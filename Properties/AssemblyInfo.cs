@@ -8,8 +8,8 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyDescription ("")]
 [assembly: AssemblyConfiguration ("")]
 [assembly: AssemblyCompany ("")]
-[assembly: AssemblyProduct ("")]
-[assembly: AssemblyCopyright ("balu")]
+[assembly: AssemblyProduct ("Pluton.Rust")]
+[assembly: AssemblyCopyright ("Pluton Team")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
 

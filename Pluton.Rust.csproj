@@ -171,6 +171,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Objects\PluginCommand.cs" />
+    <None Include="Pluton.Patcher.Rust.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
