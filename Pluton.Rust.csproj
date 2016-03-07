@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{06734676-2637-4336-8E48-875140AFC200}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Pluton.Rust</RootNamespace>
+    <AssemblyName>Pluton.Rust</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <UseMSBuildEngine>False</UseMSBuildEngine>
+    <ApplicationManifest>StringExtensions.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="Assembly-CSharp">
+      <HintPath>references\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>references\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>references\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="Pluton.Core">
+      <HintPath>references\Pluton.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading">
+      <HintPath>references\System.Threading.dll</HintPath>
+    </Reference>
+    <Reference Include="IronPython.Deps">
+      <HintPath>references\IronPython.Deps.dll</HintPath>
+    </Reference>
+    <Reference Include="Jint">
+      <HintPath>references\Jint.dll</HintPath>
+    </Reference>
+    <Reference Include="MoonSharp.Interpreter">
+      <HintPath>references\MoonSharp.Interpreter.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive">
+      <HintPath>references\System.Reactive.dll</HintPath>
+    </Reference>
+    <Reference Include="Facepunch.Network">
+      <HintPath>references\Facepunch.Network.dll</HintPath>
+    </Reference>
+    <Reference Include="Facepunch.System">
+      <HintPath>references\Facepunch.System.dll</HintPath>
+    </Reference>
+    <Reference Include="Facepunch.UnityEngine">
+      <HintPath>references\Facepunch.UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="Rust.Data">
+      <HintPath>references\Rust.Data.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Bootstrap.cs" />
+    <Compile Include="World.cs" />
+    <Compile Include="Server.cs" />
+    <Compile Include="Find.cs" />
+    <Compile Include="Util.cs" />
+    <Compile Include="Hooks.cs" />
+    <Compile Include="Objects\Player.cs" />
+    <Compile Include="PluginLoaders\PyPlugin.cs" />
+    <Compile Include="Objects\ChatCommands.cs" />
+    <Compile Include="Objects\ConsoleCommands.cs" />
+    <Compile Include="PluginLoaders\LUAPlugin.cs" />
+    <Compile Include="PluginLoaders\JSPlugin.cs" />
+    <Compile Include="PluginLoaders\CSharpPlugin.cs" />
+    <Compile Include="Events\AuthEvent.cs" />
+    <Compile Include="Events\BuildingEvent.cs" />
+    <Compile Include="Events\BuildingPartDemolishedEvent.cs" />
+    <Compile Include="Events\BuildingPartDestroyedEvent.cs" />
+    <Compile Include="Events\BuildingPartGradeChangeEvent.cs" />
+    <Compile Include="Events\ChatEvent.cs" />
+    <Compile Include="Events\ClientConsoleEvent.cs" />
+    <Compile Include="Events\CombatEntityHurtEvent.cs" />
+    <Compile Include="Events\CommandEvent.cs" />
+    <Compile Include="Events\CommandPermissionEvent.cs" />
+    <Compile Include="Events\ConsumeFuelEvent.cs" />
+    <Compile Include="Events\CorpseHurtEvent.cs" />
+    <Compile Include="Events\CorpseInitEvent.cs" />
+    <Compile Include="Events\CraftEvent.cs" />
+    <Compile Include="Events\DeathEvent.cs" />
+    <Compile Include="Events\DoorCodeEvent.cs" />
+    <Compile Include="Events\DoorUseEvent.cs" />
+    <Compile Include="Events\EntityLootEvent.cs" />
+    <Compile Include="Events\EventTriggeredEvent.cs" />
+    <Compile Include="Events\GatherEvent.cs" />
+    <Compile Include="Events\HammerEvent.cs" />
+    <Compile Include="Events\HurtEvent.cs" />
+    <Compile Include="Events\InventoryModEvent.cs" />
+    <Compile Include="Events\ItemConditionEvent.cs" />
+    <Compile Include="Events\ItemLootEvent.cs" />
+    <Compile Include="Events\ItemPickupEvent.cs" />
+    <Compile Include="Events\ItemRepairEvent.cs" />
+    <Compile Include="Events\ItemUsedEvent.cs" />
+    <Compile Include="Events\LandmineTriggerEvent.cs" />
+    <Compile Include="Events\LootEvent.cs" />
+    <Compile Include="Events\MetabolismDamageEvent.cs" />
+    <Compile Include="Events\MetabolismTickEvent.cs" />
+    <Compile Include="Events\NPCDeathEvent.cs" />
+    <Compile Include="Events\NPCHurtEvent.cs" />
+    <Compile Include="Events\PlayerClothingEvent.cs" />
+    <Compile Include="Events\PlayerDeathEvent.cs" />
+    <Compile Include="Events\PlayerHealthChangeEvent.cs" />
+    <Compile Include="Events\PlayerHurtEvent.cs" />
+    <Compile Include="Events\PlayerKickEvent.cs" />
+    <Compile Include="Events\PlayerLootEvent.cs" />
+    <Compile Include="Events\PlayerTakedmgEvent.cs" />
+    <Compile Include="Events\PlayerTakeRadsEvent.cs" />
+    <Compile Include="Events\RespawnEvent.cs" />
+    <Compile Include="Events\RocketShootEvent.cs" />
+    <Compile Include="Events\ServerConsoleEvent.cs" />
+    <Compile Include="Events\ShootEvent.cs" />
+    <Compile Include="Events\SyringeUseEvent.cs" />
+    <Compile Include="Events\WeaponThrowEvent.cs" />
+    <Compile Include="Objects\BuildingPart.cs" />
+    <Compile Include="Objects\Entity.cs" />
+    <Compile Include="Objects\Inv.cs" />
+    <Compile Include="Objects\InvItem.cs" />
+    <Compile Include="Objects\LoadOut.cs" />
+    <Compile Include="Objects\LoadOutItem.cs" />
+    <Compile Include="Objects\NPC.cs" />
+    <Compile Include="Objects\OfflinePlayer.cs" />
+    <Compile Include="Objects\PlutonUIEntity.cs" />
+    <Compile Include="Objects\PlutonUIPanel.cs" />
+    <Compile Include="Objects\Stats.cs" />
+    <Compile Include="Objects\Zone2D.cs" />
+    <Compile Include="Objects\PlutonUIComponents\BaseComponent.cs" />
+    <Compile Include="Objects\PlutonUIComponents\Button.cs" />
+    <Compile Include="Objects\PlutonUIComponents\IComponent.cs" />
+    <Compile Include="Objects\PlutonUIComponents\Image.cs" />
+    <Compile Include="Objects\PlutonUIComponents\NeedsCursor.cs" />
+    <Compile Include="Objects\PlutonUIComponents\Outline.cs" />
+    <Compile Include="Objects\PlutonUIComponents\RawImage.cs" />
+    <Compile Include="Objects\PlutonUIComponents\RectTransform.cs" />
+    <Compile Include="Objects\PlutonUIComponents\Text.cs" />
+    <Compile Include="Serialize\SerializedZone2D.cs" />
+    <Compile Include="StringExtensions.cs" />
+    <Compile Include="plugins.cs" />
+    <Compile Include="pluton.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="PluginLoaders\" />
+    <Folder Include="Events\" />
+    <Folder Include="Objects\" />
+    <Folder Include="Serialize\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Objects\PluginCommand.cs" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <DotNetNamingPolicy DirectoryNamespaceAssociation="PrefixedHierarchical" ResourceNamePolicy="FileFormatDefault" />
+          <TextStylePolicy FileWidth="120" TabsToSpaces="False" EolMarker="Unix" inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/x-csharp" />
+          <CSharpFormattingPolicy IndentSwitchSection="True" NewLinesForBracesInProperties="True" NewLinesForBracesInAccessors="True" NewLinesForBracesInAnonymousMethods="True" NewLinesForBracesInControlBlocks="True" NewLinesForBracesInAnonymousTypes="True" NewLinesForBracesInObjectCollectionArrayInitializers="True" NewLinesForBracesInLambdaExpressionBody="True" NewLineForElse="True" NewLineForCatch="True" NewLineForFinally="True" NewLineForMembersInObjectInit="True" NewLineForMembersInAnonymousTypes="True" NewLineForClausesInQuery="True" SpacingAfterMethodDeclarationName="False" SpaceAfterMethodCallName="False" SpaceBeforeOpenSquareBracket="False" inheritsSet="Mono" inheritsScope="text/x-csharp" scope="text/x-csharp" />
+          <TextStylePolicy FileWidth="120" TabsToSpaces="False" inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/plain" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+</Project>
