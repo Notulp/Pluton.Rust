@@ -35,42 +35,55 @@
     <Reference Include="System" />
     <Reference Include="Assembly-CSharp">
       <HintPath>references\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>references\Assembly-CSharp-firstpass.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>references\UnityEngine.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Pluton.Core">
       <HintPath>references\Pluton.Core.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Threading">
       <HintPath>references\System.Threading.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="IronPython.Deps">
       <HintPath>references\IronPython.Deps.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Jint">
       <HintPath>references\Jint.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="MoonSharp.Interpreter">
       <HintPath>references\MoonSharp.Interpreter.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Reactive">
       <HintPath>references\System.Reactive.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Facepunch.Network">
       <HintPath>references\Facepunch.Network.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Facepunch.System">
       <HintPath>references\Facepunch.System.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Facepunch.UnityEngine">
       <HintPath>references\Facepunch.UnityEngine.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Rust.Data">
       <HintPath>references\Rust.Data.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
