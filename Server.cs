@@ -70,7 +70,7 @@
 
 		public void CheckPluginsFolder()
 		{
-			string path = Util.GetInstance().GetPluginsFolder();
+			string path = Singleton<Util>.Instance.GetPluginsFolder();
 			if (!Directory.Exists(path))
 				Directory.CreateDirectory(path);
 		}
@@ -142,7 +142,7 @@
 			}
 		}
 
-		public bool SendCommand(string command, params object[] args) => ConsoleSystem.Run.Server.Normal(command, args);
+		public string SendCommand(string command, params object[] args) => ConsoleSystem.Run.Server.Normal(command, args);
 
 		public void OnShutdown()
 		{
