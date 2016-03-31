@@ -339,7 +339,7 @@
 			Effect.server.Run("assets/bundled/prefabs/fx/build/promote_" + bpgce.Grade.ToString().ToLower() + ".prefab", bb, 0u, Vector3.zero, Vector3.zero);
 		}
 
-		public static void On_CombatEntityHurt(BaseCombatEntity combatEnt, HitInfo info, bool useProtection = true)
+		public static void On_CombatEntityHurt(BaseCombatEntity combatEnt, HitInfo info)
 		{
 			try {
 				Assert.Test(combatEnt.isServer, "This should be called serverside only");
@@ -349,7 +349,7 @@
 					BaseCorpse corpse = combatEnt.GetComponent<BaseCorpse>();
 					BasePlayer player = combatEnt.GetComponent<BasePlayer>();
 
-					combatEnt.ScaleDamage(info, useProtection);
+					combatEnt.ScaleDamage(info);
 
 					HurtEvent he;
 					if (player != null) {
@@ -377,7 +377,7 @@
 						DirectionProperties[] directionProperties = (DirectionProperties[])combatEnt.GetFieldValue("propDirection");
 						for (int i = 0; i < directionProperties.Length; i++) {
 							if (!(directionProperties[i].extraProtection == null)) {
-								if (directionProperties[i].IsPointWithinRadius(combatEnt.transform, info.PointStart)) {
+								if (directionProperties[i].IsWeakspot(combatEnt.transform, info)) {
 									directionProperties[i].extraProtection.Scale(info.damageTypes);
 								}
 							}
