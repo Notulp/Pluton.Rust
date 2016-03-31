@@ -167,7 +167,7 @@
 		"BaseCombatEntity": {
 			"Methods": [{
 				"TargetMethod": "Hurt",
-				"TargetMethodSigniture": "Hurt(HitInfo,Boolean)",
+				"TargetMethodSigniture": "Hurt(HitInfo)",
 				"Instructions": [{
 					"InstructionType": "Clear"
 				}, {
@@ -176,10 +176,6 @@
 					"OperandType": "None"
 				}, {
 					"OpCode": "Ldarg_1",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_2",
 					"InstructionType": "Append",
 					"OperandType": "None"
 				}, {
