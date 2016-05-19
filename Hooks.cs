@@ -760,7 +760,7 @@
 			OnNext("On_Respawn", re);
 
 			++ServerPerformance.spawns;
-			player.SetFieldValue("lastPositionValue", pos);
+			player.SetFieldValue("tickPosition", pos);
 			player.transform.position = re.SpawnPos;
 			player.transform.rotation = re.SpawnRot;
 			player.SetPlayerFlag(BasePlayer.PlayerFlags.Wounded, false);
@@ -786,10 +786,11 @@
 			if (re.WakeUp)
 				player.EndSleeping();
 			player.SendNetworkUpdateImmediate(false);
+			player.ClearEntityQueue();
 			player.ClientRPCPlayer(null, player, "StartLoading");
 			player.SendFullSnapshot ();
-			player.SetPlayerFlag (BasePlayer.PlayerFlags.ReceivingSnapshot, false);
-			player.ClientRPCPlayer(null, player, "FinishLoading");
+			// player.SetPlayerFlag (BasePlayer.PlayerFlags.ReceivingSnapshot, false);
+			// player.ClientRPCPlayer(null, player, "FinishLoading");
 		}
 
 		// PlayerLoot.StartLootingEntity()
