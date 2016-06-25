@@ -759,12 +759,14 @@
 			var re = new RespawnEvent(p, pos, quat);
 			OnNext("On_Respawn", re);
 
+			player.SetPlayerFlag(BasePlayer.PlayerFlags.Wounded, false);
+			player.SetPlayerFlag(BasePlayer.PlayerFlags.HasBuildingPrivilege, false);
+			player.SetPlayerFlag(BasePlayer.PlayerFlags.InBuildingPrivilege, false);
+			player.SetPlayerFlag(BasePlayer.PlayerFlags.ReceivingSnapshot, true);
 			++ServerPerformance.spawns;
-			player.SetFieldValue("tickPosition", pos);
 			player.transform.position = re.SpawnPos;
 			player.transform.rotation = re.SpawnRot;
-			player.SetPlayerFlag(BasePlayer.PlayerFlags.Wounded, false);
-			player.SetPlayerFlag(BasePlayer.PlayerFlags.ReceivingSnapshot, true);
+			(player.GetFieldValue("tickInterpolator") as TickInterpolator).Reset(pos);
 			player.SetFieldValue("lastTickTime", 0f);
 			player.CancelInvoke("WoundingEnd");
 			player.StopSpectating();
@@ -774,21 +776,21 @@
 			player.Invoke("LifeStoryStart", 0f);
 			player.metabolism.Reset();
 
-			if (re.StartHealth < Single.Epsilon) {
+			if (re.StartHealth < Single.Epsilon)
 				player.InitializeHealth(player.StartHealth(), player.StartMaxHealth());
-			} else {
+			else
 				player.InitializeHealth(re.StartHealth, player.StartMaxHealth());
-			}
 
 			if (re.GiveDefault)
 				player.inventory.GiveDefaultItems();
 
 			if (re.WakeUp)
 				player.EndSleeping();
+			
 			player.SendNetworkUpdateImmediate(false);
 			player.ClearEntityQueue();
 			player.ClientRPCPlayer(null, player, "StartLoading");
-			player.SendFullSnapshot ();
+			player.SendFullSnapshot();
 			// player.SetPlayerFlag (BasePlayer.PlayerFlags.ReceivingSnapshot, false);
 			// player.ClientRPCPlayer(null, player, "FinishLoading");
 		}
