@@ -94,22 +94,13 @@
             }
         }
 
-		public Entity Instantiate(Vector3 v3) => new Entity(_item.CreateWorldObject(v3, Quaternion.identity));
+        public Entity Instantiate(Vector3 v3) => new Entity(_item.CreateWorldObject(v3, Quaternion.identity));
 
-		public Entity Instantiate(Vector3 v3, Quaternion q) => new Entity(_item.CreateWorldObject(v3, q));
+        public Entity Instantiate(Vector3 v3, Quaternion q) => new Entity(_item.CreateWorldObject(v3, q));
 
-        public bool IsBlueprint {
-            get {
-                return _item.HasFlag(Item.Flag.Blueprint);
-            }
-            set {
-                _item.SetFlag(Item.Flag.Blueprint, value);
-            }
-        }
+        public int ItemID => _item.info.itemid;
 
-		public int ItemID => _item.info.itemid;
-
-		public string Name => _item.info.displayName.english;
+        public string Name => _item.info.displayName.english;
 
         public int Quantity {
             get {
