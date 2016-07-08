@@ -255,7 +255,7 @@
 			for (int i = 0; i < array.Length; i++)
 			{
 				ItemAmount itemAmount = array[i];
-				Item item = ItemManager.Create(itemAmount.itemDef, (int)itemAmount.amount, false, 0);
+				Item item = ItemManager.Create(itemAmount.itemDef, (int)itemAmount.amount, 0);
 				OnNext("On_ItemPickup", new ItemPickupEvent(ce, msg, item));
 				msg.player.GiveItem(item, BaseEntity.GiveItemReason.PickedUp);
 			}
