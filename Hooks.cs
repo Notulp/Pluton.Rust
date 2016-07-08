@@ -339,7 +339,7 @@
 			Effect.server.Run("assets/bundled/prefabs/fx/build/promote_" + bpgce.Grade.ToString().ToLower() + ".prefab", bb, 0u, Vector3.zero, Vector3.zero);
 		}
 
-		public static void On_CombatEntityHurt(BaseCombatEntity combatEnt, HitInfo info)
+		public static void On_CombatEntityHurt(BaseCombatEntity combatEnt, HitInfo info, bool useProtection = true)
 		{
 			try {
 				Assert.Test(combatEnt.isServer, "This should be called serverside only");
@@ -406,15 +406,15 @@
 						}
 						string text3 = String.Concat(new object[] {
 							"<color=lightblue>Damage:</color>".PadRight(10),
-							                                      info.damageTypes.Total().ToString("0.00"),
-							                                      "\r\n<color=lightblue>Health:</color>".PadRight(10),
-							                                      combatEnt.health.ToString("0.00"), " / ",
-							                                      (combatEnt.health - info.damageTypes.Total() > 0) ? "<color=green>" : "<color=red>",
-							                                      (combatEnt.health - info.damageTypes.Total()).ToString("0.00"), "</color>",
-							                                      "\r\n<color=lightblue>Hit Ent:</color>".PadRight(10), combatEnt,
-							                                      "\r\n<color=lightblue>Attacker:</color>".PadRight(10), info.Initiator,
-							                                      "\r\n<color=lightblue>Weapon:</color>".PadRight(10), info.Weapon,
-							                                      "\r\n<color=lightblue>Damages:</color>\r\n", text
+                            info.damageTypes.Total().ToString("0.00"),
+                            "\r\n<color=lightblue>Health:</color>".PadRight(10),
+                            combatEnt.health.ToString("0.00"), " / ",
+                            (combatEnt.health - info.damageTypes.Total() > 0) ? "<color=green>" : "<color=red>",
+                            (combatEnt.health - info.damageTypes.Total()).ToString("0.00"), "</color>",
+                            "\r\n<color=lightblue>Hit Ent:</color>".PadRight(10), combatEnt,
+                            "\r\n<color=lightblue>Attacker:</color>".PadRight(10), info.Initiator,
+                            "\r\n<color=lightblue>Weapon:</color>".PadRight(10), info.Weapon,
+                            "\r\n<color=lightblue>Damages:</color>\r\n", text
 						});
 						ConsoleSystem.Broadcast("ddraw.text", new object[] {
 							60, Color.white, info.HitPositionWorld, text3
@@ -439,6 +439,10 @@
 					}
 					combatEnt.lastDamage = info.damageTypes.GetMajorityDamageType();
 					combatEnt.lastAttacker = info.Initiator;
+					var baseCombatEntity = combatEnt.lastAttacker as BaseCombatEntity;
+					if (baseCombatEntity != null)
+						baseCombatEntity.MarkHostileTime();
+
 					combatEnt.SetFieldValue("_lastAttackedTime", Time.time);
 					if (combatEnt.health <= 0f) {
 						combatEnt.Die(info);
