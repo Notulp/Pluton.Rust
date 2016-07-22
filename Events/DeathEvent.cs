@@ -82,7 +82,7 @@
                         return null;
                     var itemUID = (uint)_info.Weapon.GetFieldValue("ownerItemUID");
 
-                    BasePlayer ownerPlayer = _info.Weapon.ownerPlayer;
+					BasePlayer ownerPlayer = _info.Weapon.GetOwnerPlayer();
                     if (ownerPlayer == null) {
                         return null;
                     }
