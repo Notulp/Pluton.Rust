@@ -13,18 +13,19 @@
         public string BroadcastName;
         public string FinalText;
         public string Reply;
+		public bool AllowFormatting = false;
 
         public ChatEvent(Player player, ConsoleSystem.Arg args)
         {
             User = player;
             Arg = args;
             if (args.connection != null)
-                BroadcastName = args.connection.username;
+                BroadcastName = args.connection.username.Replace('<', '[').Replace('>', ']');
             else
                 BroadcastName = Server.server_message_name;
             OriginalText = args.ArgsStr.Substring(1, args.ArgsStr.Length - 2).Replace("\\", "");
-            FinalText = OriginalText.Replace('<', '[').Replace('>', ']');
-            Reply = "chat.say was executed";
+            FinalText = OriginalText;
+            Reply = "";
         }
 
         public void Cancel(string reply = "Your message was not sent")

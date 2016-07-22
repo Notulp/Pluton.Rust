@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Linq;
+	using System.Globalization;
 	using System.Collections.Generic;
 	using Network;
 	using UnityEngine;
@@ -98,13 +99,11 @@
 				}
 
 				BasePlayer basePlayer = arg.Player();
-				if (!basePlayer) {
+				if (!basePlayer || basePlayer.HasPlayerFlag(BasePlayer.PlayerFlags.ChatMute)) {
 					return;
 				}
 
-				var pChat = new ChatEvent(Server.GetPlayer(basePlayer), arg);
-
-				string str = arg.GetString(0, "text");
+				string str = arg.GetString(0, "text").Trim();
 
 				if (str.Length > 128)
 					str = str.Substring(0, 128);
@@ -112,15 +111,56 @@
 				if (str.Length <= 0)
 					return;
 
+				if (basePlayer.NextChatTime < Single.Epsilon) {
+					basePlayer.NextChatTime = Time.realtimeSinceStartup - 30f;
+				}
+
+				if (basePlayer.NextChatTime > Time.realtimeSinceStartup) {
+					basePlayer.NextChatTime += 2f;
+					float num = basePlayer.NextChatTime - Time.realtimeSinceStartup;
+					ConsoleNetwork.SendClientCommand(basePlayer.net.connection, "chat.add", new object[] {
+						0,
+						"You're chatting too fast - try again in " + (num + 0.5f).ToString ("0") + " seconds"
+					});
+					if (num > 120f) {
+						basePlayer.Kick("Chatting too fast");
+					}
+					return;
+				}
+
+				var pChat = new ChatEvent(Server.GetPlayer(basePlayer), arg);
+				
+				OnNext("On_Chat", pChat);
+
+				if (!pChat.AllowFormatting && pChat.FinalText.Contains("<")) {
+					if (pChat.FinalText.Contains("<size", CompareOptions.IgnoreCase)) {
+						return;
+					}
+					if (pChat.FinalText.Contains("<color", CompareOptions.IgnoreCase)) {
+						return;
+					}
+					if (pChat.FinalText.Contains("<material", CompareOptions.IgnoreCase)) {
+						return;
+					}
+					if (pChat.FinalText.Contains("<quad", CompareOptions.IgnoreCase)) {
+						return;
+					}
+					if (pChat.FinalText.Contains("<b>", CompareOptions.IgnoreCase)) {
+						return;
+					}
+					if (pChat.FinalText.Contains("<i>", CompareOptions.IgnoreCase)) {
+						return;
+					}
+				}
 
 				if (ConVar.Chat.serverlog) {
 					ServerConsole.PrintColoured(new object[] {
 						ConsoleColor.DarkYellow,
-						            basePlayer.displayName + ": ",
-						            ConsoleColor.DarkGreen,
-						            str
+			            basePlayer.displayName + ": ",
+			            ConsoleColor.DarkGreen,
+			            str
 					});
-					ConVar.Server.Log("Log.Chat.txt", string.Format("{0}/{1}: {2}\r\n", basePlayer.userID, basePlayer.displayName, str));
+					ConVar.Server.Log("Log.Chat.txt", string.Format("{0}: {1}\n", basePlayer.userID, basePlayer.displayName, str));
 					Debug.Log(String.Format("[CHAT] {0}: {1}", basePlayer.displayName, str));
 				}
 
@@ -133,24 +173,30 @@
 					colour = "#fa5";
 				}
 
-				OnNext("On_Chat", pChat);
-
-				string text2 = $"<color={colour}>{basePlayer.displayName.Replace('<', '[').Replace('>', ']')}</color>: {pChat.FinalText}";
+				basePlayer.NextChatTime = Time.realtimeSinceStartup + 1.5f;
+				var chatEntry = new ConVar.Chat.ChatEntry
+				{
+					Message = pChat.FinalText,
+					UserId = basePlayer.userID,
+					Username = basePlayer.displayName,
+					Color = colour,
+					Time = Facepunch.Math.Epoch.Current
+				};
+				(typeof(ConVar.Chat).GetStaticFieldValue( "History") as List<ConVar.Chat.ChatEntry>).Add(chatEntry);
+				Facepunch.RCon.Broadcast(Facepunch.RCon.LogType.Chat, chatEntry);
 
 				if (pChat.FinalText != "") {
 					Logger.ChatLog(pChat.BroadcastName, pChat.OriginalText);
 					arg.ReplyWith(pChat.Reply);
 
 					if (ConVar.Server.globalchat) {
-						ConsoleNetwork.BroadcastToAllClients("chat.add", basePlayer.userID, text2, 1);
+						ConsoleNetwork.BroadcastToAllClients("chat.add2", basePlayer.userID, pChat.FinalText, pChat.BroadcastName, colour, 1);
 					} else {
 						float num = 2500;
-						foreach (Connection current in Net.sv.connections) {
-							if (current.player != null) {
-								float sqrMagnitude = (current.player.transform.position - basePlayer.transform.position).sqrMagnitude;
-								if (sqrMagnitude <= num) {
-									ConsoleNetwork.SendClientCommand(current, "chat.add", basePlayer.userID, text2, Mathf.Clamp01(num - sqrMagnitude + 0.2f));
-								}
+						foreach (BasePlayer current in BasePlayer.activePlayerList) {
+							float sqrMagnitude = (current.transform.position - basePlayer.transform.position).sqrMagnitude;
+							if (sqrMagnitude <= num) {
+								ConsoleNetwork.SendClientCommand(current.net.connection, "chat.add2", basePlayer.userID, pChat.FinalText, pChat.BroadcastName, colour, Mathf.Clamp01(num - sqrMagnitude + 0.2f));
 							}
 						}
 					}
