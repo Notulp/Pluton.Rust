@@ -1,4 +1,4 @@
-{
+[{
 	"TargetAssembly": "Assembly-CSharp.dll",
 	"Instructions": [{
 		"InstructionType": "CreateType",
@@ -1095,31 +1095,6 @@
 				}]
 			}]
 		},
-		"ConsoleSystem/SystemRealm": {
-			"Methods": [{
-				"TargetMethod": "Normal",
-				"TargetMethodSigniture": "Normal(RunOptions,String,Object[])",
-				"Instructions": [{
-					"OpCode": "Ldloc_1",
-					"InstructionType": "InsertAfter",
-					"OperandType": "None",
-					"InsertOffset": "12"
-				}, {
-					"OpCode": "Ldarg_2",
-					"InstructionType": "InsertAfter",
-					"OperandType": "None",
-					"InsertOffset": "13"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertAfter",
-					"OperandType": "Method",
-					"InsertOffset": "14",
-					"TargetMethod": "On_ServerConsole",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}]
-		},
 		"BaseProjectile": {
 			"Methods": [{
 				"TargetMethod": "CLProject",
@@ -1183,4 +1158,41 @@
 			}]
 		}
 	}
-}
+}, {
+    "TargetAssembly": "Facepunch.Console.dll",
+	"Instructions": [{
+		"InstructionType": "CreateType",
+		"Name": "PlutonPatched"
+	},
+	{
+		"InstructionType": "WriteToFile",
+		"Name": "Facepunch.Console.dll"
+	}],
+	"Types": {
+		"ConsoleSystem/SystemRealm": {
+			"Methods": [{
+				"TargetMethod": "Normal",
+				"TargetMethodSigniture": "Normal(RunOptions,String,Object[])",
+				"Instructions": [{
+					"OpCode": "Ldloc_1",
+					"InstructionType": "InsertAfter",
+					"OperandType": "None",
+					"InsertOffset": "12"
+				}, {
+					"OpCode": "Ldarg_2",
+					"InstructionType": "InsertAfter",
+					"OperandType": "None",
+					"InsertOffset": "13"
+				}, {
+					"OpCode": "Call",
+					"InstructionType": "InsertAfter",
+					"OperandType": "Method",
+					"InsertOffset": "14",
+					"TargetMethod": "On_ServerConsole",
+					"TargetType": "Pluton.Rust.Hooks",
+					"TargetAssembly": "Pluton.Rust.dll"
+				}]
+			}]
+		}
+    }
+}]
