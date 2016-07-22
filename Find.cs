@@ -51,8 +51,8 @@
 		public List<BuildingPart> BuildingPartsByName(string name)
 		{
 			return (from block in UnityEngine.Object.FindObjectsOfType<BuildingBlock>()
-			        where block.LookupPrefabName() == name ||
-			        block.LookupShortPrefabName() == name ||
+			        where block.PrefabName == name ||
+			        block.ShortPrefabName == name ||
 			        block.blockDefinition.fullName == name
 			        select new BuildingPart(block)).ToList();
 		}
@@ -123,8 +123,8 @@
 		public List<Entity> Entities(string name)
 		{
 			return (from ent in BaseNetworkable.serverEntities.All()
-			        where ent.LookupPrefabName().Contains(name) ||
-			        ent.LookupShortPrefabName().Contains(name) ||
+			        where ent.PrefabName.Contains(name) ||
+			        ent.ShortPrefabName.Contains(name) ||
 			        ent.name.Contains(name)
 			        select new Entity(ent as BaseEntity)).ToList();
 		}

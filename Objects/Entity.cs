@@ -15,7 +15,7 @@
         public Entity(BaseEntity ent)
         {
             baseEntity = ent;
-            Prefab = baseEntity.LookupPrefabName();
+			Prefab = baseEntity.PrefabName;
             PrefabID = baseEntity.prefabID;
         }
 

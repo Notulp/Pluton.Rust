@@ -52,7 +52,7 @@
                 if (_buildingBlock == null) {
                     Vector3 v3pos = position.ToVector3();
                     _buildingBlock = (from bb in UnityEngine.Object.FindObjectsOfType<BuildingBlock>()
-                                                     where this.Prefab == bb.LookupPrefabName() &&
+                                                     where this.Prefab == bb.PrefabName &&
                                                          v3pos == bb.transform.position
                                                      select bb).FirstOrDefault();
                 }
