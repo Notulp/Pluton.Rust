@@ -111,7 +111,7 @@
 					"InstructionType": "InsertAfter",
 					"OperandType": "Method",
 					"InsertOffset": "13",
-					"TargetMethod": "get_ownerPlayer",
+					"TargetMethod": "GetOwnerPlayer",
 					"TargetType": "HeldEntity",
 					"TargetAssembly": "Assembly-CSharp.dll"
 				}, {
