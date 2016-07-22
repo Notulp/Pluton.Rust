@@ -142,14 +142,14 @@
 					arg.ReplyWith(pChat.Reply);
 
 					if (ConVar.Server.globalchat) {
-						ConsoleSystem.Broadcast("chat.add", basePlayer.userID, text2, 1);
+						ConsoleNetwork.BroadcastToAllClients("chat.add", basePlayer.userID, text2, 1);
 					} else {
 						float num = 2500;
 						foreach (Connection current in Net.sv.connections) {
 							if (current.player != null) {
 								float sqrMagnitude = (current.player.transform.position - basePlayer.transform.position).sqrMagnitude;
 								if (sqrMagnitude <= num) {
-									ConsoleSystem.SendClientCommand(current, "chat.add", basePlayer.userID, text2, Mathf.Clamp01(num - sqrMagnitude + 0.2f));
+									ConsoleNetwork.SendClientCommand(current, "chat.add", basePlayer.userID, text2, Mathf.Clamp01(num - sqrMagnitude + 0.2f));
 								}
 							}
 						}
@@ -387,10 +387,10 @@
 					// the DebugHurt() method
 					if (ConVar.Vis.attack) {
 						if (info.PointStart != info.PointEnd) {
-							ConsoleSystem.Broadcast("ddraw.arrow", new object[] {
+							ConsoleNetwork.BroadcastToAllClients("ddraw.arrow", new object[] {
 								60, Color.cyan, info.PointStart, info.PointEnd, 0.1
 							});
-							ConsoleSystem.Broadcast("ddraw.sphere", new object[] {
+							ConsoleNetwork.BroadcastToAllClients("ddraw.sphere", new object[] {
 								60, Color.cyan, info.HitPositionWorld, 0.05
 							});
 						}
@@ -416,7 +416,7 @@
                             "\r\n<color=lightblue>Weapon:</color>".PadRight(10), info.Weapon,
                             "\r\n<color=lightblue>Damages:</color>\r\n", text
 						});
-						ConsoleSystem.Broadcast("ddraw.text", new object[] {
+						ConsoleNetwork.BroadcastToAllClients("ddraw.text", new object[] {
 							60, Color.white, info.HitPositionWorld, text3
 						});
 					}

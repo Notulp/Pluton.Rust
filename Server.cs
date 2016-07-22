@@ -20,9 +20,9 @@
 
 		public void Broadcast(string arg) => BroadcastFrom(server_message_name, arg);
 
-		public void BroadcastFrom(string name, string arg) => ConsoleSystem.Broadcast("chat.add", 0, String.Format("{0}: {1}", name.ColorText("fa5"), arg));
+		public void BroadcastFrom(string name, string arg) => ConsoleNetwork.BroadcastToAllClients("chat.add", 0, String.Format("{0}: {1}", name.ColorText("fa5"), arg));
 
-		public void BroadcastFrom(ulong playerid, string arg) => ConsoleSystem.Broadcast("chat.add", playerid, arg, 1);
+		public void BroadcastFrom(ulong playerid, string arg) => ConsoleNetwork.BroadcastToAllClients("chat.add", playerid, arg, 1);
 
 		public Player FindPlayer(string s)
 		{

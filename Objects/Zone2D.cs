@@ -163,7 +163,7 @@
 
         public void DrawLine(Vector3 From, Vector3 To, Color color)
         {
-            ConsoleSystem.Broadcast("ddraw.arrow", new object[] {
+            ConsoleNetwork.BroadcastToAllClients("ddraw.arrow", new object[] {
                 60, color, From, To, 0.1f
             });
         }
