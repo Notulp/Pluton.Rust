@@ -330,9 +330,9 @@
             }
         }
 
-        public float TimeOnline {
+        public int TimeOnline {
             get {
-                return basePlayer.net.connection.connectionTime;
+				return (DateTime.Now - basePlayer.net.connection.connectionTime).Seconds;
             }
         }
 
