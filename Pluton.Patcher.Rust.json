@@ -1067,7 +1067,7 @@
 				}]
 			}]
 		},
-		"ConsoleSystem": {
+		"ConsoleNetwork": {
 			"Methods": [{
 				"TargetMethod": "OnClientCommand",
 				"Instructions": [{
