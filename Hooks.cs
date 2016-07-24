@@ -312,7 +312,7 @@
 			{
 				Effect.server.Run(ce.pickupEffect.resourcePath, ce.transform.position, ce.transform.up, null, false);
 			}
-			msg.player.xp.Add(Definitions.CollectWorldItem, ce.xpScale, ce.ShortPrefabName, 0uL);
+			msg.player.xp.Add(global::Rust.Xp.Definitions.CollectWorldItem, ce.xpScale, ce.ShortPrefabName, 0uL);
 			ce.Kill(BaseNetworkable.DestroyMode.None);
 		}
 			
