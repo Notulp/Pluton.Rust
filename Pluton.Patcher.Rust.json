@@ -729,20 +729,6 @@
 					"TargetAssembly": "Pluton.Rust.dll"
 				}]
 			}, {
-				"TargetMethod": "WoundAssist",
-				"Instructions": [{
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "Method",
-					"TargetMethod": "On_PlayerAssisted",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}, {
 				"TargetMethod": "OnHealthChanged",
 				"Instructions": [{
 					"OpCode": "Ldarg_0",
