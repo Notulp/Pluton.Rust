@@ -20,7 +20,7 @@
 			BaseEntity parachute = GameManager.server.CreateEntity("assets/prefabs/misc/parachute/parachute.prefab", default(Vector3), default(Quaternion));
 			if (parachute) {
 				parachute.SetParent(e, "parachute_attach");
-				parachute.Spawn(true);
+				parachute.Spawn();
 			}
 			return parachute;
 		}
@@ -36,7 +36,7 @@
 		{
 			BaseEntity baseEntity = GameManager.server.CreateEntity("assets/prefabs/npc/cargo plane/cargo_plane.prefab", default(Vector3), default(Quaternion));
 			if (baseEntity) {
-				baseEntity.Spawn(true);
+				baseEntity.Spawn();
 			}
 			CargoPlane cp = baseEntity.GetComponent<CargoPlane>();
 			var start = (Vector3)cp.GetFieldValue("startPos");
@@ -55,7 +55,7 @@
 
 			BaseEntity baseEntity = GameManager.server.CreateEntity("assets/prefabs/npc/cargo plane/cargo_plane.prefab", default(Vector3), default(Quaternion));
 			if (baseEntity) {
-				baseEntity.Spawn(true);
+				baseEntity.Spawn();
 			}
 			CargoPlane cp = baseEntity.GetComponent<CargoPlane>();
 
@@ -77,7 +77,7 @@
 			cp.SetFieldValue("secondsToTake", secsToTake);
 			cp.transform.rotation = Quaternion.LookRotation(endPos - startPos);
 
-			baseEntity.Spawn(true);
+			baseEntity.Spawn();
 		}
 
 		public void AirDropAt(float x, float y, float z, float speed = 50f, float height = 400f) => AirDropAt(new Vector3(x, y, z), speed, height);
@@ -89,7 +89,7 @@
 			BaseEntity baseEntity = GameManager.server.CreateEntity("assets/prefabs/npc/patrol helicopter/patrolhelicopter.prefab", default(Vector3), default(Quaternion), true);
 			if (baseEntity)
 			{
-				baseEntity.Spawn(true);
+				baseEntity.Spawn();
 				return new Entity(baseEntity);
 			}
 			return null;
@@ -102,7 +102,7 @@
 			{
 				PatrolHelicopterAI component = baseEntity.GetComponent<PatrolHelicopterAI>();
 				component.SetInitialDestination(position + new Vector3(0, height, 0), 0.25f);
-				baseEntity.Spawn(true);
+				baseEntity.Spawn();
 				return new Entity(baseEntity);
 			}
 			return null;
@@ -155,7 +155,7 @@
 			BaseEntity ent = GameManager.server.CreateEntity("assets/bundled/prefabs/fx/" + evt + ".prefab", 
 			                                                 new UnityEngine.Vector3(x, y, z), 
 			                                                 new UnityEngine.Quaternion());
-			ent.Spawn(true);
+			ent.Spawn();
 			return ent;
 		}
 
@@ -165,7 +165,7 @@
 			BaseEntity ent = GameManager.server.CreateEntity("assets/bundled/prefabs/autospawn/animals/" + name + ".prefab", 
 			                                                 new UnityEngine.Vector3(x, y, z), 
 			                                                 new UnityEngine.Quaternion());
-			ent.Spawn(true);
+			ent.Spawn();
 			return ent;
 		}
 
