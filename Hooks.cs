@@ -979,12 +979,12 @@
 					SteamGameServer.SetKeyValue("headerimage", ConVar.Server.headerimage);
 					SteamGameServer.SetKeyValue("url", ConVar.Server.url);
 					SteamGameServer.SetKeyValue("uptime", ((int)Time.realtimeSinceStartup).ToString());
-					SteamGameServer.SetKeyValue("mem_ws", Performance.usedMemoryWorkingSetMB.ToString());
-					SteamGameServer.SetKeyValue("mem_pv", Performance.usedMemoryPrivateMB.ToString());
-					SteamGameServer.SetKeyValue("gc_mb", Performance.memoryAllocations.ToString());
-					SteamGameServer.SetKeyValue("gc_cl", Performance.memoryCollections.ToString());
-					SteamGameServer.SetKeyValue("fps", Performance.frameRate.ToString());
-					SteamGameServer.SetKeyValue("fps_avg", Performance.frameRateAverage.ToString("0.00"));
+					SteamGameServer.SetKeyValue("mem_ws", Performance.report.usedMemoryWorkingSetMB.ToString());
+					SteamGameServer.SetKeyValue("mem_pv", Performance.report.usedMemoryPrivateMB.ToString());
+					SteamGameServer.SetKeyValue("gc_mb", Performance.report.memoryAllocations.ToString());
+					SteamGameServer.SetKeyValue("gc_cl", Performance.report.memoryCollections.ToString());
+					SteamGameServer.SetKeyValue("fps", Performance.report.frameRate.ToString());
+					SteamGameServer.SetKeyValue("fps_avg", Performance.report.frameRateAverage.ToString("0.00"));
 					SteamGameServer.SetKeyValue("ent_cnt", BaseNetworkable.serverEntities.Count.ToString());
 					SteamGameServer.SetKeyValue("build", BuildInformation.VersionStampDays.ToString());
 				}
