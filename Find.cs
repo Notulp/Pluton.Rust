@@ -104,7 +104,7 @@
 
 		public Entity Entity(UnityEngine.Vector3 location, float dist = 1f)
 		{
-			foreach (var x in BaseNetworkable.serverEntities.All())
+			foreach (var x in BaseNetworkable.serverEntities)
 			{
 				if (UnityEngine.Vector3.Distance(x.transform.position, location) <= dist)
 				{
@@ -116,13 +116,13 @@
 
 		public List<Entity> Entities()
 		{
-			return (from ent in BaseNetworkable.serverEntities.All()
+			return (from ent in BaseNetworkable.serverEntities
 			        select new Entity(ent as BaseEntity)).ToList();
 		}
 
 		public List<Entity> Entities(string name)
 		{
-			return (from ent in BaseNetworkable.serverEntities.All()
+			return (from ent in BaseNetworkable.serverEntities
 			        where ent.PrefabName.Contains(name) ||
 			        ent.ShortPrefabName.Contains(name) ||
 			        ent.name.Contains(name)
