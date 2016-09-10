@@ -926,8 +926,7 @@
 		public static void On_ServerInit()
 		{
 			Server.GetInstance().SendCommand("plugins.loaded");
-			if (Server.GetInstance().Loaded)
-				return;
+			if (Server.GetInstance().Loaded) return;
 
 			Server.GetInstance().Loaded = true;
 			OnNext("On_ServerInit");
@@ -943,52 +942,57 @@
 			PluginLoader.GetInstance().UnloadPlugins();
 
 			Core.Bootstrap.SaveAll();
-		}
+        }
 
 		public static void SetModded()
 		{
 			try {
-				using (TimeWarning.New ("UpdateServerInformation", 0.1f)) {
-					SteamGameServer.SetServerName(ConVar.Server.hostname);
-					SteamGameServer.SetMaxPlayerCount(ConVar.Server.maxplayers);
-					SteamGameServer.SetPasswordProtected(false);
-					SteamGameServer.SetMapName(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
-					string pchGameTags = string.Format("mp{0},cp{1},v{2}{3}{4}", new object[] {
-						ConVar.Server.maxplayers,
-						      BasePlayer.activePlayerList.Count,
-						      global::Rust.Protocol.network,
-						      ConVar.Server.pve ? ",pve" : string.Empty,
-						      pluton.enabled ? ",modded,pluton" : string.Empty
-					});
-
-					SteamGameServer.SetGameTags(pchGameTags);
-					string[] array = ConVar.Server.description.SplitToChunks(100).ToArray();
-					for (int i = 0; i < 16; i++) {
-						if (i < array.Length) {
-							SteamGameServer.SetKeyValue(string.Format("description_{0:00}", i), array[i]);
-						}
-						else {
-							SteamGameServer.SetKeyValue(string.Format("description_{0:00}", i), String.Empty);
-						}
-					}
-					SteamGameServer.SetKeyValue("country", SteamGameServerUtils.GetIPCountry());
-					SteamGameServer.SetKeyValue("world.seed", global::World.Seed.ToString());
-					SteamGameServer.SetKeyValue("world.size", global::World.Size.ToString());
-					SteamGameServer.SetKeyValue("official", ConVar.Server.official.ToString());
-					SteamGameServer.SetKeyValue("pve", ConVar.Server.pve.ToString());
-					SteamGameServer.SetKeyValue("headerimage", ConVar.Server.headerimage);
-					SteamGameServer.SetKeyValue("url", ConVar.Server.url);
-					SteamGameServer.SetKeyValue("uptime", ((int)Time.realtimeSinceStartup).ToString());
-					SteamGameServer.SetKeyValue("mem_ws", Performance.report.usedMemoryWorkingSetMB.ToString());
-					SteamGameServer.SetKeyValue("mem_pv", Performance.report.usedMemoryPrivateMB.ToString());
-					SteamGameServer.SetKeyValue("gc_mb", Performance.report.memoryAllocations.ToString());
-					SteamGameServer.SetKeyValue("gc_cl", Performance.report.memoryCollections.ToString());
-					SteamGameServer.SetKeyValue("fps", Performance.report.frameRate.ToString());
-					SteamGameServer.SetKeyValue("fps_avg", Performance.report.frameRateAverage.ToString("0.00"));
-					SteamGameServer.SetKeyValue("ent_cnt", BaseNetworkable.serverEntities.Count.ToString());
-					SteamGameServer.SetKeyValue("build", BuildInformation.VersionStampDays.ToString());
-				}
-			} catch (Exception ex) {
+                using (TimeWarning.New("UpdateServerInformation", 0.1f)) {
+                    System.Reflection.Assembly assembly = typeof(ServerMgr).Assembly;
+                    byte[] byteArray = System.IO.File.ReadAllBytes(assembly.Location);
+                    Ionic.Crc.CRC32 cRC = new Ionic.Crc.CRC32();
+                    cRC.SlurpBlock(byteArray, 0, byteArray.Length);
+                    string _AssemblyHash = cRC.Crc32Result.ToString("x");
+                    SteamGameServer.SetServerName(ConVar.Server.hostname);
+                    SteamGameServer.SetMaxPlayerCount(ConVar.Server.maxplayers);
+                    SteamGameServer.SetPasswordProtected(false);
+                    SteamGameServer.SetMapName(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+                    string gameTags = string.Format("mp{0},cp{1},qp{5},v{2}{3},h{4}", new object[] {
+                        ConVar.Server.maxplayers,
+                        BasePlayer.activePlayerList.Count,
+                        global::Rust.Protocol.network,
+                        ConVar.Server.pve ? ",pve": string.Empty,
+                        pluton.enabled ? ",modded,pluton" : string.Empty,
+                        _AssemblyHash,
+                        SingletonComponent<ServerMgr>.Instance.connectionQueue.Queued
+                    });
+                    SteamGameServer.SetGameTags(gameTags);
+                    string[] array = ConVar.Server.description.SplitToChunks(100).ToArray();
+                    for (int i = 0; i < 16; i++) {
+                        if (i < array.Length) {
+                            SteamGameServer.SetKeyValue(string.Format("description_{0:00}", i), array[i]);
+                        } else {
+                            SteamGameServer.SetKeyValue(string.Format("description_{0:00}", i), string.Empty);
+                        }
+                    }
+                    SteamGameServer.SetKeyValue("hash", _AssemblyHash);
+                    SteamGameServer.SetKeyValue("country", SteamGameServerUtils.GetIPCountry());
+                    SteamGameServer.SetKeyValue("world.seed", global::World.Seed.ToString());
+                    SteamGameServer.SetKeyValue("world.size", global::World.Size.ToString());
+                    SteamGameServer.SetKeyValue("pve", ConVar.Server.pve.ToString());
+                    SteamGameServer.SetKeyValue("headerimage", ConVar.Server.headerimage);
+                    SteamGameServer.SetKeyValue("url", ConVar.Server.url);
+                    SteamGameServer.SetKeyValue("uptime", ((int)Time.realtimeSinceStartup).ToString());
+                    SteamGameServer.SetKeyValue("mem_ws", Performance.report.usedMemoryWorkingSetMB.ToString());
+                    SteamGameServer.SetKeyValue("mem_pv", Performance.report.usedMemoryPrivateMB.ToString());
+                    SteamGameServer.SetKeyValue("gc_mb", Performance.report.memoryAllocations.ToString());
+                    SteamGameServer.SetKeyValue("gc_cl", Performance.report.memoryCollections.ToString());
+                    SteamGameServer.SetKeyValue("fps", Performance.report.frameRate.ToString());
+                    SteamGameServer.SetKeyValue("fps_avg", Performance.report.frameRateAverage.ToString("0.00"));
+                    SteamGameServer.SetKeyValue("ent_cnt", BaseNetworkable.serverEntities.Count.ToString());
+                    SteamGameServer.SetKeyValue("build", BuildInformation.VersionStampDays.ToString());
+                }
+            } catch (Exception ex) {
 				Logger.LogError("[Hooks] Error while setting the server modded.");
 				Logger.LogException(ex);
 			}
