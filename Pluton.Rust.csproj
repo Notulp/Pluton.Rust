@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -82,10 +82,6 @@
     </Reference>
     <Reference Include="Rust.Data">
       <HintPath>references\Rust.Data.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Rust.Xp">
-      <HintPath>references\Rust.Xp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Rust.Xp">
@@ -187,12 +183,6 @@
     <Compile Include="pluton.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="PluginLoaders\" />
-    <Folder Include="Events\" />
-    <Folder Include="Objects\" />
-    <Folder Include="Serialize\" />
-  </ItemGroup>
   <ItemGroup>
     <None Include="Objects\PluginCommand.cs" />
     <None Include="Pluton.Patcher.Rust.json">

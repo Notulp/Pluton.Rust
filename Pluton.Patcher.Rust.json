@@ -100,17 +100,17 @@
 					"OpCode": "Ldarg_1",
 					"InstructionType": "InsertAfter",
 					"OperandType": "None",
-					"InsertOffset": "11"
+					"InsertOffset": "10"
 				}, {
 					"OpCode": "Ldarg_0",
 					"InstructionType": "InsertAfter",
 					"OperandType": "None",
-					"InsertOffset": "12"
+					"InsertOffset": "11"
 				}, {
 					"OpCode": "Call",
 					"InstructionType": "InsertAfter",
 					"OperandType": "Method",
-					"InsertOffset": "13",
+					"InsertOffset": "12",
 					"TargetMethod": "GetOwnerPlayer",
 					"TargetType": "HeldEntity",
 					"TargetAssembly": "Assembly-CSharp.dll"
@@ -118,7 +118,7 @@
 					"OpCode": "Call",
 					"InstructionType": "InsertAfter",
 					"OperandType": "Method",
-					"InsertOffset": "14",
+					"InsertOffset": "13",
 					"TargetMethod": "On_BeingHammered",
 					"TargetType": "Pluton.Rust.Hooks",
 					"TargetAssembly": "Pluton.Rust.dll"
@@ -171,24 +171,24 @@
 				"Instructions": [{
 					"InstructionType": "Clear"
 				}, {
-					"OpCode": "Ldarg_0",
+					"OpCode": "Ret",
 					"InstructionType": "Append",
+					"OperandType": "None"
+				}, {
+					"OpCode": "Ldarg_0",
+					"InstructionType": "InsertBeforeRet",
 					"OperandType": "None"
 				}, {
 					"OpCode": "Ldarg_1",
-					"InstructionType": "Append",
+					"InstructionType": "InsertBeforeRet",
 					"OperandType": "None"
 				}, {
 					"OpCode": "Call",
-					"InstructionType": "Append",
+					"InstructionType": "InsertBeforeRet",
 					"OperandType": "Method",
 					"TargetMethod": "On_CombatEntityHurt",
 					"TargetType": "Pluton.Rust.Hooks",
 					"TargetAssembly": "Pluton.Rust.dll"
-				}, {
-					"OpCode": "Ret",
-					"InstructionType": "Append",
-					"OperandType": "None"
 				}]
 			}]
 		},
