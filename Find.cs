@@ -101,7 +101,7 @@
 			return (from door in UnityEngine.Object.FindObjectsOfType<Door>()
 			        select new Entity(door as BaseEntity)).ToList();
 		}
-
+		/*
 		public Entity Entity(UnityEngine.Vector3 location, float dist = 1f)
 		{
 			foreach (var x in BaseNetworkable.serverEntities)
@@ -127,7 +127,7 @@
 			        ent.ShortPrefabName.Contains(name) ||
 			        ent.name.Contains(name)
 			        select new Entity(ent as BaseEntity)).ToList();
-		}
+		}*/
 
 		public List<ItemDefinition> ItemDefinitions()
 		{
