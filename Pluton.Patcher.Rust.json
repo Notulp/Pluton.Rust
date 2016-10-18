@@ -508,7 +508,7 @@
 					"OpCode": "Call",
 					"InstructionType": "InsertBefore",
 					"OperandType": "Method",
-					"InsertOffset": "34",
+					"InsertOffset": "36",
 					"TargetMethod": "On_LandmineExploded",
 					"TargetType": "Pluton.Rust.Hooks",
 					"TargetAssembly": "Pluton.Rust.dll"
@@ -516,7 +516,7 @@
 					"OpCode": "Ldarg_0",
 					"InstructionType": "InsertBefore",
 					"OperandType": "None",
-					"InsertOffset": "34"
+					"InsertOffset": "36"
 				}]
 			}, {
 				"TargetMethod": "Trigger",
