@@ -15,7 +15,13 @@
         {
             _item = new InvItem(item);
             _amount = amount;
-            Player = Server.GetPlayer(item.GetOwnerPlayer());
+
+            BasePlayer ownerPlayer = item.GetOwnerPlayer();
+
+            if (ownerPlayer != null)
+            {
+                Player = Server.GetPlayer(ownerPlayer);
+            }
         }
 
         public InvItem Item {
