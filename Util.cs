@@ -126,6 +126,21 @@
 			LoadZones();
 		}
 
+		public IEnumerable<string> Prefabs()
+		{
+			if (Server.GetInstance().Loaded)
+			{
+				foreach (string entity in FileSystem.FindAll("assets", ".prefab"))
+				{
+					yield return entity;
+				}
+			}
+			else
+			{
+				Logger.LogError("Util.Prefabs() should be only called after the server is loaded.");
+			}
+		}
+
 		public void Items()
 		{
 			var path = Path.Combine(GetPublicFolder(), "Items.ini");
