@@ -130,7 +130,7 @@
 		{
 			var path = Path.Combine(GetPublicFolder(), "Items.ini");
 			if (!File.Exists(path))
-				File.AppendAllText("", path);
+				File.AppendAllText(path, "");
 			var ini = new IniParser(path);
 			foreach (ItemDefinition item in ItemManager.itemList) {
 				ini.AddSetting(item.displayName.english, "itemid", item.itemid.ToString());
