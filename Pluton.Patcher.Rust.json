@@ -825,39 +825,45 @@
 				}]
 			}]
 		},
-		"SyringeWeapon": {
+		"MedicalTool": {
 			"Methods": [{
-				"TargetMethod": "InjectedSelf",
+				"TargetMethod": "UseSelf",
 				"Instructions": [{
 					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
+					"InstructionType": "InsertBefore",
+					"OperandType": "None",
+					"InsertOffset": "0"
 				}, {
 					"OpCode": "Ldarg_1",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
+					"InstructionType": "InsertBefore",
+					"OperandType": "None",
+					"InsertOffset": "1"
 				}, {
 					"OpCode": "Call",
-					"InstructionType": "InsertBeforeRet",
+					"InstructionType": "InsertBefore",
 					"OperandType": "Method",
+					"InsertOffset": "2",
 					"TargetMethod": "On_PlayerSyringeSelf",
 					"TargetType": "Pluton.Rust.Hooks",
 					"TargetAssembly": "Pluton.Rust.dll"
 				}]
 			}, {
-				"TargetMethod": "InjectedOther",
+				"TargetMethod": "UseOther",
 				"Instructions": [{
 					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
+					"InstructionType": "InsertBefore",
+					"OperandType": "None",
+					"InsertOffset": "0"
 				}, {
 					"OpCode": "Ldarg_1",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
+					"InstructionType": "InsertBefore",
+					"OperandType": "None",
+					"InsertOffset": "1"
 				}, {
 					"OpCode": "Call",
-					"InstructionType": "InsertBeforeRet",
+					"InstructionType": "InsertBefore",
 					"OperandType": "Method",
+					"InsertOffset": "2",
 					"TargetMethod": "On_PlayerSyringeOther",
 					"TargetType": "Pluton.Rust.Hooks",
 					"TargetAssembly": "Pluton.Rust.dll"

@@ -6,12 +6,12 @@ namespace Pluton.Rust.Events
 
 	public class SyringeUseEvent : CountedInstance
 	{
-		public readonly SyringeWeapon Syringe;
+		public readonly MedicalTool Syringe;
         public readonly BaseEntity.RPCMessage RPCMessage;
         public readonly Player User;
         public readonly Player Receiver;
 
-        public SyringeUseEvent(SyringeWeapon syringe, BaseEntity.RPCMessage msg, bool isSelf)
+        public SyringeUseEvent(MedicalTool syringe, BaseEntity.RPCMessage msg, bool isSelf)
 		{
 			Syringe = syringe;
             RPCMessage = msg;

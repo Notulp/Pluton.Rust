@@ -1,4 +1,4 @@
-﻿namespace Pluton.Rust
+namespace Pluton.Rust
 {
 	using System;
 	using System.Linq;
@@ -331,9 +331,9 @@
 
 		public static void On_ItemRepaired(RepairBench rb, BaseEntity.RPCMessage msg) => OnNext("On_ItemRepaired", new ItemRepairEvent(rb, msg));
 
-		public static void On_PlayerSyringeSelf(SyringeWeapon sw, BaseEntity.RPCMessage msg) => OnNext("On_PlayerSyringeSelf", new SyringeUseEvent(sw, msg, true));
+		public static void On_PlayerSyringeSelf(MedicalTool mt, BaseEntity.RPCMessage msg) => OnNext("On_PlayerSyringeSelf", new SyringeUseEvent(mt, msg, true));
 
-		public static void On_PlayerSyringeOther(SyringeWeapon sw, BaseEntity.RPCMessage msg) => OnNext("On_PlayerSyringeOther", new SyringeUseEvent(sw, msg, false));
+		public static void On_PlayerSyringeOther(MedicalTool mt, BaseEntity.RPCMessage msg) => OnNext("On_PlayerSyringeOther", new SyringeUseEvent(mt, msg, false));
 
 		public static void On_PlayerHealthChange(BasePlayer p, float f, float f2) => OnNext("On_PlayerHealthChange", new PlayerHealthChangeEvent(p, f, f2));
 

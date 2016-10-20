@@ -28,8 +28,6 @@
             set {
                 baseNPC.health = value;
             }
-
         }
     }
 }
-
