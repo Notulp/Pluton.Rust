@@ -148,7 +148,6 @@
     <Compile Include="Events\PlayerHurtEvent.cs" />
     <Compile Include="Events\PlayerKickEvent.cs" />
     <Compile Include="Events\PlayerLootEvent.cs" />
-    <Compile Include="Events\PlayerTakedmgEvent.cs" />
     <Compile Include="Events\PlayerTakeRadsEvent.cs" />
     <Compile Include="Events\RespawnEvent.cs" />
     <Compile Include="Events\RocketShootEvent.cs" />
