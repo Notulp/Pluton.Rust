@@ -1,4 +1,4 @@
-﻿namespace Pluton.Rust.Events
+namespace Pluton.Rust.Events
 {
 	using Core;
 	using Rust;
@@ -6,15 +6,14 @@
 
     public class ItemConditionEvent : CountedInstance
     {
-        private InvItem _item;
-        private float _amount;
-
-        public Player Player;
+        public readonly InvItem Item;
+        public readonly float Amount;
+        public readonly Player Player;
 
         public ItemConditionEvent(Item item, float amount)
         {
-            _item = new InvItem(item);
-            _amount = amount;
+            Item = new InvItem(item);
+            Amount = amount;
 
             BasePlayer ownerPlayer = item.GetOwnerPlayer();
 
@@ -22,14 +21,6 @@
             {
                 Player = Server.GetPlayer(ownerPlayer);
             }
-        }
-
-        public InvItem Item {
-            get { return _item; }
-        }
-
-        public float Amount {
-            get { return _amount; }
         }
     }
 }

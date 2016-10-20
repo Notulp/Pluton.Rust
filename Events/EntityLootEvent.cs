@@ -1,17 +1,15 @@
-﻿namespace Pluton.Rust.Events
+namespace Pluton.Rust.Events
 {
-	using Rust;
 	using Rust.Objects;
 
     public class EntityLootEvent : LootEvent
     {
         public readonly Entity Target;
 
-        public EntityLootEvent(PlayerLoot pl, Player looter, Entity looted)
-            : base(pl, looter)
+        public EntityLootEvent(PlayerLoot playerLoot, Player looter, Entity looted)
+            : base(playerLoot, looter)
         {
             Target = looted;
         }
     }
 }
-

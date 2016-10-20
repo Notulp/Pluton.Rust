@@ -5,24 +5,13 @@
 
 	public class ItemUsedEvent : CountedInstance
 	{
-		private InvItem _item;
-		private int _amount;
+		public readonly InvItem Item;
+		public readonly int Amount;
 
-		public ItemUsedEvent(Item item, int amountToConsume)
+		public ItemUsedEvent(Item item, int amount)
 		{
-			_item = new InvItem(item);
-			_amount = amountToConsume;
+			Item = new InvItem(item);
+			Amount = amount;
 		}
-
-		public InvItem Item
-		{
-			get { return _item; }
-		}
-
-		public int Amount
-		{
-			get { return _amount; }
-		}
-
 	}
 }

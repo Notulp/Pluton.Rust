@@ -5,19 +5,20 @@
 
     public class DoorUseEvent : CountedInstance
     {
-        public bool Allow = true; // allow the player to open ( or try to open with a lock ) the door ?
-        public bool Open; // is the player opening or closing the door ?
+        public readonly Player Player;
+        public readonly Entity Door;
+
+        public bool Allow = true;
+        public bool Open;
         public bool IgnoreLock = false;
-        public Player Player;
-        public Entity Door;
 
         public string DenyReason = "";
 
         public DoorUseEvent(Entity door, Player player, bool open)
         {
             Door = door;
-            Open = open;
             Player = player;
+            Open = open;
         }
 
         public void Deny(string reason = "")
@@ -27,4 +28,3 @@
         }
     }
 }
-

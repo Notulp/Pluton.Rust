@@ -6,21 +6,15 @@ namespace Pluton.Rust.Events
 
 	public class WeaponThrowEvent : CountedInstance
 	{
-		ThrownWeapon _thrownWeapon;
-		BaseEntity.RPCMessage _msg;
-		Player _player;
+		public readonly ThrownWeapon Weapon;
+		public readonly BaseEntity.RPCMessage RPCMessage;
+		public readonly Player Player;
 
 		public WeaponThrowEvent(ThrownWeapon thrownWeapon, BaseEntity.RPCMessage msg)
 		{
-			_msg = msg;
-			_thrownWeapon = thrownWeapon;
-			_player = Server.GetPlayer(msg.player);
+			Weapon = thrownWeapon;
+		    RPCMessage = msg;
+			Player = Server.GetPlayer(msg.player);
 		}
-
-		public BaseEntity.RPCMessage RPCMessage => _msg;
-
-		public ThrownWeapon Weapon => _thrownWeapon;
-
-		public Player Player => _player;
 	}
 }

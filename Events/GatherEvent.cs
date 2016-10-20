@@ -1,4 +1,4 @@
-﻿namespace Pluton.Rust.Events
+namespace Pluton.Rust.Events
 {
 	using Core;
 	using Rust;
@@ -6,43 +6,23 @@
 
     public class GatherEvent : CountedInstance
     {
-        private ResourceDispenser _resourceDispenser;
-        private Player _gatherer;
-        private Entity _resource;
-        private ItemAmount _itemAmount;
-        private int _amount;
+        public readonly ResourceDispenser ResourceDispenser;
+        public readonly Entity Resource;
+        public readonly Player Gatherer;
+        public readonly ItemAmount ItemAmount;
 
-        public GatherEvent(ResourceDispenser dispenser, BaseEntity from, BaseEntity to, ItemAmount itemAmt, int amount)
+        public int Amount;
+
+        public GatherEvent(ResourceDispenser resourceDispenser, BaseEntity from, BaseEntity to, ItemAmount itemAmount, int amount)
         {
-            if (to is BasePlayer) {
-                _gatherer = Server.GetPlayer((BasePlayer)to);
-                _resource = new Entity(from);
-                _resourceDispenser = dispenser;
-                _itemAmount = itemAmt;
-                _amount = (int)(amount * World.GetInstance().ResourceGatherMultiplier);
+            if (to is BasePlayer)
+            {
+                ResourceDispenser = resourceDispenser;
+                Resource = new Entity(from);
+                Gatherer = Server.GetPlayer(to as BasePlayer);
+                ItemAmount = itemAmount;
+                Amount = (int) (amount * World.GetInstance().ResourceGatherMultiplier);
             }
-        }
-
-        public ResourceDispenser ResourceDispenser {
-            get { return _resourceDispenser; }
-        }
-
-        public Player Gatherer {
-            get { return _gatherer; }
-        }
-
-        public Entity Resource {
-            get { return _resource; }
-        }
-
-        public ItemAmount ItemAmount {
-            get { return _itemAmount; }
-        }
-
-        public int Amount {
-            get { return _amount; }
-            set { _amount = value; }
         }
     }
 }
-

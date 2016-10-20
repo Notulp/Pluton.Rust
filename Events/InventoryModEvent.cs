@@ -6,28 +6,21 @@
 
     public class InventoryModEvent : CountedInstance
     {
-        private InvItem _item;
-        private ItemContainer _itemContainer;
-        private Player _owner;
-        private Entity _entity;
+        public readonly InvItem Item;
+        public readonly ItemContainer ItemContainer;
+        public readonly Player Player;
+        public readonly Entity Entity;
 
-        public InventoryModEvent(ItemContainer ic, Item i)
+        public InventoryModEvent(ItemContainer itemContainer, Item item)
         {
-            _item = new InvItem(i);
-            _itemContainer = ic;
+            ItemContainer = itemContainer;
+            Item = new InvItem(item);
 
-            if (ic.entityOwner != null)
-                _entity = new Entity(ic.entityOwner);
-            if (ic.playerOwner != null)
-                _owner = Server.GetPlayer(ic.playerOwner);
+            if (itemContainer.playerOwner != null)
+                Player = Server.GetPlayer(itemContainer.playerOwner);
+
+            if (itemContainer.entityOwner != null)
+                Entity = new Entity(itemContainer.entityOwner);
         }
-
-        public InvItem Item => _item;
-
-        public ItemContainer ItemContainer => _itemContainer;
-
-        public Player Player => _owner;
-
-        public Entity Entity => _entity;
     }
 }

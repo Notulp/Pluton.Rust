@@ -1,4 +1,4 @@
-﻿namespace Pluton.Rust.Events
+namespace Pluton.Rust.Events
 {
 	using System;
 	using Core;
@@ -7,22 +7,22 @@
 
 	public class BuildingEvent : CountedInstance
     {
-        public BuildingPart BuildingPart;
-        public readonly Player Builder;
         public readonly Construction Construction;
         public readonly Construction.Target Target;
-        public bool NeedsValidPlacement;
+        public readonly BuildingPart BuildingPart;
+        public readonly Player Builder;
+        public readonly bool NeedsValidPlacement;
 
-        public string DestroyReason = String.Empty;
+        public string DestroyReason = string.Empty;
         public bool DoDestroy = false;
 
-        public BuildingEvent(Construction construction, Construction.Target target, BuildingBlock bb, bool bNeedsValidPlacement)
+        public BuildingEvent(Construction construction, Construction.Target target, BuildingBlock buildingBlock, bool needsValidPlacement)
         {
-			Builder = Server.GetPlayer(target.player);
-            BuildingPart = new BuildingPart(bb);
             Construction = construction;
             Target = target;
-            NeedsValidPlacement = bNeedsValidPlacement;
+            BuildingPart = new BuildingPart(buildingBlock);
+            Builder = Server.GetPlayer(target.player);
+            NeedsValidPlacement = needsValidPlacement;
         }
 
         public void Destroy(string reason = "Plugin blocks building!")

@@ -6,12 +6,12 @@
 
     public class BuildingPartDemolishedEvent : CountedInstance
     {
-        public readonly Player Player;
         public readonly BuildingPart BuildingPart;
+        public readonly Player Player;
 
-        public BuildingPartDemolishedEvent(BuildingBlock bb, BasePlayer basePlayer)
+        public BuildingPartDemolishedEvent(BuildingBlock buildingBlock, BasePlayer basePlayer)
         {
-            BuildingPart = new BuildingPart(bb);
+            BuildingPart = new BuildingPart(buildingBlock);
             Player = Server.GetPlayer(basePlayer);
         }
     }

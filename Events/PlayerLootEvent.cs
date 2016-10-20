@@ -6,11 +6,10 @@
 	{
 		public readonly Player Target;
 
-		public PlayerLootEvent(PlayerLoot pl, Player looter, Player looted)
-			: base(pl, looter)
+		public PlayerLootEvent(PlayerLoot playerLoot, Player looter, Player looted)
+			: base(playerLoot, looter)
 		{
 			Target = looted;
 		}
 	}
 }
-

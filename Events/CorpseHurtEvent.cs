@@ -4,11 +4,10 @@
     {
         public readonly BaseCorpse corpse;
 
-        public CorpseHurtEvent(BaseCorpse c, HitInfo info)
+        public CorpseHurtEvent(BaseCorpse baseCorpse, HitInfo info)
             : base(info)
         {
-            corpse = c;
+            corpse = baseCorpse;
         }
     }
 }
-

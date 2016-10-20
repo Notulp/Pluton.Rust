@@ -25,11 +25,10 @@
 		public float PoisonValue = 0.0f;
 		public float RadiationValue = 0.0f;
 		public bool PreventDamage = false;
-
-
-		public MetabolismTickEvent(BasePlayer player)
+        
+		public MetabolismTickEvent(BasePlayer basePlayer)
 		{
-			Victim = Server.GetPlayer(player);
+			Victim = Server.GetPlayer(basePlayer);
 		}
 
 		public PlayerMetabolism metabolism
@@ -39,7 +38,5 @@
 				return Victim.basePlayer.metabolism;
 			}
 		}
-
 	}
 }
-
