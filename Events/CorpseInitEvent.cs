@@ -8,11 +8,10 @@
         public readonly BaseCorpse Corpse;
         public readonly Entity Parent;
 
-        public CorpseInitEvent(BaseCorpse c, BaseEntity p)
+        public CorpseInitEvent(BaseCorpse baseCorpse, BaseEntity baseEntity)
         {
-            Corpse = c;
-            Parent = new Entity(p);
+            Corpse = baseCorpse;
+            Parent = new Entity(baseEntity);
         }
     }
 }
-

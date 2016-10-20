@@ -1,4 +1,4 @@
-﻿namespace Pluton.Rust.Events
+namespace Pluton.Rust.Events
 {
 	using Core;
 	using Rust;
@@ -8,9 +8,10 @@
     public class DeathEvent : CountedInstance
     {
         public readonly HitInfo _info;
-        public bool dropLoot = true;
         public readonly string HitBone;
-		public bool Die = true;
+
+        public bool Die = true;
+        public bool dropLoot = true;
 
         public DeathEvent(HitInfo info)
         {
@@ -54,17 +55,18 @@
         public Entity Attacker {
             get {
                 try {
-                    if (_info.Initiator != null) {
-                        BaseEntity ent = _info.Initiator;
-                        BasePlayer p = ent.GetComponent<BasePlayer>();
-                        if (p != null)
-                            return Server.GetPlayer(p);
+                    if (_info.Initiator != null)
+                    {
+                        BaseEntity baseEntity = _info.Initiator;
+                        BasePlayer basePlayer = baseEntity.GetComponent<BasePlayer>();
+                        if (basePlayer != null)
+                            return Server.GetPlayer(basePlayer);
 
-                        BaseNPC n = ent.GetComponent<BaseNPC>();
-                        if (n != null)
-                            return new NPC(n);
+                        BaseNPC baseNPC = baseEntity.GetComponent<BaseNPC>();
+                        if (baseNPC != null)
+                            return new NPC(baseNPC);
 
-                        return new Entity(ent);
+                        return new Entity(baseEntity);
                     }
                     return null;
                 } catch (Exception ex) {
@@ -80,7 +82,7 @@
                 try {
                     if (_info.Weapon == null)
                         return null;
-                    var itemUID = (uint)_info.Weapon.GetFieldValue("ownerItemUID");
+                    var itemUID = (uint) _info.Weapon.GetFieldValue("ownerItemUID");
 
 					BasePlayer ownerPlayer = _info.Weapon.GetOwnerPlayer();
                     if (ownerPlayer == null) {
@@ -97,4 +99,3 @@
         }
     }
 }
-

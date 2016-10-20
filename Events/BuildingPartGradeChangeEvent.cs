@@ -6,25 +6,24 @@
 
     public class BuildingPartGradeChangeEvent: CountedInstance
     {
-        private BuildingGrade.Enum grade;
-
-        public BuildingPart BuildingPart;
+        public readonly BuildingPart BuildingPart;
         public readonly Player Builder;
 
         public bool HasPrivilege;
         public bool Rotatable = true;
         public bool PayForUpgrade = true;
-
         public string DestroyReason = string.Empty;
         public bool DoDestroy = false;
 
-        public BuildingPartGradeChangeEvent(BuildingBlock bb, BuildingGrade.Enum bgrade, BasePlayer player)
-        {
-            BuildingPart = new BuildingPart(bb);
-            Builder = Server.GetPlayer(player);
-            grade = bgrade;
+        private BuildingGrade.Enum grade;
 
-            HasPrivilege = (bool)bb.CallMethod("CanChangeToGrade", bgrade, player);
+        public BuildingPartGradeChangeEvent(BuildingBlock buildingBlock, BuildingGrade.Enum buildingGrade, BasePlayer basePlayer)
+        {
+            BuildingPart = new BuildingPart(buildingBlock);
+            Builder = Server.GetPlayer(basePlayer);
+            grade = buildingGrade;
+
+            HasPrivilege = (bool) buildingBlock.CallMethod("CanChangeToGrade", buildingGrade, basePlayer);
         }
 
         public BuildingGrade.Enum Grade {
@@ -33,8 +32,8 @@
         }
 
         public int GradeInt {
-            get { return (int)grade; }
-            set { grade = (BuildingGrade.Enum)value; }
+            get { return (int) grade; }
+            set { grade = (BuildingGrade.Enum) value; }
         }
 
         public void Destroy(string reason = "Plugin blocks building!")

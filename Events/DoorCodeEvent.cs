@@ -14,11 +14,11 @@
         public bool allowed = true;
         public bool forceAllow = false;
 
-        string _entered;
+        private string _entered;
 
         public string Code {
             get {
-                return (string)codeLock.GetFieldValue("code");
+                return (string) codeLock.GetFieldValue("code");
             }
             set {
                 int code;
@@ -43,8 +43,8 @@
         public DoorCodeEvent(CodeLock doorLock, BasePlayer player, string entered)
         {
             codeLock = doorLock;
-            _entered = entered;
             Player = Server.GetPlayer(player);
+            _entered = entered;
         }
 
         public void Allow() => forceAllow = true;
@@ -80,4 +80,3 @@
         }
     }
 }
-

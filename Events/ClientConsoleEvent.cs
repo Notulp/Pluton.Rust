@@ -10,23 +10,22 @@
     {
         public readonly ConsoleSystem.Arg _args;
         public readonly Player User;
-
+        public readonly List<string> Args;
         public readonly string Cmd;
 
-        public readonly List<string> Args;
         public string Reply;
 
         public ClientConsoleEvent(ConsoleSystem.Arg arg, string rconCmd)
         {
 			_args = arg;
-            User = Server.GetPlayer((BasePlayer)arg.connection.player);
+            User = Server.GetPlayer((BasePlayer) arg.connection.player);
             Args = new List<string>();
 
             Reply = "Command not found!";
 
-            if (String.IsNullOrEmpty(rconCmd))
+            if (string.IsNullOrEmpty(rconCmd))
                 return;
-
+            
             foreach (string str in rconCmd.Split(' '))
                 Args.Add(str);
 

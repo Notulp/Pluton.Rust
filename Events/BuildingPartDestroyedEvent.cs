@@ -8,15 +8,13 @@
     public class BuildingPartDestroyedEvent : CountedInstance
     {
         public readonly BuildingPart BuildingPart;
-
         public readonly HitInfo Info;
-
         public readonly string HitBone;
 
-        public BuildingPartDestroyedEvent(BuildingBlock bb, HitInfo info)
+        public BuildingPartDestroyedEvent(BuildingBlock buildingBlock, HitInfo info)
         {
+            BuildingPart = new BuildingPart(buildingBlock);
             Info = info;
-            BuildingPart = new BuildingPart(bb);
             string bonename = StringPool.Get(info.HitBone);
             HitBone = bonename == "" ? "unknown" : bonename;
         }
@@ -36,16 +34,16 @@
             get {
                 try {
                     if (Info.Initiator != null) {
-                        BaseEntity ent = Info.Initiator;
-                        BasePlayer p = ent.GetComponent<BasePlayer>();
-                        if (p != null)
-                            return Server.GetPlayer(p);
+                        BaseEntity baseEntity = Info.Initiator;
+                        BasePlayer basePlayer = baseEntity.GetComponent<BasePlayer>();
+                        if (basePlayer != null)
+                            return Server.GetPlayer(basePlayer);
 
-                        BaseNPC n = ent.GetComponent<BaseNPC>();
-                        if (n != null)
-                            return new NPC(n);
+                        BaseNPC baseNPC = baseEntity.GetComponent<BaseNPC>();
+                        if (baseNPC != null)
+                            return new NPC(baseNPC);
 
-                        return new Entity(ent);
+                        return new Entity(baseEntity);
                     }
                     return null;
                 } catch (Exception ex) {
@@ -61,7 +59,7 @@
                 try {
                     if (Info.Weapon == null)
                         return null;
-                    uint itemUID = (uint)Info.Weapon.GetFieldValue("ownerItemUID");
+                    uint itemUID = (uint) Info.Weapon.GetFieldValue("ownerItemUID");
 
 					BasePlayer ownerPlayer = Info.Weapon.GetOwnerPlayer();
                     if (ownerPlayer == null) {

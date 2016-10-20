@@ -4,9 +4,9 @@
 
     public class CommandPermissionEvent : CommandEvent
     {
-        public bool Blocked = false;
-
         public readonly ChatCommand ChatCommand;
+
+        public bool Blocked = false;
 
         public CommandPermissionEvent(Player player, string[] command, ChatCommand chatCmd)
             : base(player, command)
@@ -23,4 +23,3 @@
         public string PluginName => ChatCommand.plugin.Name;
     }
 }
-

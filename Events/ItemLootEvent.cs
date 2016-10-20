@@ -6,8 +6,8 @@
 	{
 		public readonly Item Target;
 
-		public ItemLootEvent(PlayerLoot pl, Player looter, Item looted)
-			: base(pl, looter)
+		public ItemLootEvent(PlayerLoot playerLoot, Player looter, Item looted)
+			: base(playerLoot, looter)
 		{
 			Target = looted;
 		}

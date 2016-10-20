@@ -6,16 +6,15 @@
     {
         public readonly Entity Victim;
 
-        public CombatEntityHurtEvent(BaseCombatEntity combatEnt, HitInfo info)
+        public CombatEntityHurtEvent(BaseCombatEntity combatEntity, HitInfo info)
             : base(info)
         {
-            var block = combatEnt.GetComponent<BuildingBlock>();
+            BuildingBlock buildingBlock = combatEntity.GetComponent<BuildingBlock>();
 
-            if (block != null)
-                Victim = new BuildingPart(block);
+            if (buildingBlock != null)
+                Victim = new BuildingPart(buildingBlock);
             else
-                Victim = new Entity(combatEnt);
+                Victim = new Entity(combatEntity);
         }
     }
 }
-

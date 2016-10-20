@@ -1,4 +1,4 @@
-﻿namespace Pluton.Rust.Events
+namespace Pluton.Rust.Events
 {
 	using Core;
 	using Rust;
@@ -6,29 +6,21 @@
 
 	public class SyringeUseEvent : CountedInstance
 	{
-		private Player _user;
-		private Player _receiver;
-		private SyringeWeapon _syringeWeapon;
-		private bool _self;
+		public readonly SyringeWeapon Syringe;
+        public readonly BaseEntity.RPCMessage RPCMessage;
+        public readonly Player User;
+        public readonly Player Receiver;
 
-		public SyringeUseEvent(SyringeWeapon sw, BaseEntity.RPCMessage msg, bool isSelf)
+        public SyringeUseEvent(SyringeWeapon syringe, BaseEntity.RPCMessage msg, bool isSelf)
 		{
-			_syringeWeapon = sw;
-			_user = Server.GetPlayer(sw.GetOwnerPlayer());
-			_self = isSelf;
+			Syringe = syringe;
+            RPCMessage = msg;
+			User = Server.GetPlayer(syringe.GetOwnerPlayer());
 
 			if (isSelf)
-				_receiver = _user;
+				Receiver = User;
 			else
-				_receiver = new Player(BaseNetworkable.serverEntities.Find(msg.read.UInt32()) as BasePlayer);
+				Receiver = new Player(BaseNetworkable.serverEntities.Find(msg.read.UInt32()) as BasePlayer);
 		}
-
-		public Player User => _user;
-
-		public Player Receiver => _receiver;
-
-		public SyringeWeapon Syringe =>  _syringeWeapon;
-
-		public bool IsSelfUsage() => _self;
 	}
 }

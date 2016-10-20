@@ -29,7 +29,5 @@
 				return Victim.basePlayer.metabolism;
 			}
 		}
-
 	}
 }
-

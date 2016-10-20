@@ -799,7 +799,7 @@
 		// BasePlayer.UpdateRadiation()
 		public static void On_PlayerTakeRadiation(BasePlayer player, float radAmount)
 		{
-			var ptr = new PlayerTakeRadsEvent(Server.GetPlayer(player), player.metabolism.radiation_level.value, radAmount);
+			var ptr = new PlayerTakeRadsEvent(player, player.metabolism.radiation_level.value, radAmount);
 			OnNext("On_PlayerTakeRadiation", ptr);
 			player.metabolism.radiation_level.value = ptr.Next;
 		}

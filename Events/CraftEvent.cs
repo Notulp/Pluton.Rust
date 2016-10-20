@@ -6,29 +6,23 @@
 
     public class CraftEvent : CountedInstance
     {
-        public Player Crafter;
-
-        public ItemDefinition Target;
+        public readonly Player Crafter;
 
         public ItemCrafter itemCrafter;
-
         public ItemBlueprint bluePrint;
-
+        public ItemDefinition Target;
         public int Amount;
-
         public bool Cancel = false;
-
-        public string cancelReason = System.String.Empty;
-
+        public string cancelReason = string.Empty;
         public int SkinID;
 
-        public CraftEvent(ItemCrafter self, ItemBlueprint bp, BasePlayer owner, ProtoBuf.Item.InstanceData instanceData, int amount, int skinid)
+        public CraftEvent(ItemCrafter itemCrafter, ItemBlueprint itemBlueprint, BasePlayer owner, ProtoBuf.Item.InstanceData instanceData, int amount, int skinid)
         {
+            this.itemCrafter = itemCrafter;
+            bluePrint = itemBlueprint;
             Crafter = Server.GetPlayer(owner);
-            Target = bp.targetItem;
-            itemCrafter = self;
+            Target = itemBlueprint.targetItem;
             Amount = amount;
-            bluePrint = bp;
             SkinID = skinid;
         }
 
@@ -48,4 +42,3 @@
         }
     }
 }
-

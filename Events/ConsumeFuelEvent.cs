@@ -5,28 +5,15 @@ namespace Pluton.Rust.Events
 
     public class ConsumeFuelEvent : CountedInstance
     {
-        BaseOven _baseOven;
-        InvItem _item;
-        ItemModBurnable _burn;
+        public readonly BaseOven BaseOven;
+        public readonly InvItem Item;
+        public readonly ItemModBurnable Burnable;
 
-        public ConsumeFuelEvent(BaseOven bo, Item fuel, ItemModBurnable burn)
+        public ConsumeFuelEvent(BaseOven baseOven, Item fuel, ItemModBurnable burnable)
         {
-            _baseOven = bo;
-            _item = new InvItem(fuel);
-            _burn = burn;
+            BaseOven = baseOven;
+            Item = new InvItem(fuel);
+            Burnable = burnable;
         }
-
-        public BaseOven BaseOven {
-            get { return _baseOven; }
-        }
-
-        public InvItem Item {
-            get { return _item; }
-        }
-
-        public ItemModBurnable Burnable {
-            get { return _burn; }
-        }
-
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Pluton.Rust.Events
+namespace Pluton.Rust.Events
 {
 	using Core;
 	using Rust;
@@ -6,37 +6,17 @@
 
 	public class ItemRepairEvent : CountedInstance
 	{
-		private RepairBench _repairBench;
-		private Player _player;
-		private InvItem _item;
-		private BaseEntity.RPCMessage _msg;
+		public readonly RepairBench RepairBench;
+        public readonly Player Player;
+        public readonly InvItem Item;
+        public readonly BaseEntity.RPCMessage RPCMessage;
 
 		public ItemRepairEvent(RepairBench repairBench, BaseEntity.RPCMessage msg)
 		{
-			_repairBench = repairBench;
-			_player = Server.GetPlayer(msg.player);
-			_item = new InvItem(repairBench.inventory.GetSlot(0));
-			_msg = msg;
-		}
-
-		public RepairBench RepairBench
-		{
-			get { return _repairBench; }
-		}
-
-		public Player Player
-		{
-			get { return _player; }
-		}
-
-		public InvItem Item
-		{
-			get { return _item; }
-		}
-
-		public BaseEntity.RPCMessage RPCMessage
-		{
-			get { return _msg; }
+			RepairBench = repairBench;
+            RPCMessage = msg;
+            Player = Server.GetPlayer(msg.player);
+			Item = new InvItem(repairBench.inventory.GetSlot(0));
 		}
 	}
 }
