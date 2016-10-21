@@ -199,6 +199,7 @@ namespace Pluton.Rust
 
                     combatEnt.health -= info.damageTypes.Total();
                     combatEnt.SendNetworkUpdate(BasePlayer.NetworkQueue.Update);
+
                     if (ConVar.Global.developer > 1)
                     {
                         Debug.Log(string.Concat(new object[]
@@ -214,17 +215,23 @@ namespace Pluton.Rust
                                       " health left"
                         }));
                     }
+
                     combatEnt.lastDamage = info.damageTypes.GetMajorityDamageType();
                     combatEnt.lastAttacker = info.Initiator;
+
                     BaseCombatEntity baseCombatEntity = combatEnt.lastAttacker as BaseCombatEntity;
+
                     if (baseCombatEntity != null)
                         baseCombatEntity.MarkHostileTime();
 
                     combatEnt.SetFieldValue("_lastAttackedTime", Time.time);
+
                     if (combatEnt.health <= 0f)
                     {
                         combatEnt.Die(info);
+
                         BuildingBlock bb = combatEnt.GetComponent<BuildingBlock>();
+
                         if (bb != null)
                         {
                             OnNext("On_BuildingPartDestroyed", new BuildingPartDestroyedEvent(bb, info));
