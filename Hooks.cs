@@ -93,7 +93,10 @@ namespace Pluton.Rust
             try
             {
                 Assert.Test(combatEnt.isServer, "This should be called serverside only");
-                if (combatEnt.IsDead()) return;
+
+                if (combatEnt.IsDead())
+                    return;
+
                 using (TimeWarning.New("Hurt", 50))
                 {
                     BaseNPC npc = combatEnt.GetComponent<BaseNPC>();
@@ -101,11 +104,11 @@ namespace Pluton.Rust
                     BasePlayer player = combatEnt.GetComponent<BasePlayer>();
 
                     combatEnt.ScaleDamage(info);
-
-                    HurtEvent he;
+                    
                     if (player != null)
                     {
                         Player p = Server.GetPlayer(player);
+
                         if (p.Teleporting)
                         {
                             for (int i = 0; i < info.damageTypes.types.Length; i++)
@@ -114,28 +117,28 @@ namespace Pluton.Rust
                             }
                         }
 
-                        he = new PlayerHurtEvent(p, info);
+                        HurtEvent he = new PlayerHurtEvent(p, info);
                         OnNext("On_PlayerHurt", he);
                     }
                     else if (npc != null)
                     {
-                        he = new NPCHurtEvent(new NPC(npc), info);
+                        HurtEvent he = new NPCHurtEvent(new NPC(npc), info);
                         OnNext("On_NPCHurt", he);
                     }
                     else if (corpse != null)
                     {
-                        he = new CorpseHurtEvent(corpse, info);
+                        HurtEvent he = new CorpseHurtEvent(corpse, info);
                         OnNext("On_CorpseHurt", he);
                     }
                     else
                     {
-                        he = new CombatEntityHurtEvent(combatEnt, info);
+                        HurtEvent he = new CombatEntityHurtEvent(combatEnt, info);
                         OnNext("On_CombatEntityHurt", he);
                     }
 
                     if (info.PointStart != Vector3.zero)
                     {
-                        DirectionProperties[] directionProperties = (DirectionProperties[])combatEnt.GetFieldValue("propDirection");
+                        DirectionProperties[] directionProperties = (DirectionProperties[]) combatEnt.GetFieldValue("propDirection");
                         for (int i = 0; i < directionProperties.Length; i++)
                         {
                             if (!(directionProperties[i].extraProtection == null))
@@ -156,11 +159,14 @@ namespace Pluton.Rust
                             ConsoleNetwork.BroadcastToAllClients("ddraw.arrow", new object[] {
                                 60, Color.cyan, info.PointStart, info.PointEnd, 0.1
                             });
+
                             ConsoleNetwork.BroadcastToAllClients("ddraw.sphere", new object[] {
                                 60, Color.cyan, info.HitPositionWorld, 0.05
                             });
                         }
+
                         string text = String.Empty;
+
                         for (int i = 0; i < info.damageTypes.types.Length; i++)
                         {
                             float num = info.damageTypes.types[i];
@@ -172,6 +178,7 @@ namespace Pluton.Rust
                                 });
                             }
                         }
+
                         string text3 = String.Concat(new object[] {
                             "<color=lightblue>Damage:</color>".PadRight(10),
                             info.damageTypes.Total().ToString("0.00"),
@@ -184,6 +191,7 @@ namespace Pluton.Rust
                             "\r\n<color=lightblue>Weapon:</color>".PadRight(10), info.Weapon,
                             "\r\n<color=lightblue>Damages:</color>\r\n", text
                         });
+
                         ConsoleNetwork.BroadcastToAllClients("ddraw.text", new object[] {
                             60, Color.white, info.HitPositionWorld, text3
                         });
@@ -208,7 +216,7 @@ namespace Pluton.Rust
                     }
                     combatEnt.lastDamage = info.damageTypes.GetMajorityDamageType();
                     combatEnt.lastAttacker = info.Initiator;
-                    var baseCombatEntity = combatEnt.lastAttacker as BaseCombatEntity;
+                    BaseCombatEntity baseCombatEntity = combatEnt.lastAttacker as BaseCombatEntity;
                     if (baseCombatEntity != null)
                         baseCombatEntity.MarkHostileTime();
 
@@ -235,12 +243,19 @@ namespace Pluton.Rust
 
         public static void On_EventTriggered(TriggeredEventPrefab tep)
         {
-            var ete = new EventTriggeredEvent(tep);
+            EventTriggeredEvent ete = new EventTriggeredEvent(tep);
+
             OnNext("On_EventTriggered", ete);
-            if (ete.Stop) return;
+
+            if (ete.Stop)
+                return;
+
             Debug.Log("[event] " + ete.Prefab);
+
             BaseEntity baseEntity = GameManager.server.CreateEntity(ete.Prefab);
-            if (baseEntity) baseEntity.Spawn();
+
+            if (baseEntity)
+                baseEntity.Spawn();
         }
 
         public static void On_NetworkableKill(BaseNetworkable bn) => OnNext("On_NetworkableKill", bn);
@@ -272,6 +287,7 @@ namespace Pluton.Rust
                 }
 
                 BasePlayer basePlayer = arg.Player();
+
                 if (!basePlayer || basePlayer.HasPlayerFlag(BasePlayer.PlayerFlags.ChatMute))
                 {
                     return;
@@ -294,10 +310,12 @@ namespace Pluton.Rust
                 {
                     basePlayer.NextChatTime += 2f;
                     float num = basePlayer.NextChatTime - Time.realtimeSinceStartup;
+
                     ConsoleNetwork.SendClientCommand(basePlayer.net.connection, "chat.add", new object[] {
                         0,
-                        "You're chatting too fast - try again in " + (num + 0.5f).ToString ("0") + " seconds"
+                        "You're chatting too fast - try again in " + (num + 0.5f).ToString("0") + " seconds"
                     });
+
                     if (num > 120f)
                     {
                         basePlayer.Kick("Chatting too fast");
@@ -312,29 +330,22 @@ namespace Pluton.Rust
                 if (!pChat.AllowFormatting && pChat.FinalText.Contains("<"))
                 {
                     if (pChat.FinalText.Contains("<size", CompareOptions.IgnoreCase))
-                    {
                         return;
-                    }
+
                     if (pChat.FinalText.Contains("<color", CompareOptions.IgnoreCase))
-                    {
                         return;
-                    }
+
                     if (pChat.FinalText.Contains("<material", CompareOptions.IgnoreCase))
-                    {
                         return;
-                    }
+
                     if (pChat.FinalText.Contains("<quad", CompareOptions.IgnoreCase))
-                    {
                         return;
-                    }
+
                     if (pChat.FinalText.Contains("<b>", CompareOptions.IgnoreCase))
-                    {
                         return;
-                    }
+
                     if (pChat.FinalText.Contains("<i>", CompareOptions.IgnoreCase))
-                    {
                         return;
-                    }
                 }
 
                 if (ConVar.Chat.serverlog)
@@ -345,11 +356,14 @@ namespace Pluton.Rust
                         ConsoleColor.DarkGreen,
                         str
                     });
+
                     ConVar.Server.Log("Log.Chat.txt", string.Format("{0}: {1}\n", basePlayer.userID, basePlayer.displayName, str));
+
                     Debug.Log(String.Format("[CHAT] {0}: {1}", basePlayer.displayName, str));
                 }
 
                 string colour = "#5af";
+
                 if (basePlayer.IsAdmin())
                 {
                     colour = "#af5";
@@ -361,6 +375,7 @@ namespace Pluton.Rust
                 }
 
                 basePlayer.NextChatTime = Time.realtimeSinceStartup + 1.5f;
+
                 var chatEntry = new ConVar.Chat.ChatEntry
                 {
                     Message = pChat.FinalText,
@@ -369,7 +384,9 @@ namespace Pluton.Rust
                     Color = colour,
                     Time = Facepunch.Math.Epoch.Current
                 };
+
                 (typeof(ConVar.Chat).GetStaticFieldValue("History") as List<ConVar.Chat.ChatEntry>).Add(chatEntry);
+
                 Facepunch.RCon.Broadcast(Facepunch.RCon.LogType.Chat, chatEntry);
 
                 if (pChat.FinalText != "")
@@ -384,9 +401,11 @@ namespace Pluton.Rust
                     else
                     {
                         float num = 2500;
+
                         foreach (BasePlayer current in BasePlayer.activePlayerList)
                         {
                             float sqrMagnitude = (current.transform.position - basePlayer.transform.position).sqrMagnitude;
+
                             if (sqrMagnitude <= num)
                             {
                                 ConsoleNetwork.SendClientCommand(current.net.connection, "chat.add2", basePlayer.userID, pChat.FinalText, pChat.BroadcastName, colour, Mathf.Clamp01(num - sqrMagnitude + 0.2f));
@@ -403,19 +422,23 @@ namespace Pluton.Rust
             string[] args = arg.ArgsStr.Substring(2, arg.ArgsStr.Length - 3).Replace("\\", "").Split(new string[] { " " }, StringSplitOptions.None);
 
             var cmd = new CommandEvent(player, args);
+
             // TODO: do this part in a different function to be documented
             if (cmd.Cmd == "")
                 return;
 
             foreach (KeyValuePair<string, BasePlugin> pl in PluginLoader.GetInstance().Plugins)
             {
-                ChatCommand[] commands = ((ChatCommands)pl.Value.GetGlobalObject("Commands")).getChatCommands(cmd.Cmd);
+                ChatCommand[] commands = ((ChatCommands) pl.Value.GetGlobalObject("Commands")).getChatCommands(cmd.Cmd);
+
                 foreach (ChatCommand chatCmd in commands)
                 {
                     if (chatCmd.callback != null)
                     {
-                        var permission = new CommandPermissionEvent(player, args, chatCmd);
+                        CommandPermissionEvent permission = new CommandPermissionEvent(player, args, chatCmd);
+
                         OnNext("On_CommandPermission", permission);
+
                         if (permission.Blocked)
                         {
                             player.Message(permission.Reply);
@@ -433,6 +456,7 @@ namespace Pluton.Rust
                     }
                 }
             }
+
             OnNext("On_Command", cmd);
 
             if (cmd.Reply != "")
@@ -457,8 +481,10 @@ namespace Pluton.Rust
             for (int i = 0; i < array.Length; i++)
             {
                 ItemAmount itemAmount = array[i];
-                Item item = ItemManager.Create(itemAmount.itemDef, (int)itemAmount.amount, 0);
+                Item item = ItemManager.Create(itemAmount.itemDef, (int) itemAmount.amount, 0);
+
                 OnNext("On_ItemPickup", new ItemPickupEvent(ce, msg, item));
+
                 msg.player.GiveItem(item, BaseEntity.GiveItemReason.PickedUp);
             }
 
@@ -468,7 +494,9 @@ namespace Pluton.Rust
             {
                 Effect.server.Run(ce.pickupEffect.resourcePath, ce.transform.position, ce.transform.up, null, false);
             }
+
             msg.player.xp.Add(global::Rust.Xp.Definitions.CollectWorldItem, ce.xpScale, ce.ShortPrefabName, 0uL);
+
             ce.Kill(BaseNetworkable.DestroyMode.None);
         }
 
@@ -484,27 +512,44 @@ namespace Pluton.Rust
         
         public static void On_BuildingPartGradeChange(BuildingBlock bb, BaseEntity.RPCMessage msg)
         {
-            var bgrade = (BuildingGrade.Enum)msg.read.Int32();
             BasePlayer player = msg.player;
+            var bgrade = (BuildingGrade.Enum) msg.read.Int32();
             var bpgce = new BuildingPartGradeChangeEvent(bb, bgrade, player);
-            OnNext("On_BuildingPartGradeChange", bpgce);
             var cg = (ConstructionGrade)bb.CallMethod("GetGrade", bpgce.Grade);
+
+            OnNext("On_BuildingPartGradeChange", bpgce);
+
             if (bpgce.DoDestroy)
             {
                 bpgce.Builder.Message(bpgce.DestroyReason);
                 UnityEngine.Object.Destroy(bb);
                 return;
             }
-            if (cg == null) return;
-            if (!bpgce.HasPrivilege) return;
-            if (bpgce.PayForUpgrade && !(bool)bb.CallMethod("CanAffordUpgrade", bpgce.Grade, player)) return;
-            if (bb.TimeSinceAttacked() < 8f) return;
-            if (bpgce.PayForUpgrade) bb.CallMethod("PayForUpgrade", cg, player);
+
+            if (cg == null)
+                return;
+
+            if (!bpgce.HasPrivilege)
+                return;
+
+            if (bpgce.PayForUpgrade && !(bool) bb.CallMethod("CanAffordUpgrade", bpgce.Grade, player))
+                return;
+
+            if (bb.TimeSinceAttacked() < 8f)
+                return;
+
+            if (bpgce.PayForUpgrade)
+                bb.CallMethod("PayForUpgrade", cg, player);
+
             bb.SetGrade(bpgce.Grade);
             bb.SetHealthToMax();
-            if (bpgce.Rotatable) bb.CallMethod("StartBeingRotatable");
+
+            if (bpgce.Rotatable)
+                bb.CallMethod("StartBeingRotatable");
+
             bb.SendNetworkUpdate();
             bb.CallMethod("UpdateSkin", false);
+
             Effect.server.Run("assets/bundled/prefabs/fx/build/promote_" + bpgce.Grade.ToString().ToLower() + ".prefab", bb, 0u, Vector3.zero, Vector3.zero);
         }
 
@@ -517,8 +562,8 @@ namespace Pluton.Rust
             {
                 GameObject gameObject = GameManager.server.CreatePrefab(construction.fullName, default(Vector3), default(Quaternion), true);
                 BuildingBlock component = gameObject.GetComponent<BuildingBlock>();
-
                 bool flag = construction.UpdatePlacement(gameObject.transform, construction, target);
+
                 if (bNeedsValidPlacement && !flag)
                 {
                     UnityEngine.Object.Destroy(gameObject);
@@ -526,9 +571,11 @@ namespace Pluton.Rust
                 }
 
                 BuildingEvent be = null;
+
                 if (component != null)
                 {
                     be = new BuildingEvent(construction, target, component, bNeedsValidPlacement);
+
                     OnNext("On_Placement", be);
                 }
 
@@ -559,12 +606,14 @@ namespace Pluton.Rust
         public static void On_LandmineTriggered(Landmine landmine, BasePlayer basePlayer)
         {
             LandmineTriggerEvent landmineTriggerEvent = new LandmineTriggerEvent(landmine, basePlayer);
+
             OnNext("On_LandmineTriggered", landmineTriggerEvent);
 
             if (landmineTriggerEvent.Explode)
             {
                 if (basePlayer != null)
                     landmine.SetFieldValue("triggerPlayerID", basePlayer.userID);
+
                 landmine.SetFlag(BaseEntity.Flags.Open, true);
                 landmine.SendNetworkUpdate(BasePlayer.NetworkQueue.Update);
             }
@@ -578,20 +627,28 @@ namespace Pluton.Rust
         {
             if (!doorLock.IsLocked())
                 return;
+
             string code = rpc.read.String();
             DoorCodeEvent dc = new DoorCodeEvent(doorLock, rpc.player, code);
+
             OnNext("On_DoorCode", dc);
+
             if ((!dc.IsCorrect() || !dc.allowed) && !dc.forceAllow)
             {
                 Effect.server.Run(doorLock.effectDenied.resourcePath, doorLock, 0u, Vector3.zero, Vector3.forward);
                 rpc.player.Hurt(1f, global::Rust.DamageType.ElectricShock, doorLock, true);
                 return;
             }
+
             Effect.server.Run(doorLock.effectUnlocked.resourcePath, doorLock, 0u, Vector3.zero, Vector3.forward);
+
             doorLock.SetFlag(BaseEntity.Flags.Locked, false);
             doorLock.SendNetworkUpdate(BasePlayer.NetworkQueue.Update);
+
             List<ulong> whitelist = new List<ulong>();
-            whitelist = (List<ulong>)doorLock.GetFieldValue("whitelistPlayers");
+
+            whitelist = (List<ulong>) doorLock.GetFieldValue("whitelistPlayers");
+
             if (!whitelist.Contains(rpc.player.userID))
             {
                 whitelist.Add(rpc.player.userID);
@@ -606,23 +663,25 @@ namespace Pluton.Rust
                 return;
 
             DoorUseEvent due = new DoorUseEvent(new Entity(door), Server.GetPlayer(rpc.player), open);
+
             OnNext("On_DoorUse", due);
 
             if (!due.Allow)
             {
                 if (due.DenyReason != "")
                     rpc.player.SendConsoleCommand("chat.add", 0, String.Format("{0}: {1}", Server.server_message_name.ColorText("fa5"), due.DenyReason));
+
                 return;
             }
 
             bool doaction = true;
-
             BaseLock baseLock = door.GetSlot(BaseEntity.Slot.Lock) as BaseLock;
+
             if (!due.IgnoreLock && baseLock != null)
             {
                 doaction = open ? baseLock.OnTryToOpen(rpc.player) : baseLock.OnTryToClose(rpc.player);
 
-                if (doaction && open && (baseLock.IsLocked() && Time.realtimeSinceStartup - (float)door.GetFieldValue("decayResetTimeLast") > 60))
+                if (doaction && open && (baseLock.IsLocked() && Time.realtimeSinceStartup - (float) door.GetFieldValue("decayResetTimeLast") > 60))
                 {
                     Decay.RadialDecayTouch(door.transform.position, 40, 270532608);
                     door.SetFieldValue("decayResetTimeLast", Time.realtimeSinceStartup);
@@ -649,7 +708,8 @@ namespace Pluton.Rust
                 Server.GetPlayer(info.Initiator as BasePlayer).Stats.AddKill(false, true);
             }
 
-            var npc = new NPC(bnpc);
+            NPC npc = new NPC(bnpc);
+
             OnNext("On_NPCKilled", new Events.NPCDeathEvent(npc, info));
         }
 
@@ -664,8 +724,10 @@ namespace Pluton.Rust
         public static void On_PlayerConnected(BasePlayer player)
         {
             var p = new Player(player);
+
             if (Server.GetInstance().OfflinePlayers.ContainsKey(player.userID))
                 Server.GetInstance().OfflinePlayers.Remove(player.userID);
+
             if (!Server.GetInstance().Players.ContainsKey(player.userID))
                 Server.GetInstance().Players.Add(player.userID, p);
 
@@ -675,17 +737,20 @@ namespace Pluton.Rust
         // BasePlayer.OnDisconnected()
         public static void On_PlayerDisconnected(BasePlayer player)
         {
-            var p = Server.GetPlayer(player);
+            Player p = Server.GetPlayer(player);
 
             if (Server.GetInstance().serverData.ContainsKey("OfflinePlayers", p.SteamID))
             {
                 OfflinePlayer op = (Server.GetInstance().serverData.Get("OfflinePlayers", p.SteamID) as OfflinePlayer);
+
                 op.Update(p);
+
                 Server.GetInstance().OfflinePlayers[player.userID] = op;
             }
             else
             {
                 var op = new OfflinePlayer(p);
+
                 Server.GetInstance().OfflinePlayers.Add(player.userID, op);
             }
 
@@ -710,10 +775,11 @@ namespace Pluton.Rust
                     }
 
                     Player victim = Server.GetPlayer(player);
-                    if (!((bool)player.CallMethod("WoundInsteadOfDying", info)))
-                    {
 
+                    if (!((bool) player.CallMethod("WoundInsteadOfDying", info)))
+                    {
                         var pde = new PlayerDeathEvent(victim, info);
+
                         OnNext("On_PlayerDied", pde);
 
                         if (pde.Die)
@@ -738,8 +804,10 @@ namespace Pluton.Rust
                                 if (player.belt != null)
                                 {
                                     var vector = new Vector3(UnityEngine.Random.Range(-2f, 2f), 0.2f, UnityEngine.Random.Range(-2f, 2f));
+
                                     player.belt.DropActive(vector.normalized * 3f);
                                 }
+
                                 player.inventory.Strip();
                             }
 
@@ -752,7 +820,7 @@ namespace Pluton.Rust
 
         public static void On_PlayerGathering(ResourceDispenser dispenser, BaseEntity to, ItemAmount itemAmt, float gatherDamage, float destroyFraction)
         {
-            var from = (BaseEntity)dispenser.GetFieldValue("baseEntity");
+            var from = (BaseEntity) dispenser.GetFieldValue("baseEntity");
 
             if (itemAmt.amount == 0)
             {
@@ -760,24 +828,31 @@ namespace Pluton.Rust
             }
 
             float num = gatherDamage / from.MaxHealth();
-            float num2 = itemAmt.startAmount / (float)dispenser.GetFieldValue("startingItemCounts");
+            float num2 = itemAmt.startAmount / (float) dispenser.GetFieldValue("startingItemCounts");
             float value = itemAmt.startAmount * num / num2;
             float num3 = Mathf.Clamp(value, 0, itemAmt.amount);
             float num4 = num3 * destroyFraction * 2;
+
             if (itemAmt.amount < num3 + num4)
             {
                 itemAmt.amount -= destroyFraction * num3;
                 num3 = itemAmt.amount;
                 num4 = 0;
             }
+
             float amount = itemAmt.amount;
+
             itemAmt.amount -= num3;
+
             if (itemAmt.amount < 0)
             {
                 itemAmt.amount = 0;
             }
+
             int num5 = Mathf.Clamp(Mathf.RoundToInt(num3), 0, Mathf.CeilToInt(amount));
+
             itemAmt.amount -= num4;
+
             if (itemAmt.amount < 0)
             {
                 itemAmt.amount = 0;
@@ -791,7 +866,9 @@ namespace Pluton.Rust
             {
                 return;
             }
+
             Item item = ItemManager.CreateByItemID(itemAmt.itemid, ge.Amount);
+
             if (item == null)
             {
                 return;
@@ -823,6 +900,7 @@ namespace Pluton.Rust
             }
 
             self.taskUID++;
+
             ItemCraftTask itemCraftTask = Facepunch.Pool.Get<ItemCraftTask>();
             itemCraftTask.blueprint = bp;
             self.CallMethod("CollectIngredients", bp, ce.Amount, owner);
@@ -830,19 +908,23 @@ namespace Pluton.Rust
             itemCraftTask.taskUID = self.taskUID;
             itemCraftTask.owner = owner;
             itemCraftTask.instanceData = instanceData;
+
             if (itemCraftTask.instanceData != null)
             {
                 itemCraftTask.instanceData.ShouldPool = false;
             }
+
             itemCraftTask.amount = ce.Amount;
             itemCraftTask.skinID = ce.SkinID;
+
             self.queue.Enqueue(itemCraftTask);
+
             if (itemCraftTask.owner != null)
             {
                 itemCraftTask.owner.Command("note.craft_add", new object[] {
                     itemCraftTask.taskUID,
-                                 itemCraftTask.blueprint.targetItem.itemid,
-                                 amount
+                    itemCraftTask.blueprint.targetItem.itemid,
+                    amount
                 });
             }
             return true;
@@ -856,7 +938,9 @@ namespace Pluton.Rust
         public static void On_PlayerTakeRadiation(BasePlayer player, float radAmount)
         {
             var ptr = new PlayerTakeRadsEvent(player, player.metabolism.radiation_level.value, radAmount);
+
             OnNext("On_PlayerTakeRadiation", ptr);
+
             player.metabolism.radiation_level.value = ptr.Next;
         }
 
@@ -873,11 +957,13 @@ namespace Pluton.Rust
             OnNext("On_ClientAuth", ae);
 
             ConnectionAuth.m_AuthConnection.Remove(connection);
+
             if (!ae.Approved)
             {
                 ConnectionAuth.Reject(connection, ae.Reason);
                 return;
             }
+
             SingletonComponent<ServerMgr>.Instance.ConnectionApproved(connection);
         }
 
@@ -885,6 +971,7 @@ namespace Pluton.Rust
         {
             Player p = Server.GetPlayer(player);
             var re = new RespawnEvent(p, pos, quat);
+
             OnNext("On_Respawn", re);
 
             player.SetPlayerFlag(BasePlayer.PlayerFlags.Wounded, false);
@@ -938,9 +1025,11 @@ namespace Pluton.Rust
 		{
 			BasePlayer looter = playerLoot.GetComponent<BasePlayer>();
 			var ele = new EntityLootEvent(playerLoot, Server.GetPlayer(looter), new Entity(playerLoot.entitySource));
+
 			OnNext("On_LootingEntity", ele);
 
-			if (ele.Cancel) {
+			if (ele.Cancel)
+            {
 				playerLoot.Clear();
 				looter.SendConsoleCommand("chat.add", 0, String.Format("{0}: {1}", Server.server_message_name.ColorText("fa5"), ele.cancelReason));
 			}
@@ -951,6 +1040,7 @@ namespace Pluton.Rust
         {
             BasePlayer looter = playerLoot.GetComponent<BasePlayer>();
             var ile = new ItemLootEvent(playerLoot, Server.GetPlayer(looter), playerLoot.itemSource);
+
             OnNext("On_LootingItem", ile);
 
             if (ile.Cancel)
@@ -965,9 +1055,11 @@ namespace Pluton.Rust
 		{
 			BasePlayer looter = playerLoot.GetComponent<BasePlayer>();
 			var ple = new PlayerLootEvent(playerLoot, Server.GetPlayer(looter), Server.GetPlayer(playerLoot.entitySource as BasePlayer));
+
 			OnNext("On_LootingPlayer", ple);
 
-			if (ple.Cancel) {
+			if (ple.Cancel)
+            {
 				playerLoot.Clear();
 				looter.SendConsoleCommand("chat.add", 0, String.Format("{0}: {1}", Server.server_message_name.ColorText("fa5"), ple.cancelReason));
 			}
@@ -980,9 +1072,12 @@ namespace Pluton.Rust
 		public static void On_ServerInit()
 		{
 			Server.GetInstance().SendCommand("plugins.loaded");
-			if (Server.GetInstance().Loaded) return;
+
+			if (Server.GetInstance().Loaded)
+                return;
 
 			Server.GetInstance().Loaded = true;
+
 			OnNext("On_ServerInit");
 		}
 
@@ -991,6 +1086,7 @@ namespace Pluton.Rust
 		public static void On_ServerShutdown()
 		{
 			Core.Bootstrap.timers.Dispose();
+
 			OnNext("On_ServerShutdown");
 
 			PluginLoader.GetInstance().UnloadPlugins();
@@ -1003,9 +1099,10 @@ namespace Pluton.Rust
         #region Console Hooks
 
         // ConsoleSystem.OnClientCommand()
-        public static void On_ClientConsole(ConsoleSystem.Arg arg, String rconCmd)
+        public static void On_ClientConsole(ConsoleSystem.Arg arg, string rconCmd)
         {
             var ce = new ClientConsoleEvent(arg, rconCmd);
+
             if (arg.connection != null)
             {
                 OnNext("On_ClientConsole", ce);
@@ -1016,6 +1113,7 @@ namespace Pluton.Rust
                     {
                         return;
                     }
+
                     Net.sv.write.Start();
                     Net.sv.write.PacketID(Message.Type.ConsoleMessage);
                     Net.sv.write.String(ce.Reply);
@@ -1036,18 +1134,21 @@ namespace Pluton.Rust
                 if (!Core.Bootstrap.PlutonLoaded)
                     return;
 
-                var ssc = new ServerConsoleEvent(arg, cmd);
+                var sce = new ServerConsoleEvent(arg, cmd);
 
                 foreach (KeyValuePair<string, BasePlugin> pl in PluginLoader.GetInstance().Plugins)
                 {
-                    var globalObj = pl.Value.GetGlobalObject("ServerConsoleCommands");
+                    object globalObj = pl.Value.GetGlobalObject("ServerConsoleCommands");
+
                     if (globalObj is ConsoleCommands)
                     {
-                        ConsoleCommand[] commands = (globalObj as ConsoleCommands).getConsoleCommands(ssc.Cmd);
+                        ConsoleCommand[] commands = (globalObj as ConsoleCommands).getConsoleCommands(sce.Cmd);
+
                         foreach (ConsoleCommand cc in commands)
                         {
                             if (cc.callback == null)
                                 continue;
+
                             try
                             {
                                 cc.callback(arg.ArgsStr.Split(' '));
@@ -1060,10 +1161,11 @@ namespace Pluton.Rust
                     }
                 }
 
-                OnNext("On_ServerConsole", ssc);
+                OnNext("On_ServerConsole", sce);
+
                 if (arg.Invalid)
                 {
-                    Debug.Log(ssc.Reply);
+                    Debug.Log(sce.Reply);
                 }
             }
             catch (Exception ex)
@@ -1076,17 +1178,23 @@ namespace Pluton.Rust
 
         public static void SetModded()
 		{
-			try {
-                using (TimeWarning.New("UpdateServerInformation", 0.1f)) {
+			try
+            {
+                using (TimeWarning.New("UpdateServerInformation", 0.1f))
+                {
                     System.Reflection.Assembly assembly = typeof(ServerMgr).Assembly;
                     byte[] byteArray = System.IO.File.ReadAllBytes(assembly.Location);
                     Ionic.Crc.CRC32 cRC = new Ionic.Crc.CRC32();
+
                     cRC.SlurpBlock(byteArray, 0, byteArray.Length);
+
                     string _AssemblyHash = cRC.Crc32Result.ToString("x");
+
                     SteamGameServer.SetServerName(ConVar.Server.hostname);
                     SteamGameServer.SetMaxPlayerCount(ConVar.Server.maxplayers);
                     SteamGameServer.SetPasswordProtected(false);
                     SteamGameServer.SetMapName(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+
                     string gameTags = string.Format("mp{0},cp{1},qp{5},v{2}{3},h{4}", new object[] {
                         ConVar.Server.maxplayers,
                         BasePlayer.activePlayerList.Count,
@@ -1096,15 +1204,23 @@ namespace Pluton.Rust
                         _AssemblyHash,
                         SingletonComponent<ServerMgr>.Instance.connectionQueue.Queued
                     });
+
                     SteamGameServer.SetGameTags(gameTags);
+
                     string[] array = ConVar.Server.description.SplitToChunks(100).ToArray();
-                    for (int i = 0; i < 16; i++) {
-                        if (i < array.Length) {
+
+                    for (int i = 0; i < 16; i++)
+                    {
+                        if (i < array.Length)
+                        {
                             SteamGameServer.SetKeyValue(string.Format("description_{0:00}", i), array[i]);
-                        } else {
+                        }
+                        else
+                        {
                             SteamGameServer.SetKeyValue(string.Format("description_{0:00}", i), string.Empty);
                         }
                     }
+
                     SteamGameServer.SetKeyValue("hash", _AssemblyHash);
                     SteamGameServer.SetKeyValue("country", SteamGameServerUtils.GetIPCountry());
                     SteamGameServer.SetKeyValue("world.seed", global::World.Seed.ToString());
@@ -1122,7 +1238,9 @@ namespace Pluton.Rust
                     SteamGameServer.SetKeyValue("ent_cnt", BaseNetworkable.serverEntities.Count.ToString());
                     SteamGameServer.SetKeyValue("build", BuildInformation.VersionStampDays.ToString());
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
 				Logger.LogError("[Hooks] Error while setting the server modded.");
 				Logger.LogException(ex);
 			}
