@@ -1,4 +1,4 @@
-﻿namespace Pluton.Rust.Serialize
+namespace Pluton.Rust.Serialize
 {
 	using Objects;
 	using Core.Serialize;
@@ -19,14 +19,17 @@
 		{
 			try
 			{
-				var obj = new GameObject(Name);
-				var gobj = UnityEngine.Object.Instantiate(obj, Vector3.zero, Quaternion.identity) as GameObject;
-				var zone = gobj.AddComponent<Zone2D>();
+                GameObject obj = new GameObject(Name);
+                GameObject gobj = UnityEngine.Object.Instantiate(obj, Vector3.zero, Quaternion.identity) as GameObject;
+                Zone2D zone = gobj.AddComponent<Zone2D>();
+
 				zone.Name = Name;
 				zone.Tris = Tris;
 				zone.TrisCount = TrisCount;
 				zone.Verts = Verts.Select(x => x.ToVector3()).ToList();
+
 				Core.Singleton<Util>.GetInstance().zones.Add(Name, zone);
+
 				return zone;
 			}
 			catch (Exception ex)

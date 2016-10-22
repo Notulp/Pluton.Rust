@@ -1,4 +1,4 @@
-﻿namespace Pluton.Rust.Objects
+namespace Pluton.Rust.Objects
 {
 	using System;
 	using System.Linq;
@@ -19,6 +19,7 @@
         public ConsoleCommand setCallback(CallbackDelegate function)
         {
             callback = function;
+
             return this;
         }
 
@@ -27,29 +28,34 @@
             callback = new CallbackDelegate(cmd => {
                 try {
                     plugin.Invoke(function, (object)cmd);
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                     Logger.Log("there");
                     Logger.Log(ex.ToString());
                 }
             });
+
             return this;
         }
 
         public ConsoleCommand setUsage(string usage)
         {
             _usage = usage;
+
             return this;
         }
 
         public ConsoleCommand setDescription(string description)
         {
             _description = description;
+
             return this;
         }
 
         public ConsoleCommand setCommand(string command)
         {
             _command = command;
+
             return this;
         }
 
@@ -80,44 +86,44 @@
             if (String.IsNullOrEmpty(command))
                 return null;
 
-            var c = new ConsoleCommand(command);
-            c.plugin = plugin;
+            ConsoleCommand cc = new ConsoleCommand(command);
+            cc.plugin = plugin;
 
-            return Register(c);
+            return Register(cc);
         }
 
         public ConsoleCommand Register(ConsoleCommand command)
         {
             Commands.Add(Commands.Count, command);
+
             return command;
         }
 
         public List<string> getCommands()
         {
             return (from c in Commands.Values
-                             select c._command).ToList();
+                    select c._command).ToList();
         }
 
         public ConsoleCommand[] getConsoleCommands(string command)
         {
             return (from c in Commands.Values
-                             where c._command == command
-                             select c).ToArray();
+                    where c._command == command
+                    select c).ToArray();
         }
 
         public string[] getDescriptions(string command)
         {
             return (from c in Commands.Values
-                             where c._command == command
-                             select c._description).ToArray();
+                    where c._command == command
+                    select c._description).ToArray();
         }
 
         public string[] getUsages(string command)
         {
             return (from c in Commands.Values
-                             where c._command == command
-                             select c._usage).ToArray();
+                    where c._command == command
+                    select c._usage).ToArray();
         }
     }
 }
-

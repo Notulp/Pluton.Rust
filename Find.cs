@@ -17,9 +17,9 @@
 		public ItemBlueprint BluePrint(string name)
 		{
 			return ItemManager.bpList.Find(item => {
-				if (item.targetItem.shortname == name ||
-				    item.targetItem.displayName.english == name)
+				if (item.targetItem.shortname == name || item.targetItem.displayName.english == name)
 					return true;
+
 				return false;
 			});
 		}
@@ -29,6 +29,7 @@
 			return ItemManager.bpList.FindAll(item => {
 				if (item.targetItem.category.ToString() == cat)
 					return true;
+
 				return false;
 			});
 		}
@@ -38,6 +39,7 @@
 			return ItemManager.bpList.FindAll(item => {
 				if (item.targetItem.category == cat)
 					return true;
+
 				return false;
 			});
 		}
@@ -67,7 +69,7 @@
 		public List<BuildingPart> BuildingPartsByGrade(int grade)
 		{
 			return (from block in UnityEngine.Object.FindObjectsOfType<BuildingBlock>()
-			        where (int)block.grade == grade
+			        where (int) block.grade == grade
 			        select new BuildingPart(block)).ToList();
 		}
 
@@ -93,7 +95,7 @@
         {
             return (from board in UnityEngine.Object.FindObjectsOfType<BuildingPrivlidge>()
 			        where board.authorizedPlayers.Count(x => x.userid == steamid) != 0
-                select new Entity(board)).ToList();
+                    select new Entity(board)).ToList();
         }
 
 		public List<Entity> Doors()
@@ -101,16 +103,16 @@
 			return (from door in UnityEngine.Object.FindObjectsOfType<Door>()
 			        select new Entity(door as BaseEntity)).ToList();
 		}
+
 		/*
 		public Entity Entity(UnityEngine.Vector3 location, float dist = 1f)
 		{
-			foreach (var x in BaseNetworkable.serverEntities)
-			{
-				if (UnityEngine.Vector3.Distance(x.transform.position, location) <= dist)
-				{
+			foreach (var x in BaseNetworkable.serverEntities) {
+				if (UnityEngine.Vector3.Distance(x.transform.position, location) <= dist) {
 					return new Entity(x as BaseEntity);
 				}
 			}
+
 			return null;
 		}
 
@@ -127,7 +129,8 @@
 			        ent.ShortPrefabName.Contains(name) ||
 			        ent.name.Contains(name)
 			        select new Entity(ent as BaseEntity)).ToList();
-		}*/
+		}
+        */
 
 		public List<ItemDefinition> ItemDefinitions()
 		{
@@ -165,7 +168,7 @@
 		public List<Entity> LocksByAuthorizedUserID(ulong steamid)
 		{
 			return (from _lock in UnityEngine.Object.FindObjectsOfType<CodeLock>()
-			        where ((List<ulong>)_lock.GetFieldValue("whitelistPlayers")).Contains(steamid)
+			        where ((List<ulong>) _lock.GetFieldValue("whitelistPlayers")).Contains(steamid)
 			        select new Entity(_lock as BaseEntity)).ToList();
 		}
 
@@ -232,4 +235,3 @@
 		}
 	}
 }
-

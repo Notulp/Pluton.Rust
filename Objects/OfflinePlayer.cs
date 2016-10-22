@@ -34,10 +34,12 @@
         public static OfflinePlayer Get(ulong steamID)
         {
             OfflinePlayer op = Server.GetInstance().OfflinePlayers[steamID];
+
             if (op == null) {
-                Logger.LogDebug("[OfflinePlayer] Couldn't find OfflinePlayer: " + steamID.ToString());
+                Logger.LogDebug("[OfflinePlayer] Couldn't find OfflinePlayer: " + steamID);
                 return null;
             }
+
             return op;
         }
 
@@ -47,14 +49,14 @@
                 Logger.LogDebug("[OfflinePlayer] " + Name + " changed name to: " + player.Name);
                 Name = player.Name;
             }
+
             IP = player.IP;
             OS = player.OS;
             X = player.X;
             Y = player.Y;
             Z = player.Z;
             Admin = player.Admin;
-            totalTimeOnline += (ulong)player.TimeOnline;
+            totalTimeOnline += (ulong) player.TimeOnline;
         }
     }
 }
-

@@ -1,8 +1,9 @@
-﻿namespace Pluton.Rust
+namespace Pluton.Rust
 {
-	using System;
 	using System.Linq;
 	using System.Timers;
+    using System.Collections;
+    using System.Collections.Generic;
 	using Core;
 	using UnityEngine;
 	using Objects;
@@ -11,38 +12,46 @@
 	{
 		public float ResourceGatherMultiplier = 1.0f;
 		public Timer freezeTimeTimer;
-		float frozenTime = -1;
+
+        private float frozenTime = -1;
 
 		public BaseEntity AttachParachute(Player p) => AttachParachute(p.basePlayer);
 
 		public BaseEntity AttachParachute(BaseEntity e)
 		{
 			BaseEntity parachute = GameManager.server.CreateEntity("assets/prefabs/misc/parachute/parachute.prefab", default(Vector3), default(Quaternion));
+
 			if (parachute) {
 				parachute.SetParent(e, "parachute_attach");
 				parachute.Spawn();
 			}
+
 			return parachute;
 		}
 
 		public void AirDrop()
 		{
-			float speed = UnityEngine.Random.Range(30f, 55f);
-			float height = UnityEngine.Random.Range(900f, 1000f);
+			float speed = Random.Range(30f, 55f);
+			float height = Random.Range(900f, 1000f);
+
 			AirDrop(speed, height);
 		}
 
 		public void AirDrop(float speed, float height = 400f)
 		{
 			BaseEntity baseEntity = GameManager.server.CreateEntity("assets/prefabs/npc/cargo plane/cargo_plane.prefab", default(Vector3), default(Quaternion));
-			if (baseEntity) {
-				baseEntity.Spawn();
-			}
-			CargoPlane cp = baseEntity.GetComponent<CargoPlane>();
-			var start = (Vector3)cp.GetFieldValue("startPos");
-			var end = (Vector3)cp.GetFieldValue("endPos");
+
+			if (baseEntity)
+                baseEntity.Spawn();
+
+            CargoPlane cp = baseEntity.GetComponent<CargoPlane>();
+
+            Vector3 start = (Vector3) cp.GetFieldValue("startPos");
+            Vector3 end = (Vector3) cp.GetFieldValue("endPos");
+
 			start.y = height;
 			end.y = height;
+
 			cp.SetFieldValue("secondsToTake", Vector3.Distance(start, end) / speed);
 			cp.SetFieldValue("startPos", start);
 			cp.SetFieldValue("endPos", end);
@@ -51,18 +60,14 @@
 		public void AirDropAt(Vector3 position, float speed = 50f, float height = 400f)
 		{
 			float worldSize = (global::World.Size - (global::World.Size / 7));
-			Vector3 zero = Vector3.zero;
-
 			BaseEntity baseEntity = GameManager.server.CreateEntity("assets/prefabs/npc/cargo plane/cargo_plane.prefab", default(Vector3), default(Quaternion));
-			if (baseEntity) {
-				baseEntity.Spawn();
-			}
-			CargoPlane cp = baseEntity.GetComponent<CargoPlane>();
 
-			Vector3 startPos = zero, endPos = zero;
-			float secsToTake;
+			if (baseEntity)
+                baseEntity.Spawn();
 
-			float rand = (worldSize * UnityEngine.Random.Range(0.4f, 1.2f));
+            CargoPlane cp = baseEntity.GetComponent<CargoPlane>();
+			Vector3 startPos = Vector3.zero, endPos = Vector3.zero;
+		    float rand = (worldSize * Random.Range(0.4f, 1.2f));
 
 			while (startPos.x == 0 || startPos.z == 0)
 				startPos = Vector3Ex.Range(-rand, rand);
@@ -70,7 +75,8 @@
 			startPos.y = height;
 			endPos = position + (position - startPos);
 			endPos.y = height;
-			secsToTake = Vector3.Distance(startPos, endPos) / speed;
+
+			float secsToTake = Vector3.Distance(startPos, endPos) / speed;
 
 			cp.SetFieldValue("startPos", startPos);
 			cp.SetFieldValue("endPos", endPos);
@@ -87,24 +93,28 @@
 		public Entity PatrolHelicopter(float height = 10f)
 		{
 			BaseEntity baseEntity = GameManager.server.CreateEntity("assets/prefabs/npc/patrol helicopter/patrolhelicopter.prefab", default(Vector3), default(Quaternion), true);
-			if (baseEntity)
-			{
+
+			if (baseEntity) {
 				baseEntity.Spawn();
+
 				return new Entity(baseEntity);
 			}
+
 			return null;
 		}
 
 		public Entity PatrolHelicopterAt(Vector3 position, float height = 10f)
 		{
 			BaseEntity baseEntity = GameManager.server.CreateEntity("assets/prefabs/npc/patrol helicopter/patrolhelicopter.prefab", default(Vector3), default(Quaternion), true);
-			if (baseEntity)
-			{
+
+			if (baseEntity) {
 				PatrolHelicopterAI component = baseEntity.GetComponent<PatrolHelicopterAI>();
 				component.SetInitialDestination(position + new Vector3(0, height, 0), 0.25f);
 				baseEntity.Spawn();
+
 				return new Entity(baseEntity);
 			}
+
 			return null;
 		}
 
@@ -115,19 +125,21 @@
 		public float GetGround(float x, float z)
 		{
 			RaycastHit hit;
-			var origin = new Vector3(x, 1000f, z);
+			Vector3 origin = new Vector3(x, 1000f, z);
 			float ground = 0f;
+
 			if (Physics.Raycast(origin, Vector3.down, out hit, Vector3.Distance(origin, new Vector3(origin.x, -100f, origin.z)), 1 << 23)) {
 				ground = hit.point.y;
 			}
+
 			return ground;
 		}
 
 		public float GetGround(Vector3 v3) => GetGround(v3.x, v3.z);
 
-		public System.Collections.Generic.List<string> GetPrefabNames()
+		public List<string> GetPrefabNames()
 		{
-			var pool = (System.Collections.Generic.Dictionary<uint, string>)typeof(StringPool).GetStaticFieldValue("toString");
+			var pool = (Dictionary<uint, string>) typeof(StringPool).GetStaticFieldValue("toString");
 			return (from keyvaluepair in pool
 			        orderby keyvaluepair.Value ascending
 			        select keyvaluepair.Value).ToList();
@@ -152,28 +164,30 @@
 		// Like sounds, smoke, fire
 		public BaseEntity SpawnEffect(string evt, float x, float y, float z)
 		{
-			BaseEntity ent = GameManager.server.CreateEntity("assets/bundled/prefabs/fx/" + evt + ".prefab", 
-			                                                 new UnityEngine.Vector3(x, y, z), 
-			                                                 new UnityEngine.Quaternion());
+			BaseEntity ent = GameManager.server.CreateEntity("assets/bundled/prefabs/fx/" + evt + ".prefab", new Vector3(x, y, z), new Quaternion());
+
 			ent.Spawn();
+
 			return ent;
 		}
 
-		//Animals: boar, bear, stag, wolf, horse, chicken
+		// Animals: boar, bear, stag, wolf, horse, chicken
 		public BaseEntity SpawnAnimal(string name, float x, float y, float z)
 		{
-			BaseEntity ent = GameManager.server.CreateEntity("assets/bundled/prefabs/autospawn/animals/" + name + ".prefab", 
-			                                                 new UnityEngine.Vector3(x, y, z), 
-			                                                 new UnityEngine.Quaternion());
+			BaseEntity ent = GameManager.server.CreateEntity("assets/bundled/prefabs/autospawn/animals/" + name + ".prefab", new Vector3(x, y, z), new Quaternion());
+
 			ent.Spawn();
+
 			return ent;
 		}
 
-		//map entities, like a resource node, a tree of even a structure
+		// Map entities, like a resource node, a tree of even a structure
 		public BaseEntity SpawnMapEntity(string name, float x, float y, float z, Quaternion q)
 		{
 			BaseEntity ent = GameManager.server.CreateEntity(name, new Vector3(x, y, z), q);
+
 			ent.SpawnAsMapEntity();
+
 			return ent;
 		}
 
@@ -188,13 +202,15 @@
 
 		public float Timescale {
 			get {
-				var comp = TOD_Sky.Instance.GetComponent<TOD_Components>();
-				var time = comp.GetComponent<TOD_Time>();
+                TOD_Components comp = TOD_Sky.Instance.GetComponent<TOD_Components>();
+                TOD_Time time = comp.GetComponent<TOD_Time>();
+
 				return time.DayLengthInMinutes;
 			}
 			set {
-				var comp = TOD_Sky.Instance.GetComponent<TOD_Components>();
-				var time = comp.GetComponent<TOD_Time>();
+                TOD_Components comp = TOD_Sky.Instance.GetComponent<TOD_Components>();
+                TOD_Time time = comp.GetComponent<TOD_Time>();
+
 				time.DayLengthInMinutes = value;
 			}
 		}
@@ -206,6 +222,7 @@
 				freezeTimeTimer = new Timer(10000);
 				freezeTimeTimer.Elapsed += new ElapsedEventHandler(this.Freeze);
 			}
+
 			freezeTimeTimer.Start();
 		}
 
@@ -221,18 +238,18 @@
 
 		public void Initialize() { }
 
-		System.Collections.ArrayList list = new System.Collections.ArrayList();
+		private ArrayList list = new ArrayList();
 
 		public void PrintPrefabs()
 		{
 			GameManifest.PrefabProperties[] prefabProperties = GameManifest.Get().prefabProperties;
+
 			foreach (var prefabProperty in prefabProperties)
 				if (!list.Contains(prefabProperty.name))
 					list.Add(prefabProperty.name);
 
-			foreach (var s in list)
-				Debug.Log(s);
+			foreach (object o in list)
+				Debug.Log(o);
 		}
 	}
 }
-

@@ -1,11 +1,9 @@
-﻿namespace Pluton.Rust.Objects
+namespace Pluton.Rust.Objects
 {
 	using System;
-	using System.Collections.Generic;
-	using UnityEngine;
-	using System.Runtime.Serialization;
+    using System.Runtime.Serialization;
+    using UnityEngine;
 	using Network;
-	using Facepunch;
 	using Logger = Core.Logger;
 	using Server = Rust.Server;
 
@@ -24,9 +22,11 @@
             GameID = player.userID;
             SteamID = player.userID.ToString();
             _basePlayer = player;
+
             try {
                 Stats = new PlayerStats(SteamID);
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 Logger.LogDebug("[Player] Couldn't load stats!");
                 Logger.LogException(ex);
             }
@@ -36,7 +36,9 @@
         public void OnPlayerDeserialized(StreamingContext context)
         {
             Logger.LogWarning("Deserializing player with id: " + SteamID);
+
             _basePlayer = BasePlayer.FindByID(GameID);
+
             if (_basePlayer == null)
                 Logger.LogWarning("_basePlayer is <null>, is the player offline?");
             else
@@ -46,18 +48,24 @@
         public static Player Find(string nameOrSteamidOrIP)
         {
             BasePlayer player = BasePlayer.Find(nameOrSteamidOrIP);
+
             if (player != null)
                 return Server.GetPlayer(player);
+
             Logger.LogDebug("[Player] Couldn't find player!");
+
             return null;
         }
 
         public static Player FindByGameID(ulong steamID)
         {
             BasePlayer player = BasePlayer.FindByID(steamID);
+
             if (player != null)
                 return Server.GetPlayer(player);
+
             Logger.LogDebug("[Player] Couldn't find player!");
+
             return null;
         }
 
@@ -70,12 +78,13 @@
         {
             ServerUsers.Set(GameID, ServerUsers.UserGroup.Banned, Name, reason);
             ServerUsers.Save();
+
             Kick("[BAN] " + reason);
         }
 
         public void Kick(string reason = "no reason")
         {
-			global::Network.Net.sv.Kick(basePlayer.net.connection, reason);
+			Net.sv.Kick(basePlayer.net.connection, reason);
         }
 
         public void Reject(string reason = "no reason")
@@ -93,38 +102,45 @@
             RaycastHit hit;
             Ray orig = basePlayer.eyes.HeadRay();
             Physics.Raycast(orig, out hit, maxDist, layers);
+
             return hit;
         }
 
         public Player GetLookPlayer(float maxDist = 500f)
         {
             RaycastHit hit = GetLookHit(maxDist, LayerMask.GetMask("Player (Server)"));
+
             if (hit.collider != null) {
                 BasePlayer basePlayer = hit.collider.GetComponentInParent<BasePlayer>();
                 if (basePlayer != null) {
                     return Server.GetPlayer(basePlayer);
                 }
             }
+
             return null;
         }
 
         public BuildingPart GetLookBuildingPart(float maxDist = 500f)
         {
             RaycastHit hit = GetLookHit(maxDist, LayerMask.GetMask("Construction", "Deployed"));
+
             if (hit.collider != null) {
                 BuildingBlock buildingBlock = hit.collider.GetComponentInParent<BuildingBlock>();
                 if (buildingBlock != null) {
                     return new BuildingPart(buildingBlock);
                 }
             }
+
             return null;
         }
 
         public override void Kill()
         {
-            var info = new HitInfo();
+            HitInfo info = new HitInfo();
+
             info.damageTypes.Add(global::Rust.DamageType.Suicide, Single.MaxValue);
             info.Initiator = baseEntity;
+
             basePlayer.Die(info);
         }
 
@@ -190,6 +206,7 @@
         }
 
         public static float worldSizeHalf = (float)global::World.Size / 2;
+
         public static Vector3[] firstLocations = new Vector3[] {
             new Vector3(worldSizeHalf, 0, worldSizeHalf),
             new Vector3(-worldSizeHalf, 0, worldSizeHalf),
@@ -205,11 +222,14 @@
             teleporting = true;
 
             Vector3 newPos = new Vector3(x, y + 0.05f, z);
+
             basePlayer.SetPlayerFlag(BasePlayer.PlayerFlags.Sleeping, true);
+
             if (!BasePlayer.sleepingPlayerList.Contains(basePlayer))
             {
                 BasePlayer.sleepingPlayerList.Add(basePlayer);
             }
+
             basePlayer.CancelInvoke("InventoryUpdate");
             basePlayer.inventory.crafting.CancelAll(true);
             basePlayer.MovePosition(newPos);
@@ -242,6 +262,7 @@
             get {
                 if (_basePlayer == null)
                     return BasePlayer.FindByID(GameID);
+
                 return _basePlayer;
             }
             private set {
@@ -345,4 +366,3 @@
         }
     }
 }
-

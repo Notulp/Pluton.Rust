@@ -29,26 +29,32 @@
 
         public BuildingPart ToBuildingPart()
         {
-            BuildingBlock b = baseEntity.GetComponent<BuildingBlock>();
-            if (b == null)
+            BuildingBlock block = baseEntity.GetComponent<BuildingBlock>();
+
+            if (block == null)
                 return null;
-            return new BuildingPart(b);
+
+            return new BuildingPart(block);
         }
 
         public NPC ToNPC()
         {
-            BaseNPC a = baseEntity.GetComponent<BaseNPC>();
-            if (a == null)
+            BaseNPC baseNPC = baseEntity.GetComponent<BaseNPC>();
+
+            if (baseNPC == null)
                 return null;
-            return new NPC(a);
+
+            return new NPC(baseNPC);
         }
 
         public Player ToPlayer()
         {
-            BasePlayer p = baseEntity.ToPlayer();
-            if (p == null)
+            BasePlayer basePlayer = baseEntity.ToPlayer();
+
+            if (basePlayer == null)
                 return null;
-            return Server.GetPlayer(p);
+
+            return Server.GetPlayer(basePlayer);
         }
 
         public virtual Vector3 Location {
@@ -73,4 +79,3 @@
         public float Z => baseEntity.transform.position.z;
     }
 }
-

@@ -1,4 +1,4 @@
-﻿namespace Pluton.Rust
+namespace Pluton.Rust
 {
 	using Core;
 	using Objects;
@@ -16,7 +16,8 @@
 		public Dictionary<string, LoadOut> LoadOuts;
 		public DataStore serverData;
 		public static string server_message_name = "Pluton";
-		float craftTimeScale = 1f;
+
+        private float craftTimeScale = 1f;
 
 		public void Broadcast(string arg) => BroadcastFrom(server_message_name, arg);
 
@@ -27,8 +28,10 @@
 		public Player FindPlayer(string s)
 		{
 			BasePlayer player = BasePlayer.Find(s);
+
 			if (player != null)
 				return new Player(player);
+
 			return null;
 		}
 
@@ -36,17 +39,21 @@
 		{
 			if (Players.ContainsKey(steamid))
 				return Players[steamid];
+
 			return FindPlayer(steamid.ToString());
 		}
 
-		public static Player GetPlayer(BasePlayer bp)
+		public static Player GetPlayer(BasePlayer basePlayer)
 		{
 			try {
-				Player p = GetInstance().FindPlayer(bp.userID);
-				if (p != null)
-					return p;
-				return new Player(bp);
-			} catch (Exception ex) {
+				Player player = GetInstance().FindPlayer(basePlayer.userID);
+
+				if (player != null)
+					return player;
+
+				return new Player(basePlayer);
+			}
+            catch (Exception ex) {
 				Logger.LogDebug("[Server] GetPlayer: " + ex.Message);
 				Logger.LogException(ex);
 				return null;
@@ -71,6 +78,7 @@
 		public void CheckPluginsFolder()
 		{
 			string path = Singleton<Util>.Instance.GetPluginsFolder();
+
 			if (!Directory.Exists(path))
 				Directory.CreateDirectory(path);
 		}
@@ -86,36 +94,43 @@
 
 		public void LoadLoadouts()
 		{
-			string path = Core.Singleton<Util>.GetInstance().GetLoadoutFolder();
+			string path = Singleton<Util>.GetInstance().GetLoadoutFolder();
+
 			if (!Directory.Exists(path))
 				Directory.CreateDirectory(path);
 
-			var loadoutPath = new DirectoryInfo(path);
+            DirectoryInfo loadoutPath = new DirectoryInfo(path);
 
 			foreach (FileInfo file in loadoutPath.GetFiles()) {
 				if (file.Extension == ".ini") {
 					new LoadOut(file.Name.Replace(".ini", ""));
 				}
 			}
-			Logger.Log("[Server] " + LoadOuts.Count.ToString() + " loadout loaded!");
+
+			Logger.Log("[Server] " + LoadOuts.Count + " loadout loaded!");
 		}
 
 		public void LoadOfflinePlayers()
 		{
 			Hashtable ht = serverData.GetTable("OfflinePlayers");
+
 			if (ht != null) {
 				foreach (DictionaryEntry entry in ht) {
 					Instance.OfflinePlayers.Add(UInt64.Parse(entry.Key as string), entry.Value as OfflinePlayer);
 				}
-			} else {
+			}
+            else {
 				Logger.LogWarning("[Server] No OfflinePlayers found!");
 			}
-			Logger.Log("[Server] " + Instance.OfflinePlayers.Count.ToString() + " offlineplayer loaded!");
+
+			Logger.Log("[Server] " + Instance.OfflinePlayers.Count + " offlineplayer loaded!");
 		}
 
-		/*public void LoadStructures()
+		/*
+        public void LoadStructures()
         {
             string path = Util.GetStructuresFolder();
+
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
 
@@ -126,17 +141,21 @@
                 if (file.Extension.ToLower() == ".sps") {
                     using (FileStream stream = new FileStream(file.FullName, FileMode.Open)) {
                         BinaryFormatter formatter = new BinaryFormatter();
+
                         StructureRecorder.Structure structure = (StructureRecorder.Structure)formatter.Deserialize(stream);
                         Structures.Add(file.Name.Substring(0, file.Name.Length - 5), structure);
                     }
                 }
             }
+
             Logger.Log("[Server] " + Structures.Count.ToString() + " structure loaded!");
-        }*/
+        }
+        */
 
 		public void Save()
 		{
 			OnShutdown();
+
 			foreach (Player p in Players.Values) {
 				OfflinePlayers.Remove(p.GameID);
 			}
@@ -148,19 +167,23 @@
 		{
 			foreach (Player player in Players.Values) {
 				if (serverData.ContainsKey("OfflinePlayers", player.SteamID)) {
-					var op = serverData.Get("OfflinePlayers", player.SteamID) as OfflinePlayer;
+					OfflinePlayer op = serverData.Get("OfflinePlayers", player.SteamID) as OfflinePlayer;
+
 					op.Update(player);
 					OfflinePlayers[player.GameID] = op;
-				} else {
-					var op = new OfflinePlayer(player);
+				}
+                else {
+                    OfflinePlayer op = new OfflinePlayer(player);
+
 					OfflinePlayers.Add(player.GameID, op);
 				}
 			}
-			foreach (OfflinePlayer op2 in OfflinePlayers.Values) {
-				serverData.Add("OfflinePlayers", op2.SteamID, op2);
-			}
-			serverData.Save();
 
+			foreach (OfflinePlayer op in OfflinePlayers.Values) {
+				serverData.Add("OfflinePlayers", op.SteamID, op);
+			}
+
+			serverData.Save();
 			Singleton<Util>.Instance.SaveZones();
 			Singleton<Util>.Instance.ZoneStore.Save();
 		}
@@ -174,4 +197,3 @@
 		public int MaxPlayers => ConVar.Server.maxplayers;
 	}
 }
-

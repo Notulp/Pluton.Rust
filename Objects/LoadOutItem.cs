@@ -22,4 +22,3 @@
 		public InvItem invItem => new InvItem(Name, Amount);
     }
 }
-

@@ -1,6 +1,5 @@
-﻿namespace Pluton.Rust.Objects
+namespace Pluton.Rust.Objects
 {
-	using System;
 	using System.Linq;
 	using UnityEngine;
 	using Core;
@@ -21,11 +20,13 @@
 
         public InvItem(string name, int amount)
         {
-            var item = ItemManager.CreateByItemID(GetItemID(name), amount);
+            Item item = ItemManager.CreateByItemID(GetItemID(name), amount);
+
             if (item == null) {
 				Logger.LogDebug($"[InvItem] Couldn't create item: {amount}x{name}");
                 _item = null;
-            } else {
+            }
+            else {
                 _item = item;
                 containerPref = GetContainerPreference(Category);
             }
@@ -33,11 +34,13 @@
 
         public InvItem(int itemid, int amount = 1)
         {
-             var item = ItemManager.CreateByItemID(itemid, amount);
+             Item item = ItemManager.CreateByItemID(itemid, amount);
+
              if (item == null) {
 				Logger.LogDebug($"[InvItem] Couldn't create item: {amount}x{itemid}");
                 _item = null;
-            } else {
+            }
+            else {
                 _item = item;
                 containerPref = GetContainerPreference(Category);
             }
@@ -45,11 +48,13 @@
 
         public InvItem(string name)
         {
-            var item = ItemManager.CreateByItemID(GetItemID(name), 1);
+            Item item = ItemManager.CreateByItemID(GetItemID(name), 1);
+
             if (item == null) {
 				Logger.LogDebug($"[InvItem] Couldn't create item: 1x{name}");
                 _item = null;
-            } else {
+            }
+            else {
                 _item = item;
                 containerPref = GetContainerPreference(Category);
             }
@@ -123,20 +128,21 @@
         public static int GetItemID(string itemName)
         {
             return (from item in ItemManager.itemList
-                             where item.displayName.english == itemName ||
-                                 item.displayName.translated == itemName ||
-                                 item.shortname == itemName
-                             select item.itemid).FirstOrDefault<int>();
+                    where item.displayName.english == itemName ||
+                          item.displayName.translated == itemName ||
+                          item.shortname == itemName
+                    select item.itemid).FirstOrDefault<int>();
         }
 
         public static ContainerPreference GetContainerPreference(string category)
         {
             if ("WeaponConstructionTool".Contains(category))
                 return ContainerPreference.Belt;
+
             if (category == "Attire")
                 return ContainerPreference.Wear;
+
             return ContainerPreference.Main;
         }
     }
 }
-

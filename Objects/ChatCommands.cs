@@ -18,6 +18,7 @@
         public ChatCommand setCallback(CallbackDelegate function)
         {
             callback = function;
+
             return this;
         }
 
@@ -26,24 +27,28 @@
             callback = new CallbackDelegate((cmd, player) => {
                 plugin.Invoke(function, new[] { (object)cmd, player });
             });
+
             return this;
         }
 
         public ChatCommand setUsage(string usage)
         {
             _usage = usage;
+
             return this;
         }
 
         public ChatCommand setDescription(string description)
         {
             _description = description;
+
             return this;
         }
 
         public ChatCommand setCommand(string command)
         {
             _command = command;
+
             return this;
         }
 
@@ -74,53 +79,56 @@
             if (String.IsNullOrEmpty(command))
                 return null;
 
-            var c = new ChatCommand(command);
-            c.plugin = plugin;
+            ChatCommand cc = new ChatCommand(command);
+            cc.plugin = plugin;
 
-            return Register(c);
+            return Register(cc);
         }
 
         public List<ChatCommand> RegisterWithMultipleNames(string[] commands, string callback, string usage, string description)
         {
-            var chatCommands = new List<ChatCommand>();
+            List<ChatCommand> chatCommands = new List<ChatCommand>();
+
             foreach (string command in commands) {
                 ChatCommand chatCommand = Register(command).setCallback(callback).setUsage(usage).setDescription(description);
                 chatCommands.Add(chatCommand);
             }
+
             return chatCommands;
         }
 
         public ChatCommand Register(ChatCommand command)
         {
             Commands.Add(Commands.Count, command);
+
             return command;
         }
 
         public List<string> getCommands()
         {
             return (from c in Commands.Values
-                             select c._command).ToList<string>();
+                    select c._command).ToList<string>();
         }
 
         public ChatCommand[] getChatCommands(string command)
         {
             return (from c in Commands.Values
-                             where c._command == command
-                             select c).ToArray<ChatCommand>();
+                    where c._command == command
+                    select c).ToArray<ChatCommand>();
         }
 
         public string[] getDescriptions(string command)
         {
             return (from c in Commands.Values
-                             where c._command == command
-                             select c._description).ToArray<string>();
+                    where c._command == command
+                    select c._description).ToArray<string>();
         }
 
         public string[] getUsages(string command)
         {
             return (from c in Commands.Values
-                             where c._command == command
-                             select c._usage).ToArray<string>();
+                    where c._command == command
+                    select c._usage).ToArray<string>();
         }
     }
 }

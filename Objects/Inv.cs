@@ -6,7 +6,6 @@
 
     public class Inv : CountedInstance
     {
-
         public readonly PlayerInventory _inv;
         public readonly Player owner;
 
@@ -18,15 +17,17 @@
 
         public bool Add(InvItem item)
         {
-            ItemContainer con;
-            if (item.containerPref == InvItem.ContainerPreference.Belt)
-                con = InnerBelt;
-            else if (item.containerPref == InvItem.ContainerPreference.Wear)
-                con = InnerWear;
-            else
-                con = InnerMain;
+            ItemContainer container;
 
-            bool flag = _inv.GiveItem(item._item, con);
+            if (item.containerPref == InvItem.ContainerPreference.Belt)
+                container = InnerBelt;
+            else if (item.containerPref == InvItem.ContainerPreference.Wear)
+                container = InnerWear;
+            else
+                container = InnerMain;
+
+            bool flag = _inv.GiveItem(item._item, container);
+
             if (!flag) {
                 flag = _inv.GiveItem(item._item);
             }
@@ -67,4 +68,3 @@
                              				 select new InvItem(item)).ToList();
     }
 }
-

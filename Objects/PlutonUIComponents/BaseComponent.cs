@@ -39,4 +39,3 @@
         public virtual string type { get { return ""; } }
     }
 }
-

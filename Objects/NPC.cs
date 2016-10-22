@@ -1,4 +1,4 @@
-﻿namespace Pluton.Rust.Objects
+namespace Pluton.Rust.Objects
 {
     public class NPC : Entity
     {
@@ -11,9 +11,11 @@
 
         public override void Kill()
         {
-            var info = new HitInfo();
+            HitInfo info = new HitInfo();
+
             info.damageTypes.Add(global::Rust.DamageType.Suicide, 100f);
             info.Initiator = baseNPC as BaseEntity;
+
             baseNPC.Die(info);
         }
 

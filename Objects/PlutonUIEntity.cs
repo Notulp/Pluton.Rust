@@ -1,4 +1,4 @@
-﻿namespace Pluton.Rust.Objects
+namespace Pluton.Rust.Objects
 {
 	using System.Collections.Generic;
 
@@ -23,6 +23,7 @@
         {
             PlutonUIPanel panel = new PlutonUIPanel(name, parent, fadeout);
             panels.Add(panel.obj);
+
             return panel;
         }
 
@@ -32,6 +33,7 @@
                 return null;
             
             CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo() { connections = connections }, null, "AddUI", new Facepunch.ObjectList?(new Facepunch.ObjectList(panels.ToString())));
+
             return panels;
         }
 
@@ -39,7 +41,8 @@
         {
             if (connections.Count == 0)
                 return;
-            foreach (var panel in panels) {
+
+            foreach (JSON.Value panel in panels) {
                 CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo() { connections = connections }, null, "DestroyPanel", new Facepunch.ObjectList?(new Facepunch.ObjectList(panel.Obj.GetString("name"))));
             }
         }
@@ -48,23 +51,24 @@
         {
             for (int i = 0; i < panels.Length; i++) {
                 if (panels[i].Obj.GetString(name) == name) {
-                    return  new PlutonUIPanel() { obj = panels[i].Obj };
+                    return new PlutonUIPanel() { obj = panels[i].Obj };
                 }
             }
+
             return null;
         }
 
         public bool RemovePanel(string name)
         {
-            
             for (int i = 0; i < panels.Length; i++) {
                 if (panels[i].Obj.GetString(name) == name) {
                     panels.Remove(i);
+
                     return true;
                 }
             }
+
             return false;
         }
     }
 }
-

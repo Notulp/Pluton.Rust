@@ -17,6 +17,7 @@
 		static IEnumerable<string> yieldPretty(this string json, string indent)
 		{
 			int depth = 0;
+
 			foreach (string line in json.Replace("{", "{\n").Replace("}", "\n}").Replace(",\"", ",\n\"").Replace("[", "[\n").Replace("]", "\n]").Replace("},{", "},\n{").Replace("],[", "],\n[").Split('\n')) {
 				if (line.Contains("}") || line.Contains("]"))
 					depth -= 1;
@@ -34,8 +35,10 @@
 				throw new ArgumentOutOfRangeException(nameof(multiply), multiply, $"Can't multiply a string by x{multiply}");
 
 			string result = String.Empty;
+
 			for (int i = 0; i < multiply; i++)
 				result += self;
+
 			return result;
 		}
 
@@ -47,8 +50,8 @@
 		{
 			self = self.Replace("\"", "\\\"");
 			self = self.TrimEnd(new char[] { '\\' });
+
 			return "\"" + self + "\"";
 		}
 	}
 }
-

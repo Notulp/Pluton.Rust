@@ -12,6 +12,7 @@
 		{
 			int count = PluginLoader.GetInstance().Plugins.Count;
 			string result = String.Format("Loaded plugins({0}):" + Environment.NewLine, count);
+
 			foreach (BasePlugin plugin in PluginLoader.GetInstance().Plugins.Values) {
 				result += String.Format("    {0, -22} [{1, -12} timers: {2, 8}, parallel: {3, 8}\r\n", plugin.Name, plugin.GetType().Name + "],", plugin.Timers.Count + plugin.ParallelTimers.Count, plugin.ParallelTimers.Count);
 				result += String.Join(", ", new []{
@@ -20,13 +21,13 @@
 						  String.IsNullOrEmpty(plugin.Version) ? String.Empty : "Version: " + plugin.Version
 				}.Where(res => !String.IsNullOrEmpty(res)).ToArray()) + "\r\n";
 			}
+
 			return result;
 		}
 
 		[ConsoleSystem.Admin, ConsoleSystem.Help("Prints out plugin statistics!")]
 		public static void Loaded(ConsoleSystem.Arg args)
 		{
-			
 			args.ReplyWith(Loaded());
 		}
 
@@ -46,13 +47,13 @@
 			hooks.Keys.ToList().ForEach(k => {
 				result += k + ": " + String.Join(", ", hooks[k].ToArray()) + Environment.NewLine;
 			});
+
 			return result;
 		}
 
 		[ConsoleSystem.Admin, ConsoleSystem.Help("Prints out hooks statistics!")]
 		public static void Hooks(ConsoleSystem.Arg args)
 		{
-
 			args.ReplyWith(Hooks());
 		}
 
@@ -65,4 +66,3 @@
 		}
 	}
 }
-

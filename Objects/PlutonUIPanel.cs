@@ -66,10 +66,13 @@
         public PlutonUIPanel(string nam = null, string par = null, float? fade = null)
         {
             components = new JSON.Array();
+
             if (nam != null)
                 name = nam;
+
             if (par != null)
                 parent = par;
+
             if (fade != null)
                 fadeOut = (float)fade;
         }
@@ -77,6 +80,7 @@
         public PlutonUI.BaseComponent AddComponent(PlutonUI.BaseComponent comp)
         {
             components.Add(comp.obj);
+
             return comp;
         }
 
@@ -84,6 +88,7 @@
         {
             PlutonUI.BaseComponent t = Activator.CreateInstance<T>();
             components.Add(t.obj);
+
             return t;
         }
 
@@ -92,11 +97,12 @@
             for (int i = 0; i < components.Length; i++) {
                 if (components[i].Obj == comp.obj) {
                     components.Remove(i);
+
                     return true;
                 }
             }
+
             return false;
         }
     }
 }
-

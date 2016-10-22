@@ -10,12 +10,12 @@
     public class BuildingPart : Entity
     {
         [NonSerialized]
-        BuildingBlock _buildingBlock;
+        private BuildingBlock _buildingBlock;
 
-        SerializedVector3 position;
+        private SerializedVector3 position;
 
         [OnSerializing]
-        void OnSerializing(StreamingContext context)
+        private void OnSerializing(StreamingContext context)
         {
             position = buildingBlock.transform.position.Serialize();
         }
@@ -38,10 +38,11 @@
 
         public void Rotate()
         {
-            var blockDefinition = buildingBlock.blockDefinition;
-            if (!blockDefinition.canRotate) {
+            Construction blockDefinition = buildingBlock.blockDefinition;
+
+            if (!blockDefinition.canRotate)
                 return;
-            }
+
             buildingBlock.transform.localRotation *= Quaternion.Euler(blockDefinition.rotationAmount);
             buildingBlock.ClientRPC(null, "UpdateConditionalModels", new object[0]);
             buildingBlock.SendNetworkUpdate(BasePlayer.NetworkQueue.Update);
@@ -52,9 +53,8 @@
                 if (_buildingBlock == null) {
                     Vector3 v3pos = position.ToVector3();
                     _buildingBlock = (from bb in UnityEngine.Object.FindObjectsOfType<BuildingBlock>()
-                                                     where this.Prefab == bb.PrefabName &&
-                                                         v3pos == bb.transform.position
-                                                     select bb).FirstOrDefault();
+                                        where this.Prefab == bb.PrefabName && v3pos == bb.transform.position
+                                        select bb).FirstOrDefault();
                 }
                 return _buildingBlock;
             }
@@ -84,4 +84,3 @@
         }
     }
 }
-

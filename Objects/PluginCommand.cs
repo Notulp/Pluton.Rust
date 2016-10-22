@@ -38,12 +38,14 @@
         {
             if (instance == null)
                 new PluginCommands();
+
             return instance;
         }
 
         public void Init()
         {
             Commands.Clear();
+
 			if (Config.GetInstance().GetBoolValue("Commands", "enabled", true)) {
                 RegisterCommand(GetPlutonCommand("ShowMyStats", "mystats"), GetPlutonCommand("ShowMyStats", "mystats"), "Shows your stat.");
                 RegisterCommand(GetPlutonCommand("ShowStatsOther", "statsof"), GetPlutonCommand("ShowStatsOther", "statsof") + " \"<playername>\"", "Shows another player's stat.");
@@ -52,6 +54,7 @@
                 RegisterCommand(GetPlutonCommand("Help", "help"), GetPlutonCommand("Help", "help"), "Shows the basic help message(s).");
                 RegisterCommand(GetPlutonCommand("Commands", "commands"), GetPlutonCommand("Commands", "commands"), "Shows the list of commands.");
             }
+
             PluginLoader.LoadCommands();
         }
 
@@ -72,11 +75,13 @@
         {
             if (String.IsNullOrEmpty(command))
                 return;
-            PluginCommand c = new PluginCommand();
-            c._description = description;
-            c._command = command;
-            c._usage = usage;
-            RegisterCommand(c);
+
+            PluginCommand cmd = new PluginCommand();
+            cmd._description = description;
+            cmd._command = command;
+            cmd._usage = usage;
+
+            RegisterCommand(cmd);
         }
 
         public void RegisterCommand(PluginCommand command)
@@ -93,22 +98,21 @@
         public List<string> getCommands()
         {
             return (from c in Commands.Values
-                select c._command).ToList<string>();
+                    select c._command).ToList<string>();
         }
 
         public string[] getDescriptions(string command)
         {
             return (from c in Commands.Values
-                where c._command == command
-                select c._description).ToArray<string>();
+                    where c._command == command
+                    select c._description).ToArray<string>();
         }
 
         public string[] getUsages(string command)
         {
             return (from c in Commands.Values
-                where c._command == command
-                select c._usage).ToArray<string>();
+                    where c._command == command
+                    select c._usage).ToArray<string>();
         }
     }
 }
-

@@ -1,4 +1,4 @@
-﻿namespace Pluton.Rust.Objects
+namespace Pluton.Rust.Objects
 {
 	using System.Linq;
 	using System.Collections.Generic;
@@ -43,18 +43,22 @@
         public void ComputeSideTris()
         {
             int length = Verts.Count;
+
             for (int i = 0; i < length; i++) {
                 Tris[TrisCount] = i;
                 TrisCount += 1;
+
                 if (i == (length - 1)) {
                     Tris[TrisCount] = 0;
                     Tris[TrisCount + 1] = 1;
                     TrisCount += 2;
-                } else if (i == (length - 2)) {
+                }
+                else if (i == (length - 2)) {
                     Tris[TrisCount] = i + 1;
                     Tris[TrisCount + 1] = 0;
                     TrisCount += 2;
-                } else {
+                }
+                else {
                     Tris[TrisCount] = i + 1;
                     Tris[TrisCount + 1] = i + 2;
                     TrisCount += 2;
@@ -65,6 +69,7 @@
         public void ComputeTopTris()
         {
             int length = Verts.Count;
+
             for (int i = 2; i <= length - 4; i += 2) {
                 Tris[TrisCount] = 0;
                 Tris[TrisCount + 1] = i;
@@ -76,6 +81,7 @@
         public void ComputeBottomTris()
         {
             int length = Verts.Count;
+
             for (int i = 3; i <= length - 3; i += 2) {
                 Tris[TrisCount] = 1;
                 Tris[TrisCount + 1] = i;
@@ -84,7 +90,7 @@
             }
         }
 
-        void Awake()
+        private void Awake()
         {
             zoneMeshFilter = gameObject.AddComponent<MeshFilter>();
             zoneMeshFilter.mesh = new Mesh();
@@ -154,6 +160,7 @@
         public void Draw()
         {
             ComputeAllTris();
+
             for (int i = 0; i < Tris.Length; i += 3) {
                 DrawLine(Verts[Tris[i]], Verts[Tris[i + 1]], Color.red);
                 DrawLine(Verts[Tris[i]], Verts[Tris[i + 2]], Color.red);
@@ -171,13 +178,14 @@
         public SerializedZone2D Serialize()
         {
             Debug.LogWarning("Serializing '" + Name + "' zone.");
-            var result = new SerializedZone2D();
+
+            SerializedZone2D result = new SerializedZone2D();
             result.Tris = Tris;
             result.TrisCount = TrisCount;
             result.Verts = Verts.Select(x => x.Serialize()).ToList();
             result.Name = Name;
+
             return result;
         }
     }
 }
-

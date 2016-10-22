@@ -1,4 +1,4 @@
-﻿namespace Pluton.Rust.Objects
+namespace Pluton.Rust.Objects
 {
 	using System;
 	using Core;
@@ -6,7 +6,6 @@
     [Serializable]
     public class PlayerStats : CountedInstance
     {
-
         public uint Kills;
         public uint Deaths;
 
@@ -47,8 +46,10 @@
                 DamageToEntities = 0;
                 FallDamage = 0;
                 Server.GetInstance().serverData.Add("PlayerStats", steamid, this);
-            } else {
-                var stats = Server.GetInstance().serverData.Get("PlayerStats", steamid) as PlayerStats;
+            }
+            else {
+                PlayerStats stats = Server.GetInstance().serverData.Get("PlayerStats", steamid) as PlayerStats;
+
                 Kills = stats.Kills;
                 Deaths = stats.Deaths;
                 PlayerKills = stats.PlayerKills;
@@ -69,6 +70,7 @@
         public void AddKill(bool player, bool npc)
         {
             Kills++;
+
             if (player)
                 PlayerKills++;
             else if (npc)
@@ -78,6 +80,7 @@
         public void AddDeath(bool player, bool npc)
         {
             Deaths++;
+
             if (player)
                 PlayerDeaths++;
             else if (npc)
@@ -87,6 +90,7 @@
         public void AddDamageFrom(float dmgAmount, bool player, bool npc, bool fall)
         {
             TotalDamageTaken += dmgAmount;
+
             if (player)
                 DamageFromPlayers += dmgAmount;
             else if (npc)
@@ -98,6 +102,7 @@
         public void AddDamageTo(float dmgAmount, bool player, bool npc, bool entity)
         {
             TotalDamageDone += dmgAmount;
+
             if (player)
                 DamageToPlayers += dmgAmount;
             else if (npc)
@@ -107,4 +112,3 @@
         }
     }
 }
-

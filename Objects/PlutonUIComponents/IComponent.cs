@@ -9,4 +9,3 @@
         string type { get; }
     }
 }
-
