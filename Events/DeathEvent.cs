@@ -82,17 +82,20 @@ namespace Pluton.Rust.Events
                 try {
                     if (_info.Weapon == null)
                         return null;
-                    var itemUID = (uint) _info.Weapon.GetFieldValue("ownerItemUID");
+
+                    uint itemUID = (uint) _info.Weapon.GetFieldValue("ownerItemUID");
 
 					BasePlayer ownerPlayer = _info.Weapon.GetOwnerPlayer();
-                    if (ownerPlayer == null) {
+
+                    if (ownerPlayer == null)
                         return null;
-                    }
 
                     return new InvItem(ownerPlayer.inventory.FindItemUID(itemUID));
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                     Logger.LogWarning("[DeathEvent] Got an exception instead of the weapon.");
                     Logger.LogException(ex);
+
                     return null;
                 }
             }

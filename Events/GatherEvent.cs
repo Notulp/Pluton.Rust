@@ -15,8 +15,7 @@ namespace Pluton.Rust.Events
 
         public GatherEvent(ResourceDispenser resourceDispenser, BaseEntity from, BaseEntity to, ItemAmount itemAmount, int amount)
         {
-            if (to is BasePlayer)
-            {
+            if (to is BasePlayer) {
                 ResourceDispenser = resourceDispenser;
                 Resource = new Entity(from);
                 Gatherer = Server.GetPlayer(to as BasePlayer);

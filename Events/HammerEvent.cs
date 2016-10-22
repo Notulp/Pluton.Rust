@@ -24,14 +24,18 @@
 
         public Entity Victim {
             get {
-                BaseEntity ent = _info.HitEntity;
-                BasePlayer p = ent.GetComponent<BasePlayer>();
-                if (p != null)
-                    return Server.GetPlayer(p);
-                BaseNPC n = ent.GetComponent<BaseNPC>();
-                if (n != null)
-                    return new NPC(n);
-                return new Entity(ent);
+                BaseEntity baseEntity = _info.HitEntity;
+                BasePlayer basePlayer = baseEntity.GetComponent<BasePlayer>();
+
+                if (basePlayer != null)
+                    return Server.GetPlayer(basePlayer);
+
+                BaseNPC baseNPC = baseEntity.GetComponent<BaseNPC>();
+
+                if (baseNPC != null)
+                    return new NPC(baseNPC);
+
+                return new Entity(baseEntity);
             }
         }
     }
