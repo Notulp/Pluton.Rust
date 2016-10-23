@@ -64,8 +64,7 @@
                         return new Entity(baseEntity);
                     }
                     return null;
-                }
-                catch (Exception ex) {
+                } catch (Exception ex) {
                     Logger.LogWarning("[HurtEvent] Got an exception instead of the attacker.");
                     Logger.LogException(ex);
 
@@ -81,8 +80,7 @@
                         return null;
 
                     return new InvItem(_info.Weapon.GetItem());
-                }
-                catch (Exception ex) {
+                } catch (Exception ex) {
                     Logger.LogWarning("[HurtEvent] Got an exception instead of the weapon.");
                     Logger.LogException(ex);
 

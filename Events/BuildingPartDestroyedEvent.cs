@@ -46,8 +46,7 @@
                     }
 
                     return null;
-                }
-                catch (Exception ex) {
+                } catch (Exception ex) {
                     Logger.LogWarning("[BPDestroyedEvent] Got an exception instead of the attacker.");
                     Logger.LogException(ex);
 
@@ -70,8 +69,8 @@
                         return null;
 
                     return new InvItem(ownerPlayer.inventory.FindItemUID(itemUID));
-                }
-                catch (Exception ex) {
+
+                } catch (Exception ex) {
                     Logger.LogWarning("[BPDestroyedEvent] Got an exception instead of the weapon.");
                     Logger.LogException(ex);
 
