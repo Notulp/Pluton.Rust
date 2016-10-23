@@ -50,21 +50,25 @@
             get {
                 try {
                     if (_info.Initiator != null) {
-                        BaseEntity ent = _info.Initiator;
-                        BasePlayer p = ent.GetComponent<BasePlayer>();
-                        if (p != null)
-                            return Server.GetPlayer(p);
+                        BaseEntity baseEntity = _info.Initiator;
+                        BasePlayer basePlayer = baseEntity.GetComponent<BasePlayer>();
 
-                        BaseNPC n = ent.GetComponent<BaseNPC>();
-                        if (n != null)
-                            return new NPC(n);
+                        if (basePlayer != null)
+                            return Server.GetPlayer(basePlayer);
 
-                        return new Entity(ent);
+                        BaseNPC baseNPC = baseEntity.GetComponent<BaseNPC>();
+
+                        if (baseNPC != null)
+                            return new NPC(baseNPC);
+
+                        return new Entity(baseEntity);
                     }
                     return null;
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                     Logger.LogWarning("[HurtEvent] Got an exception instead of the attacker.");
                     Logger.LogException(ex);
+
                     return null;
                 }
             }
@@ -77,9 +81,11 @@
                         return null;
 
                     return new InvItem(_info.Weapon.GetItem());
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                     Logger.LogWarning("[HurtEvent] Got an exception instead of the weapon.");
                     Logger.LogException(ex);
+
                     return null;
                 }
             }

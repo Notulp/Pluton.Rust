@@ -20,6 +20,7 @@
             }
             set {
                 int code;
+
                 if (value.Length == 4 && Int32.TryParse(value, out code)) {
                     codeLock.SetFieldValue("code", code);
                 }
@@ -32,6 +33,7 @@
             }
             set {
                 int code;
+
                 if (value.Length == 4 && Int32.TryParse(value, out code)) {
                     _entered = value;
                 }
