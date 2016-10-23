@@ -1,5 +1,4 @@
-namespace Pluton.Rust
-{
+namespace Pluton.Rust {
 	using Core;
 	using Objects;
 	using System;
@@ -8,8 +7,7 @@ namespace Pluton.Rust
 	using System.Collections;
 	using System.Collections.Generic;
 
-	public class Server : Singleton<Server>, ISingleton
-	{
+	public class Server : Singleton<Server>, ISingleton {
 		public bool Loaded = false;
 		public Dictionary<ulong, Player> Players;
 		public Dictionary<ulong, OfflinePlayer> OfflinePlayers;
@@ -25,8 +23,7 @@ namespace Pluton.Rust
 
 		public void BroadcastFrom(ulong playerid, string arg) => ConsoleNetwork.BroadcastToAllClients("chat.add", playerid, arg, 1);
 
-		public Player FindPlayer(string s)
-		{
+		public Player FindPlayer(string s) {
 			BasePlayer player = BasePlayer.Find(s);
 
 			if (player != null)
@@ -35,16 +32,14 @@ namespace Pluton.Rust
 			return null;
 		}
 
-		public Player FindPlayer(ulong steamid)
-		{
+		public Player FindPlayer(ulong steamid) {
 			if (Players.ContainsKey(steamid))
 				return Players[steamid];
 
 			return FindPlayer(steamid.ToString());
 		}
 
-		public static Player GetPlayer(BasePlayer basePlayer)
-		{
+		public static Player GetPlayer(BasePlayer basePlayer) {
 			try {
 				Player player = GetInstance().FindPlayer(basePlayer.userID);
 
@@ -52,16 +47,14 @@ namespace Pluton.Rust
 					return player;
 
 				return new Player(basePlayer);
-			}
-            catch (Exception ex) {
+			} catch (Exception ex) {
 				Logger.LogDebug("[Server] GetPlayer: " + ex.Message);
 				Logger.LogException(ex);
 				return null;
 			}
 		}
 
-		public void Initialize()
-		{
+		public void Initialize() {
 			Instance.LoadOuts = new Dictionary<string, LoadOut>();
 			//Instance.Structures = new Dictionary<string, StructureRecorder.Structure>();
 			Instance.Players = new Dictionary<ulong, Player>();
@@ -75,8 +68,7 @@ namespace Pluton.Rust
 			Instance.CheckPluginsFolder();
 		}
 
-		public void CheckPluginsFolder()
-		{
+		public void CheckPluginsFolder() {
 			string path = Singleton<Util>.Instance.GetPluginsFolder();
 
 			if (!Directory.Exists(path))
@@ -92,8 +84,7 @@ namespace Pluton.Rust
 			}
 		}
 
-		public void LoadLoadouts()
-		{
+		public void LoadLoadouts() {
 			string path = Singleton<Util>.GetInstance().GetLoadoutFolder();
 
 			if (!Directory.Exists(path))
@@ -110,16 +101,14 @@ namespace Pluton.Rust
 			Logger.Log("[Server] " + LoadOuts.Count + " loadout loaded!");
 		}
 
-		public void LoadOfflinePlayers()
-		{
+		public void LoadOfflinePlayers() {
 			Hashtable ht = serverData.GetTable("OfflinePlayers");
 
 			if (ht != null) {
 				foreach (DictionaryEntry entry in ht) {
 					Instance.OfflinePlayers.Add(UInt64.Parse(entry.Key as string), entry.Value as OfflinePlayer);
 				}
-			}
-            else {
+			} else {
 				Logger.LogWarning("[Server] No OfflinePlayers found!");
 			}
 
@@ -152,8 +141,7 @@ namespace Pluton.Rust
         }
         */
 
-		public void Save()
-		{
+		public void Save() {
 			OnShutdown();
 
 			foreach (Player p in Players.Values) {
@@ -163,16 +151,14 @@ namespace Pluton.Rust
 
 		public string SendCommand(string command, params object[] args) => ConsoleSystem.Run.Server.Normal(command, args);
 
-		public void OnShutdown()
-		{
+		public void OnShutdown() {
 			foreach (Player player in Players.Values) {
 				if (serverData.ContainsKey("OfflinePlayers", player.SteamID)) {
 					OfflinePlayer op = serverData.Get("OfflinePlayers", player.SteamID) as OfflinePlayer;
 
 					op.Update(player);
 					OfflinePlayers[player.GameID] = op;
-				}
-                else {
+				} else {
                     OfflinePlayer op = new OfflinePlayer(player);
 
 					OfflinePlayers.Add(player.GameID, op);

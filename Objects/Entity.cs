@@ -1,19 +1,16 @@
-﻿namespace Pluton.Rust.Objects
-{
+﻿namespace Pluton.Rust.Objects {
 	using System;
 	using UnityEngine;
 	using Core;
 
     [Serializable]
-    public class Entity : CountedInstance
-    {
+    public class Entity : CountedInstance {
         [NonSerialized]
         public readonly BaseEntity baseEntity;
         public readonly string Prefab;
         public readonly uint PrefabID;
 
-        public Entity(BaseEntity ent)
-        {
+        public Entity(BaseEntity ent) {
             baseEntity = ent;
 			Prefab = baseEntity.PrefabName;
             PrefabID = baseEntity.prefabID;
@@ -27,8 +24,7 @@
 
 		public virtual bool IsPlayer() => false;
 
-        public BuildingPart ToBuildingPart()
-        {
+        public BuildingPart ToBuildingPart() {
             BuildingBlock block = baseEntity.GetComponent<BuildingBlock>();
 
             if (block == null)
@@ -37,8 +33,7 @@
             return new BuildingPart(block);
         }
 
-        public NPC ToNPC()
-        {
+        public NPC ToNPC() {
             BaseNPC baseNPC = baseEntity.GetComponent<BaseNPC>();
 
             if (baseNPC == null)
@@ -47,8 +42,7 @@
             return new NPC(baseNPC);
         }
 
-        public Player ToPlayer()
-        {
+        public Player ToPlayer() {
             BasePlayer basePlayer = baseEntity.ToPlayer();
 
             if (basePlayer == null)

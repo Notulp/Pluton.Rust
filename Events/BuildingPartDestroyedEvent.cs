@@ -1,18 +1,15 @@
-﻿namespace Pluton.Rust.Events
-{
+﻿namespace Pluton.Rust.Events {
 	using System;
 	using Core;
 	using Rust;
 	using Rust.Objects;
 
-    public class BuildingPartDestroyedEvent : CountedInstance
-    {
+    public class BuildingPartDestroyedEvent : CountedInstance {
         public readonly BuildingPart BuildingPart;
         public readonly HitInfo Info;
         public readonly string HitBone;
 
-        public BuildingPartDestroyedEvent(BuildingBlock buildingBlock, HitInfo info)
-        {
+        public BuildingPartDestroyedEvent(BuildingBlock buildingBlock, HitInfo info) {
             BuildingPart = new BuildingPart(buildingBlock);
             Info = info;
             string bonename = StringPool.Get(info.HitBone);

@@ -1,22 +1,18 @@
-﻿namespace Pluton.Rust.Objects
-{
+﻿namespace Pluton.Rust.Objects {
 	using Core;
 	using System.Linq;
 	using System.Collections.Generic;
 
-    public class Inv : CountedInstance
-    {
+    public class Inv : CountedInstance {
         public readonly PlayerInventory _inv;
         public readonly Player owner;
 
-        public Inv(PlayerInventory inv)
-        {
+        public Inv(PlayerInventory inv) {
             _inv = inv;
             owner = Server.GetPlayer(inv.GetComponent<BasePlayer>());
         }
 
-        public bool Add(InvItem item)
-        {
+        public bool Add(InvItem item) {
             ItemContainer container;
 
             if (item.containerPref == InvItem.ContainerPreference.Belt)

@@ -1,16 +1,12 @@
-namespace Pluton.Rust.Objects
-{
-    public class NPC : Entity
-    {
+namespace Pluton.Rust.Objects {
+    public class NPC : Entity {
         public readonly BaseNPC baseNPC;
 
-        public NPC(BaseNPC npc) : base(npc)
-        {
+        public NPC(BaseNPC npc) : base(npc) {
             baseNPC = npc;
         }
 
-        public override void Kill()
-        {
+        public override void Kill() {
             HitInfo info = new HitInfo();
 
             info.damageTypes.Add(global::Rust.DamageType.Suicide, 100f);

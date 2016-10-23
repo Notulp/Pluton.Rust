@@ -1,26 +1,22 @@
-namespace Pluton.Rust.Events
-{
+namespace Pluton.Rust.Events {
 	using Core;
 	using Rust;
 	using Rust.Objects;
 
-    public class ItemConditionEvent : CountedInstance
-    {
-        public readonly InvItem Item;
-        public readonly float Amount;
-        public readonly Player Player;
+	public class ItemConditionEvent : CountedInstance {
+		public readonly InvItem Item;
+		public readonly float Amount;
+		public readonly Player Player;
 
-        public ItemConditionEvent(Item item, float amount)
-        {
-            Item = new InvItem(item);
-            Amount = amount;
+		public ItemConditionEvent(Item item, float amount) {
+			Item = new InvItem(item);
+			Amount = amount;
 
-            BasePlayer ownerPlayer = item.GetOwnerPlayer();
+			BasePlayer ownerPlayer = item.GetOwnerPlayer();
 
-            if (ownerPlayer != null)
-            {
-                Player = Server.GetPlayer(ownerPlayer);
-            }
-        }
-    }
+			if (ownerPlayer != null) {
+				Player = Server.GetPlayer(ownerPlayer);
+			}
+		}
+	}
 }

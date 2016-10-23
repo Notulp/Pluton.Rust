@@ -1,67 +1,57 @@
-namespace Pluton.Rust.Objects
-{
+namespace Pluton.Rust.Objects {
 	using System.Linq;
 	using UnityEngine;
 	using Core;
 	using Logger = Core.Logger;
 
-    public class InvItem : CountedInstance
-    {
+    public class InvItem : CountedInstance {
         public readonly Item _item;
 
         public ContainerPreference containerPref;
 
-        public enum ContainerPreference
-        {
+        public enum ContainerPreference {
             Belt,
             Main,
             Wear
         }
 
-        public InvItem(string name, int amount)
-        {
+        public InvItem(string name, int amount) {
             Item item = ItemManager.CreateByItemID(GetItemID(name), amount);
 
             if (item == null) {
 				Logger.LogDebug($"[InvItem] Couldn't create item: {amount}x{name}");
                 _item = null;
-            }
-            else {
+            } else {
                 _item = item;
                 containerPref = GetContainerPreference(Category);
             }
         }
 
-        public InvItem(int itemid, int amount = 1)
-        {
+        public InvItem(int itemid, int amount = 1) {
              Item item = ItemManager.CreateByItemID(itemid, amount);
 
              if (item == null) {
 				Logger.LogDebug($"[InvItem] Couldn't create item: {amount}x{itemid}");
                 _item = null;
-            }
-            else {
+            } else {
                 _item = item;
                 containerPref = GetContainerPreference(Category);
             }
         }
 
-        public InvItem(string name)
-        {
+        public InvItem(string name) {
             Item item = ItemManager.CreateByItemID(GetItemID(name), 1);
 
             if (item == null) {
 				Logger.LogDebug($"[InvItem] Couldn't create item: 1x{name}");
                 _item = null;
-            }
-            else {
+            } else {
                 _item = item;
                 containerPref = GetContainerPreference(Category);
             }
         }
 
-        public InvItem(Item item)
-        {
+        public InvItem(Item item) {
             _item = item;
             containerPref = GetContainerPreference(Category);
         }
@@ -125,8 +115,7 @@ namespace Pluton.Rust.Objects
             }
         }
 
-        public static int GetItemID(string itemName)
-        {
+        public static int GetItemID(string itemName) {
             return (from item in ItemManager.itemList
                     where item.displayName.english == itemName ||
                           item.displayName.translated == itemName ||
@@ -134,8 +123,7 @@ namespace Pluton.Rust.Objects
                     select item.itemid).FirstOrDefault<int>();
         }
 
-        public static ContainerPreference GetContainerPreference(string category)
-        {
+        public static ContainerPreference GetContainerPreference(string category) {
             if ("WeaponConstructionTool".Contains(category))
                 return ContainerPreference.Belt;
 

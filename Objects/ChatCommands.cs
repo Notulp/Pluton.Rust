@@ -1,135 +1,120 @@
-﻿namespace Pluton.Rust.Objects
-{
+﻿namespace Pluton.Rust.Objects {
 	using System;
 	using System.Linq;
 	using System.Collections.Generic;
 	using Core.PluginLoaders;
 
-    public class ChatCommand
-    {
-        public delegate void CallbackDelegate(string[] args, Player player);
+	public class ChatCommand {
+		public delegate void CallbackDelegate(string[] args,Player player);
 
-        public string _command;
-        public string _description;
-        public string _usage;
-        public BasePlugin plugin;
-        public CallbackDelegate callback;
+		public string _command;
+		public string _description;
+		public string _usage;
+		public BasePlugin plugin;
+		public CallbackDelegate callback;
 
-        public ChatCommand setCallback(CallbackDelegate function)
-        {
-            callback = function;
+		public ChatCommand setCallback(CallbackDelegate function) {
+			callback = function;
 
-            return this;
-        }
+			return this;
+		}
 
-        public ChatCommand setCallback(string function)
-        {
-            callback = new CallbackDelegate((cmd, player) => {
-                plugin.Invoke(function, new[] { (object)cmd, player });
-            });
+		public ChatCommand setCallback(string function) {
+			callback = new CallbackDelegate((cmd, player) => {
+				plugin.Invoke(function, new[] { (object)cmd, player });
+			});
 
-            return this;
-        }
+			return this;
+		}
 
-        public ChatCommand setUsage(string usage)
-        {
-            _usage = usage;
+		public ChatCommand setUsage(string usage) {
+			_usage = usage;
 
-            return this;
-        }
+			return this;
+		}
 
-        public ChatCommand setDescription(string description)
-        {
-            _description = description;
+		public ChatCommand setDescription(string description) {
+			_description = description;
 
-            return this;
-        }
+			return this;
+		}
 
-        public ChatCommand setCommand(string command)
-        {
-            _command = command;
+		public ChatCommand setCommand(string command) {
+			_command = command;
 
-            return this;
-        }
+			return this;
+		}
 
-        public ChatCommand(string command)
-        {
-            _command = command;
-        }
+		public ChatCommand(string command) {
+			_command = command;
+		}
 
-        public ChatCommand()
-        {
-            _command = "";
-        }
-    }
+		public ChatCommand() {
+			_command = "";
+		}
+	}
 
-    public class ChatCommands
-    {
-        public BasePlugin plugin;
+	public class ChatCommands {
+		public BasePlugin plugin;
 
-        public Dictionary<int, ChatCommand> Commands = new Dictionary<int, ChatCommand>();
+		public Dictionary<int, ChatCommand> Commands = new Dictionary<int, ChatCommand>();
 
-		public ChatCommands(BasePlugin pl)
-		{
+		public ChatCommands(BasePlugin pl) {
 			plugin = pl;
 		}
 
-        public ChatCommand Register(string command)
-        {
-            if (String.IsNullOrEmpty(command))
-                return null;
+		public ChatCommand Register(string command) {
+			if (String.IsNullOrEmpty(command))
+				return null;
 
-            ChatCommand cc = new ChatCommand(command);
-            cc.plugin = plugin;
+			ChatCommand cc = new ChatCommand(command);
+			cc.plugin = plugin;
 
-            return Register(cc);
-        }
+			return Register(cc);
+		}
 
-        public List<ChatCommand> RegisterWithMultipleNames(string[] commands, string callback, string usage, string description)
-        {
-            List<ChatCommand> chatCommands = new List<ChatCommand>();
+		public List<ChatCommand> RegisterWithMultipleNames(string[] commands,
+		                                                         string callback,
+		                                                         string usage,
+		                                                         string description) {
+			List<ChatCommand> chatCommands = new List<ChatCommand>();
 
-            foreach (string command in commands) {
-                ChatCommand chatCommand = Register(command).setCallback(callback).setUsage(usage).setDescription(description);
-                chatCommands.Add(chatCommand);
-            }
+			foreach (string command in commands) {
+				ChatCommand chatCommand = Register(command).setCallback(callback).setUsage(usage).setDescription(description);
+				chatCommands.Add(chatCommand);
+			}
 
-            return chatCommands;
-        }
+			return chatCommands;
+		}
 
-        public ChatCommand Register(ChatCommand command)
-        {
-            Commands.Add(Commands.Count, command);
+		public ChatCommand Register(ChatCommand command) {
+			Commands.Add(Commands.Count, command);
 
-            return command;
-        }
+			return command;
+		}
 
-        public List<string> getCommands()
-        {
-            return (from c in Commands.Values
-                    select c._command).ToList<string>();
-        }
+		public List<string> getCommands() {
+			return (from c in Commands.Values
+			                 select c._command).ToList<string>();
+		}
 
-        public ChatCommand[] getChatCommands(string command)
-        {
-            return (from c in Commands.Values
-                    where c._command == command
-                    select c).ToArray<ChatCommand>();
-        }
+		public ChatCommand[] getChatCommands(string command) {
+			return (from c in Commands.Values
+			                 where c._command == command
+			                 select c).ToArray<ChatCommand>();
+		}
 
-        public string[] getDescriptions(string command)
-        {
-            return (from c in Commands.Values
-                    where c._command == command
-                    select c._description).ToArray<string>();
-        }
+		public string[] getDescriptions(string command) {
+			return (from c in Commands.Values
+			                 where c._command == command
+			                 select c._description).ToArray<string>();
+		}
 
-        public string[] getUsages(string command)
-        {
-            return (from c in Commands.Values
-                    where c._command == command
-                    select c._usage).ToArray<string>();
-        }
-    }
+		public string[] getUsages(string command) {
+			return (from c in Commands.Values
+			                 where c._command == command
+			                 select c._usage).ToArray<string>();
+		}
+	}
 }
 

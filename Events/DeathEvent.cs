@@ -1,20 +1,17 @@
-namespace Pluton.Rust.Events
-{
+namespace Pluton.Rust.Events {
 	using Core;
 	using Rust;
 	using Rust.Objects;
 	using System;
 
-    public class DeathEvent : CountedInstance
-    {
+    public class DeathEvent : CountedInstance {
         public readonly HitInfo _info;
         public readonly string HitBone;
 
         public bool Die = true;
         public bool dropLoot = true;
 
-        public DeathEvent(HitInfo info)
-        {
+        public DeathEvent(HitInfo info) {
             _info = info;
             string bonename = StringPool.Get(info.HitBone);
             HitBone = bonename == "" ? "unknown" : bonename;

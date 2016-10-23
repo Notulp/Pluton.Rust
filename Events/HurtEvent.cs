@@ -1,17 +1,14 @@
-﻿namespace Pluton.Rust.Events
-{
+﻿namespace Pluton.Rust.Events {
 	using Core;
 	using Rust;
 	using Rust.Objects;
 	using System;
 
-    public class HurtEvent : CountedInstance
-    {
+    public class HurtEvent : CountedInstance {
         public readonly HitInfo _info;
         public readonly string HitBone;
 
-        public HurtEvent(HitInfo info)
-        {
+        public HurtEvent(HitInfo info) {
             _info = info;
             string bonename = StringPool.Get(info.HitBone);
             HitBone = bonename == "" ? "unknown" : bonename;

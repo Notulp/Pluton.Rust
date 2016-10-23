@@ -1,24 +1,20 @@
-namespace Pluton.Rust.Events
-{
+namespace Pluton.Rust.Events {
 	using Core;
 	using Rust;
 	using Rust.Objects;
 
-	public class LandmineTriggerEvent : CountedInstance
-    {
-        public readonly Landmine Landmine;
-        public readonly Player Player;
+	public class LandmineTriggerEvent : CountedInstance {
+		public readonly Landmine Landmine;
+		public readonly Player Player;
 
-        public bool Explode = true;
+		public bool Explode = true;
 
-		public LandmineTriggerEvent(Landmine landmine, BasePlayer player)
-		{
+		public LandmineTriggerEvent(Landmine landmine, BasePlayer player) {
 			Landmine = landmine;
 			Player = Server.GetPlayer(player);
 		}
 
-		public void CancelExplosion()
-		{
+		public void CancelExplosion() {
 			Explode = false;
 		}
 	}

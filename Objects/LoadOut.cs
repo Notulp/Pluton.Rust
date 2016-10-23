@@ -1,12 +1,10 @@
-namespace Pluton.Rust.Objects
-{
+namespace Pluton.Rust.Objects {
 	using System;
 	using System.IO;
 	using System.Collections.Generic;
 	using Core;
 
-    public class LoadOut : CountedInstance
-    {
+    public class LoadOut : CountedInstance {
         public Dictionary<int, LoadOutItem> items;
         public readonly string path;
         public readonly string Name;
@@ -16,8 +14,7 @@ namespace Pluton.Rust.Objects
         public bool OwnerUse;
         public bool NormalUse;
 
-        public LoadOut(string name)
-        {
+        public LoadOut(string name) {
 			path = Path.Combine(Singleton<Rust.Util>.Instance.GetLoadoutFolder(), name + ".ini");
             bool nu = false;
 
@@ -34,8 +31,7 @@ namespace Pluton.Rust.Objects
                 OwnerUse = ini.GetBoolSetting("Def", "ownerCanUse");
                 ModeratorUse = ini.GetBoolSetting("Def", "modCanUse");
                 NormalUse = ini.GetBoolSetting("Def", "normalCanUse");
-            }
-            else {
+            } else {
                 itemCount = 0;
                 OwnerUse = true;
                 NormalUse = true;
@@ -63,8 +59,7 @@ namespace Pluton.Rust.Objects
 
         public bool Add(InvItem item) => Add(new LoadOutItem(item.Name, item.Quantity));
 
-        public bool Add(LoadOutItem item)
-        {
+        public bool Add(LoadOutItem item) {
             if (itemCount >= 30) {
                 Logger.LogDebug("[LoadOut] You may not add more then 30 items to one loadout.");
 
@@ -82,8 +77,7 @@ namespace Pluton.Rust.Objects
             return true;
         }
 
-        public bool Remove(int item)
-        {
+        public bool Remove(int item) {
             if (items.ContainsKey(item)) {
                 items.Remove(item);
                 itemCount--;
@@ -95,8 +89,7 @@ namespace Pluton.Rust.Objects
             return false;
         }
 
-        public void Reorganize()
-        {
+        public void Reorganize() {
             int count = 0;
             Dictionary<int, LoadOutItem> items2 = items;
 
@@ -122,8 +115,7 @@ namespace Pluton.Rust.Objects
             Server.GetInstance().LoadOuts.Add(Name, this);
         }
 
-        public void ToIni()
-        {
+        public void ToIni() {
             IniParser ini = new IniParser(path);
 
             ini.AddSetting("Def", "itemCount", itemCount.ToString());
@@ -139,8 +131,7 @@ namespace Pluton.Rust.Objects
             ini.Save();
         }
 
-        public void ToInv(Inv inv, bool notify = true)
-        {
+        public void ToInv(Inv inv, bool notify = true) {
             try {
                 bool perms = false;
 
@@ -160,8 +151,7 @@ namespace Pluton.Rust.Objects
                         inv.Add(item.invItem);
                     }
                 }
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 Logger.LogException(ex);
             }
         }

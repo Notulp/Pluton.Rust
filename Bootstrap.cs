@@ -1,17 +1,14 @@
-namespace Pluton.Rust
-{
+namespace Pluton.Rust {
 	using System;
 	using System.IO;
 	using System.Collections.Generic;
 	using Core;
 	using Core.PluginLoaders;
 
-	public class Bootstrap : Singleton<Bootstrap>, ISingleton
-	{
+	public class Bootstrap : Singleton<Bootstrap>, ISingleton {
 		public static string Version => typeof(Bootstrap).Assembly.GetName().Version.ToString();
 
-		public void Initialize()
-		{
+		public void Initialize() {
 			Console.WriteLine($"Loading Pluton.Rust, v.{Version}");
 
 			System.Reflection.Assembly assembly = GetType().Assembly;

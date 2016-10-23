@@ -1,12 +1,10 @@
-﻿namespace Pluton.Rust.Events
-{
+﻿namespace Pluton.Rust.Events {
 	using Core;
 	using System;
 	using System.Linq;
 	using System.Collections.Generic;
 
-	public class ServerConsoleEvent : CountedInstance
-	{
+	public class ServerConsoleEvent : CountedInstance {
 		public readonly ConsoleSystem.Arg _args;
 
 		public readonly string Cmd;
@@ -14,8 +12,7 @@
 
 		public string Reply;
 
-		public ServerConsoleEvent(ConsoleSystem.Arg args, string rconCmd)
-		{
+		public ServerConsoleEvent(ConsoleSystem.Arg args, string rconCmd) {
 			if (String.IsNullOrEmpty(rconCmd))
 				return;
 

@@ -1,23 +1,19 @@
-namespace Pluton.Rust.Events
-{
+namespace Pluton.Rust.Events {
 	using Network;
 	using Core;
 
-    public class AuthEvent : CountedInstance
-    {
+    public class AuthEvent : CountedInstance {
         public readonly Connection Connection;
 
         public bool Approved;
         public string Reason;
         
-        public AuthEvent(Connection connection)
-        {
+        public AuthEvent(Connection connection) {
             Connection = connection;
             Approved = true;
         }
 
-        public void Reject(string reason = "No reason.")
-        {
+        public void Reject(string reason = "No reason.") {
             Approved = false;
             Reason = reason;
         }

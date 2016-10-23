@@ -1,11 +1,9 @@
-﻿namespace Pluton.Rust.Events
-{
+﻿namespace Pluton.Rust.Events {
 	using System;
 	using Core;
 	using Rust.Objects;
 
-    public class CommandEvent : CountedInstance
-    {
+    public class CommandEvent : CountedInstance {
         public readonly Player User;
         public readonly string[] Args;
         public readonly string Cmd;
@@ -13,8 +11,7 @@
         public string[] QuotedArgs => Util.GetInstance().GetQuotedArgs(Args);
         public string Reply;
 
-        public CommandEvent(Player player, string[] command)
-        {
+        public CommandEvent(Player player, string[] command) {
             User = player;
             Args = new string[command.Length - 1];
             Cmd = command[0];
