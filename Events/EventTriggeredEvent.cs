@@ -1,11 +1,14 @@
-namespace Pluton.Rust.Events {
+namespace Pluton.Rust.Events
+{
 	using Core;
 
-	public class EventTriggeredEvent : CountedInstance {
+	public class EventTriggeredEvent : CountedInstance
+	{
 		public GameObjectRef PrefabRef;
 		public bool Stop;
 
-		public EventTriggeredEvent(TriggeredEventPrefab triggeredEventPrefab) {
+		public EventTriggeredEvent(TriggeredEventPrefab triggeredEventPrefab)
+		{
 			PrefabRef = triggeredEventPrefab.targetPrefab;
 		}
 

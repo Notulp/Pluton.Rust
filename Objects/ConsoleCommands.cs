@@ -1,11 +1,13 @@
-namespace Pluton.Rust.Objects {
+namespace Pluton.Rust.Objects
+{
 	using System;
 	using System.Linq;
 	using System.Collections.Generic;
 	using Core.PluginLoaders;
 	using Core;
 
-	public class ConsoleCommand {
+	public class ConsoleCommand
+	{
 		public delegate void CallbackDelegate(string[] args);
 
 		public string _command;
@@ -14,13 +16,15 @@ namespace Pluton.Rust.Objects {
 		public BasePlugin plugin;
 		public CallbackDelegate callback;
 
-		public ConsoleCommand setCallback(CallbackDelegate function) {
+		public ConsoleCommand setCallback(CallbackDelegate function)
+		{
 			callback = function;
 
 			return this;
 		}
 
-		public ConsoleCommand setCallback(string function) {
+		public ConsoleCommand setCallback(string function)
+		{
 			callback = new CallbackDelegate(cmd => {
 				try {
 					plugin.Invoke(function, (object)cmd);
@@ -33,43 +37,51 @@ namespace Pluton.Rust.Objects {
 			return this;
 		}
 
-		public ConsoleCommand setUsage(string usage) {
+		public ConsoleCommand setUsage(string usage)
+		{
 			_usage = usage;
 
 			return this;
 		}
 
-		public ConsoleCommand setDescription(string description) {
+		public ConsoleCommand setDescription(string description)
+		{
 			_description = description;
 
 			return this;
 		}
 
-		public ConsoleCommand setCommand(string command) {
+		public ConsoleCommand setCommand(string command)
+		{
 			_command = command;
 
 			return this;
 		}
 
-		public ConsoleCommand(string command) {
+		public ConsoleCommand(string command)
+		{
 			_command = command;
 		}
 
-		public ConsoleCommand() {
+		public ConsoleCommand()
+		{
 			_command = "";
 		}
 	}
 
-	public class ConsoleCommands {
+	public class ConsoleCommands
+	{
 		public BasePlugin plugin;
 
 		public Dictionary<int, ConsoleCommand> Commands = new Dictionary<int, ConsoleCommand>();
 
-		public ConsoleCommands(BasePlugin pl) {
+		public ConsoleCommands(BasePlugin pl)
+		{
 			plugin = pl;
 		}
 
-		public ConsoleCommand Register(string command) {
+		public ConsoleCommand Register(string command)
+		{
 			if (String.IsNullOrEmpty(command))
 				return null;
 
@@ -79,33 +91,38 @@ namespace Pluton.Rust.Objects {
 			return Register(cc);
 		}
 
-		public ConsoleCommand Register(ConsoleCommand command) {
+		public ConsoleCommand Register(ConsoleCommand command)
+		{
 			Commands.Add(Commands.Count, command);
 
 			return command;
 		}
 
-		public List<string> getCommands() {
+		public List<string> getCommands()
+		{
 			return (from c in Commands.Values
-			                 select c._command).ToList();
+					select c._command).ToList();
 		}
 
-		public ConsoleCommand[] getConsoleCommands(string command) {
+		public ConsoleCommand[] getConsoleCommands(string command)
+		{
 			return (from c in Commands.Values
-			                 where c._command == command
-			                 select c).ToArray();
+					where c._command == command
+					select c).ToArray();
 		}
 
-		public string[] getDescriptions(string command) {
+		public string[] getDescriptions(string command)
+		{
 			return (from c in Commands.Values
-			                 where c._command == command
-			                 select c._description).ToArray();
+					where c._command == command
+					select c._description).ToArray();
 		}
 
-		public string[] getUsages(string command) {
+		public string[] getUsages(string command)
+		{
 			return (from c in Commands.Values
-			                 where c._command == command
-			                 select c._usage).ToArray();
+					where c._command == command
+					select c._usage).ToArray();
 		}
 	}
 }

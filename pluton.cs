@@ -1,4 +1,5 @@
-namespace Pluton.Rust {
+namespace Pluton.Rust
+{
 	using System;
 	using System.Linq;
 	using Objects;
@@ -6,7 +7,8 @@ namespace Pluton.Rust {
 	using Core.PluginLoaders;
 
 	[ConsoleSystem.Factory("pluton")]
-	public class pluton : ConsoleSystem {
+	public class pluton : ConsoleSystem
+	{
 
 		[ConsoleSystem.Admin, ConsoleSystem.Help("Helps to break basic functionality", "")]
 		public static bool enabled;
@@ -14,13 +16,15 @@ namespace Pluton.Rust {
 		[ConsoleSystem.Admin, ConsoleSystem.Help("Measure perfomance of method calls.", "")]
 		public static bool stopper;
 
-		static pluton() {
+		static pluton()
+		{
 			pluton.enabled = true;
 			pluton.stopper = false;
 		}
 
 		[ConsoleSystem.Admin]
-		public static void ban(ConsoleSystem.Arg arg) {
+		public static void ban(ConsoleSystem.Arg arg)
+		{
 			Player player = Player.Find(arg.ArgsStr);
 
 			if (player != null) {
@@ -41,7 +45,8 @@ namespace Pluton.Rust {
 		}
 
 		[ConsoleSystem.Admin]
-		public static void kick(ConsoleSystem.Arg arg) {
+		public static void kick(ConsoleSystem.Arg arg)
+		{
 			Player player = Player.Find(arg.ArgsStr);
 
 			if (player != null) {
@@ -62,7 +67,8 @@ namespace Pluton.Rust {
 		}
 
 		[ConsoleSystem.User, ConsoleSystem.Help("pluton.login <rcon.password>", "")]
-		public static void login(ConsoleSystem.Arg arg) {
+		public static void login(ConsoleSystem.Arg arg)
+		{
 			if (arg.connection != null && arg.ArgsStr == rcon.password) {
 				ServerUsers.Set(arg.connection.userid, ServerUsers.UserGroup.Moderator, arg.connection.username, "Console login!");
 				ServerUsers.Save();
@@ -72,48 +78,51 @@ namespace Pluton.Rust {
 		}
 
 		[ConsoleSystem.Admin, ConsoleSystem.Help("pluton.reload <optional = plugin name>", "")]
-		public static void reload(ConsoleSystem.Arg arg) {
+		public static void reload(ConsoleSystem.Arg arg)
+		{
 			if (PluginLoader.GetInstance().Plugins.ContainsKey(arg.ArgsStr)) {
 				PluginLoader.GetInstance().ReloadPlugin(arg.ArgsStr);
 
 				arg.ReplyWith(String.Format("{0} plugin reloaded!", arg.ArgsStr));
 			} else if (arg.ArgsStr == "") {
-					DirectoryConfig.GetInstance().Reload();
-					CoreConfig.GetInstance().Reload();
-					Config.GetInstance().Reload();
+				DirectoryConfig.GetInstance().Reload();
+				CoreConfig.GetInstance().Reload();
+				Config.GetInstance().Reload();
 
-					Server.GetInstance().LoadLoadouts();
+				Server.GetInstance().LoadLoadouts();
 
-					if (Server.GetInstance().Loaded)
-						Hooks.On_ServerInit();
+				if (Server.GetInstance().Loaded)
+					Hooks.On_ServerInit();
 
-					PluginLoader.GetInstance().ReloadPlugins();
+				PluginLoader.GetInstance().ReloadPlugins();
 
-					arg.ReplyWith("Pluton reloaded!");
+				arg.ReplyWith("Pluton reloaded!");
 
-					var planes = (from plane in UnityEngine.Object.FindObjectsOfType<CargoPlane>()
-					              where plane.transform.position.y < 10f
-					              select plane).ToList();
+				var planes = (from plane in UnityEngine.Object.FindObjectsOfType<CargoPlane>()
+							  where plane.transform.position.y < 10f
+							  select plane).ToList();
 
-					if (planes.Count != 0) {
-						planes.ForEach(p => p.SendMessage("KillMessage", UnityEngine.SendMessageOptions.DontRequireReceiver));
+				if (planes.Count != 0) {
+					planes.ForEach(p => p.SendMessage("KillMessage", UnityEngine.SendMessageOptions.DontRequireReceiver));
 
-						Logger.LogWarning(String.Format("Destroyed {0} plane at Vector3.zero", planes.Count));
-					}
-				} else {
-					arg.ReplyWith(String.Format("Couldn't find plugin: {0}!", arg.ArgsStr));
+					Logger.LogWarning(String.Format("Destroyed {0} plane at Vector3.zero", planes.Count));
 				}
+			} else {
+				arg.ReplyWith(String.Format("Couldn't find plugin: {0}!", arg.ArgsStr));
+			}
 		}
 
 		[ConsoleSystem.Admin, ConsoleSystem.Help("Manually saves stats, server", "")]
-		public static void saveall(ConsoleSystem.Arg arg) {
+		public static void saveall(ConsoleSystem.Arg arg)
+		{
 			Core.Bootstrap.SaveAll();
 
 			arg.ReplyWith("Everything saved!");
 		}
 
 		[ConsoleSystem.Admin, ConsoleSystem.Help("Prints some data to the server console.", "")]
-		public static void status(ConsoleSystem.Arg arg) {
+		public static void status(ConsoleSystem.Arg arg)
+		{
 			arg.ReplyWith($"Instances:\r\n{CountedInstance.InstanceReportText()}\r\n{plugins.Loaded()}{plugins.Hooks()}");
 		}
 	}

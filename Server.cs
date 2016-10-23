@@ -1,4 +1,5 @@
-namespace Pluton.Rust {
+namespace Pluton.Rust
+{
 	using Core;
 	using Objects;
 	using System;
@@ -7,7 +8,8 @@ namespace Pluton.Rust {
 	using System.Collections;
 	using System.Collections.Generic;
 
-	public class Server : Singleton<Server>, ISingleton {
+	public class Server : Singleton<Server>, ISingleton
+	{
 		public bool Loaded = false;
 		public Dictionary<ulong, Player> Players;
 		public Dictionary<ulong, OfflinePlayer> OfflinePlayers;
@@ -15,7 +17,7 @@ namespace Pluton.Rust {
 		public DataStore serverData;
 		public static string server_message_name = "Pluton";
 
-        private float craftTimeScale = 1f;
+		private float craftTimeScale = 1f;
 
 		public void Broadcast(string arg) => BroadcastFrom(server_message_name, arg);
 
@@ -23,7 +25,8 @@ namespace Pluton.Rust {
 
 		public void BroadcastFrom(ulong playerid, string arg) => ConsoleNetwork.BroadcastToAllClients("chat.add", playerid, arg, 1);
 
-		public Player FindPlayer(string s) {
+		public Player FindPlayer(string s)
+		{
 			BasePlayer player = BasePlayer.Find(s);
 
 			if (player != null)
@@ -32,14 +35,16 @@ namespace Pluton.Rust {
 			return null;
 		}
 
-		public Player FindPlayer(ulong steamid) {
+		public Player FindPlayer(ulong steamid)
+		{
 			if (Players.ContainsKey(steamid))
 				return Players[steamid];
 
 			return FindPlayer(steamid.ToString());
 		}
 
-		public static Player GetPlayer(BasePlayer basePlayer) {
+		public static Player GetPlayer(BasePlayer basePlayer)
+		{
 			try {
 				Player player = GetInstance().FindPlayer(basePlayer.userID);
 
@@ -54,7 +59,8 @@ namespace Pluton.Rust {
 			}
 		}
 
-		public void Initialize() {
+		public void Initialize()
+		{
 			Instance.LoadOuts = new Dictionary<string, LoadOut>();
 			//Instance.Structures = new Dictionary<string, StructureRecorder.Structure>();
 			Instance.Players = new Dictionary<ulong, Player>();
@@ -68,7 +74,8 @@ namespace Pluton.Rust {
 			Instance.CheckPluginsFolder();
 		}
 
-		public void CheckPluginsFolder() {
+		public void CheckPluginsFolder()
+		{
 			string path = Singleton<Util>.Instance.GetPluginsFolder();
 
 			if (!Directory.Exists(path))
@@ -84,13 +91,14 @@ namespace Pluton.Rust {
 			}
 		}
 
-		public void LoadLoadouts() {
+		public void LoadLoadouts()
+		{
 			string path = Singleton<Util>.GetInstance().GetLoadoutFolder();
 
 			if (!Directory.Exists(path))
 				Directory.CreateDirectory(path);
 
-            DirectoryInfo loadoutPath = new DirectoryInfo(path);
+			DirectoryInfo loadoutPath = new DirectoryInfo(path);
 
 			foreach (FileInfo file in loadoutPath.GetFiles()) {
 				if (file.Extension == ".ini") {
@@ -101,7 +109,8 @@ namespace Pluton.Rust {
 			Logger.Log("[Server] " + LoadOuts.Count + " loadout loaded!");
 		}
 
-		public void LoadOfflinePlayers() {
+		public void LoadOfflinePlayers()
+		{
 			Hashtable ht = serverData.GetTable("OfflinePlayers");
 
 			if (ht != null) {
@@ -141,7 +150,8 @@ namespace Pluton.Rust {
         }
         */
 
-		public void Save() {
+		public void Save()
+		{
 			OnShutdown();
 
 			foreach (Player p in Players.Values) {
@@ -151,7 +161,8 @@ namespace Pluton.Rust {
 
 		public string SendCommand(string command, params object[] args) => ConsoleSystem.Run.Server.Normal(command, args);
 
-		public void OnShutdown() {
+		public void OnShutdown()
+		{
 			foreach (Player player in Players.Values) {
 				if (serverData.ContainsKey("OfflinePlayers", player.SteamID)) {
 					OfflinePlayer op = serverData.Get("OfflinePlayers", player.SteamID) as OfflinePlayer;
@@ -159,7 +170,7 @@ namespace Pluton.Rust {
 					op.Update(player);
 					OfflinePlayers[player.GameID] = op;
 				} else {
-                    OfflinePlayer op = new OfflinePlayer(player);
+					OfflinePlayer op = new OfflinePlayer(player);
 
 					OfflinePlayers.Add(player.GameID, op);
 				}
@@ -175,10 +186,10 @@ namespace Pluton.Rust {
 		}
 
 		public List<Player> ActivePlayers => (from player in BasePlayer.activePlayerList
-				        					  select GetPlayer(player)).ToList();
+											  select GetPlayer(player)).ToList();
 
 		public List<Player> SleepingPlayers => (from player in BasePlayer.sleepingPlayerList
-				        						select GetPlayer(player)).ToList();
+												select GetPlayer(player)).ToList();
 
 		public int MaxPlayers => ConVar.Server.maxplayers;
 	}

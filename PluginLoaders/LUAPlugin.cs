@@ -1,13 +1,17 @@
 ﻿using System;
 using Pluton.Rust.Objects;
 
-namespace Pluton.Rust.PluginLoaders {
-	public class LUAPlugin : Core.PluginLoaders.LUAPlugin {
+namespace Pluton.Rust.PluginLoaders
+{
+	public class LUAPlugin : Core.PluginLoaders.LUAPlugin
+	{
 		public LUAPlugin(string name)
-			: base(name) {
+			: base(name)
+		{
 		}
 
-		public override void AssignVariables() {
+		public override void AssignVariables()
+		{
 			script.Globals["Find"] = Find.GetInstance();
 			script.Globals["Server"] = Server.GetInstance();
 			script.Globals["ServerConsoleCommands"] = new ConsoleCommands(this);

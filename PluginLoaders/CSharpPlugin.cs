@@ -1,7 +1,9 @@
-﻿namespace Pluton.Rust.PluginLoaders {
+﻿namespace Pluton.Rust.PluginLoaders
+{
 	using Objects;
-	
-	public class CSharpPlugin : Core.PluginLoaders.CSharpPlugin {
+
+	public class CSharpPlugin : Core.PluginLoaders.CSharpPlugin
+	{
 		ConsoleCommands _ServerConsoleCommands;
 
 		ChatCommands _Commands;

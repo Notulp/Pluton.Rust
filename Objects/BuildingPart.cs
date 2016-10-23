@@ -1,4 +1,5 @@
-﻿namespace Pluton.Rust.Objects {
+﻿namespace Pluton.Rust.Objects
+{
 	using System;
 	using System.Linq;
 	using System.Runtime.Serialization;
@@ -6,33 +7,38 @@
 	using Core.Serialize;
 
 	[Serializable]
-	public class BuildingPart : Entity {
+	public class BuildingPart : Entity
+	{
 		[NonSerialized]
 		private BuildingBlock _buildingBlock;
 
 		private SerializedVector3 position;
 
 		[OnSerializing]
-		private void OnSerializing(StreamingContext context) {
+		private void OnSerializing(StreamingContext context)
+		{
 			position = buildingBlock.transform.position.Serialize();
 		}
 
 		public BuildingPart(BuildingBlock bb)
-			: base(bb) {
+			: base(bb)
+		{
 			_buildingBlock = bb;
 		}
 
-		public Socket_Base FindSocket(string name) {
+		public Socket_Base FindSocket(string name)
+		{
 			return (from socket in _buildingBlock.blockDefinition.allSockets
-			                 where socket.socketName == name
-			                 select socket).First();
+					where socket.socketName == name
+					select socket).First();
 		}
 
 		public void Destroy() => buildingBlock.Kill(BaseNetworkable.DestroyMode.Gib);
 
 		public override bool IsBuildingPart() => true;
 
-		public void Rotate() {
+		public void Rotate()
+		{
 			Construction blockDefinition = buildingBlock.blockDefinition;
 
 			if (!blockDefinition.canRotate)
@@ -48,8 +54,8 @@
 				if (_buildingBlock == null) {
 					Vector3 v3pos = position.ToVector3();
 					_buildingBlock = (from bb in UnityEngine.Object.FindObjectsOfType<BuildingBlock>()
-					                                 where this.Prefab == bb.PrefabName && v3pos == bb.transform.position
-					                                 select bb).FirstOrDefault();
+									  where this.Prefab == bb.PrefabName && v3pos == bb.transform.position
+									  select bb).FirstOrDefault();
 				}
 				return _buildingBlock;
 			}

@@ -1,4 +1,5 @@
-namespace Pluton.Rust {
+namespace Pluton.Rust
+{
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
@@ -9,27 +10,31 @@ namespace Pluton.Rust {
 	using Logger = Core.Logger;
 	using System.Collections;
 
-	public class Util : Core.Util {
+	public class Util : Core.Util
+	{
 		public Dictionary<string, Zone2D> zones = new Dictionary<string, Zone2D>();
 		public DataStore ZoneStore;
 
 		public DirectoryInfo UtilPath;
 
-		public Zone2D GetZone(string name) {
+		public Zone2D GetZone(string name)
+		{
 			if (zones.ContainsKey(name))
 				return zones[name];
 
 			return null;
 		}
 
-		public void SetZone(Zone2D zone) {
+		public void SetZone(Zone2D zone)
+		{
 			if (zone == null)
 				throw new NullReferenceException("SetZone( zone )");
 
 			zones[zone.Name] = zone;
 		}
 
-		public Zone2D CreateZone(string name) {
+		public Zone2D CreateZone(string name)
+		{
 			try {
 				GameObject obj = new GameObject(name);
 				GameObject gobj = UnityEngine.Object.Instantiate(obj, Vector3.zero, Quaternion.identity) as GameObject;
@@ -45,7 +50,8 @@ namespace Pluton.Rust {
 			}
 		}
 
-		public void LoadZones() {
+		public void LoadZones()
+		{
 			try {
 				Logger.LogWarning("Loading zones.");
 				zones = new Dictionary<string, Zone2D>();
@@ -68,7 +74,8 @@ namespace Pluton.Rust {
 			}
 		}
 
-		public void SaveZones() {
+		public void SaveZones()
+		{
 			try {
 				Logger.LogWarning("Saving " + zones.Count + " zone.");
 
@@ -80,17 +87,19 @@ namespace Pluton.Rust {
 			}
 		}
 
-		public void ChangeTriggerRadius(TriggerBase trigger, float newRadius) {
+		public void ChangeTriggerRadius(TriggerBase trigger, float newRadius)
+		{
 			if (newRadius < 0f)
 				throw new InvalidOperationException(String.Format("Radius can't be less then zero. ChangeTriggerRadius({0}, {1})",
-				                                                              trigger,
-				                                                              newRadius));
+																			  trigger,
+																			  newRadius));
 
 			trigger.GetComponent<SphereCollider>().radius = newRadius;
 			trigger.SendMessage("OnValidate", SendMessageOptions.DontRequireReceiver);
 		}
 
-		public void ConsoleLog(string str, bool adminOnly = false) {
+		public void ConsoleLog(string str, bool adminOnly = false)
+		{
 			try {
 				foreach (Player player in Server.GetInstance().Players.Values) {
 					if (!adminOnly || (adminOnly && player.Admin))
@@ -118,7 +127,8 @@ namespace Pluton.Rust {
 
 		public Vector3 Infront(Player p, float length) => p.Location + ((Vector3.forward * length));
 
-		new public void Initialize() {
+		new public void Initialize()
+		{
 			UtilPath = new DirectoryInfo(Path.Combine(GetPublicFolder(), "Util"));
 			ZoneStore = new DataStore("Zones.ds");
 
@@ -126,7 +136,8 @@ namespace Pluton.Rust {
 			LoadZones();
 		}
 
-		public IEnumerable<string> Prefabs() {
+		public IEnumerable<string> Prefabs()
+		{
 			if (Server.GetInstance().Loaded) {
 				foreach (string entity in FileSystem.FindAll("assets", ".prefab"))
 					yield return entity;
@@ -135,7 +146,8 @@ namespace Pluton.Rust {
 			}
 		}
 
-		public void Items() {
+		public void Items()
+		{
 			string path = Path.Combine(GetPublicFolder(), "Items.ini");
 
 			if (!File.Exists(path))

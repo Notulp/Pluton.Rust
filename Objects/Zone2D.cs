@@ -1,11 +1,13 @@
-namespace Pluton.Rust.Objects {
+namespace Pluton.Rust.Objects
+{
 	using System.Linq;
 	using System.Collections.Generic;
 	using UnityEngine;
 	using Serialize;
 	using Core.Serialize;
 
-	public class Zone2D : MonoBehaviour {
+	public class Zone2D : MonoBehaviour
+	{
 		public Mesh zoneMesh;
 		public MeshFilter zoneMeshFilter;
 		public MeshCollider zoneCollider;
@@ -20,12 +22,14 @@ namespace Pluton.Rust.Objects {
 		public int[] Tris;
 		public int TrisCount = 0;
 
-		public void ResetTris() {
+		public void ResetTris()
+		{
 			Tris = new int[0];
 			TrisCount = 0;
 		}
 
-		public void ComputeAllTris() {
+		public void ComputeAllTris()
+		{
 			TrisCount = 0;
 
 			int capacity = (Verts.Count - 2) * 6;
@@ -36,7 +40,8 @@ namespace Pluton.Rust.Objects {
 			ComputeBottomTris();
 		}
 
-		public void ComputeSideTris() {
+		public void ComputeSideTris()
+		{
 			int length = Verts.Count;
 
 			for (int i = 0; i < length; i++) {
@@ -48,18 +53,19 @@ namespace Pluton.Rust.Objects {
 					Tris[TrisCount + 1] = 1;
 					TrisCount += 2;
 				} else if (i == (length - 2)) {
-						Tris[TrisCount] = i + 1;
-						Tris[TrisCount + 1] = 0;
-						TrisCount += 2;
-					} else {
-						Tris[TrisCount] = i + 1;
-						Tris[TrisCount + 1] = i + 2;
-						TrisCount += 2;
-					}
+					Tris[TrisCount] = i + 1;
+					Tris[TrisCount + 1] = 0;
+					TrisCount += 2;
+				} else {
+					Tris[TrisCount] = i + 1;
+					Tris[TrisCount + 1] = i + 2;
+					TrisCount += 2;
+				}
 			}
 		}
 
-		public void ComputeTopTris() {
+		public void ComputeTopTris()
+		{
 			int length = Verts.Count;
 
 			for (int i = 2; i <= length - 4; i += 2) {
@@ -70,7 +76,8 @@ namespace Pluton.Rust.Objects {
 			}
 		}
 
-		public void ComputeBottomTris() {
+		public void ComputeBottomTris()
+		{
 			int length = Verts.Count;
 
 			for (int i = 3; i <= length - 3; i += 2) {
@@ -81,7 +88,8 @@ namespace Pluton.Rust.Objects {
 			}
 		}
 
-		private void Awake() {
+		private void Awake()
+		{
 			zoneMeshFilter = gameObject.AddComponent<MeshFilter>();
 			zoneMeshFilter.mesh = new Mesh();
 			zoneMesh = zoneMeshFilter.sharedMesh;
@@ -90,7 +98,8 @@ namespace Pluton.Rust.Objects {
 			Verts = new List<Vector3>();
 		}
 
-		public void UpdateMesh() {
+		public void UpdateMesh()
+		{
 			zoneMesh.Clear();
 			zoneMesh.vertices = Verts.ToArray();
 			zoneCollider.convex = true;
@@ -107,39 +116,47 @@ namespace Pluton.Rust.Objects {
 			zoneCollider.sharedMesh = gameObject.GetComponent<MeshFilter>().mesh;
 		}
 
-		public void AddPoint(float x, float z) {
+		public void AddPoint(float x, float z)
+		{
 			AddPoint(new Vector3(x, 0, z));
 		}
 
-		public void AddPoint(float x, float y, float z) {
+		public void AddPoint(float x, float y, float z)
+		{
 			AddPoint(new Vector3(x, y, z));
 		}
 
-		public void AddPoint(Vector3 p) {
+		public void AddPoint(Vector3 p)
+		{
 			p.y = min;
 			Verts.Add(p);
 			p.y = max;
 			Verts.Add(p);
 		}
 
-		public void Clear() {
+		public void Clear()
+		{
 			Verts = new List<Vector3>();
 			UpdateMesh();
 		}
 
-		public bool Contains(float x, float z) {
+		public bool Contains(float x, float z)
+		{
 			return Contains(new Vector3(x, 0, z));
 		}
 
-		public bool Contains(float x, float y, float z) {
+		public bool Contains(float x, float y, float z)
+		{
 			return Contains(new Vector3(x, y, z));
 		}
 
-		public bool Contains(Vector3 v3) {
+		public bool Contains(Vector3 v3)
+		{
 			return gameObject.GetComponent<MeshCollider>().bounds.Contains(v3);
 		}
 
-		public void Draw() {
+		public void Draw()
+		{
 			ComputeAllTris();
 
 			for (int i = 0; i < Tris.Length; i += 3) {
@@ -149,13 +166,15 @@ namespace Pluton.Rust.Objects {
 			}
 		}
 
-		public void DrawLine(Vector3 From, Vector3 To, Color color) {
+		public void DrawLine(Vector3 From, Vector3 To, Color color)
+		{
 			ConsoleNetwork.BroadcastToAllClients("ddraw.arrow", new object[] {
 				60, color, From, To, 0.1f
 			});
 		}
 
-		public SerializedZone2D Serialize() {
+		public SerializedZone2D Serialize()
+		{
 			Debug.LogWarning("Serializing '" + Name + "' zone.");
 
 			SerializedZone2D result = new SerializedZone2D();

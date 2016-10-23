@@ -1,5 +1,7 @@
-﻿namespace Pluton.Rust.Objects.PlutonUI {
-	public class RectTransform : BaseComponent {
+﻿namespace Pluton.Rust.Objects.PlutonUI
+{
+	public class RectTransform : BaseComponent
+	{
 		public string anchormax {
 			get {
 				return _obj.GetString("anchormax", "1.0 1.0");
@@ -54,7 +56,8 @@
 			}
 		}
 
-		public RectTransform() {
+		public RectTransform()
+		{
 			this["type"] = new JSON.Value(type);
 		}
 	}

@@ -1,5 +1,7 @@
-﻿namespace Pluton.Rust.Objects.PlutonUI {
-	public class Button : BaseComponent {
+﻿namespace Pluton.Rust.Objects.PlutonUI
+{
+	public class Button : BaseComponent
+	{
 		public string close {
 			get {
 				return _obj.GetString("close");
@@ -78,7 +80,8 @@
 			}
 		}
 
-		public Button() {
+		public Button()
+		{
 			this["type"] = new JSON.Value(type);
 		}
 	}

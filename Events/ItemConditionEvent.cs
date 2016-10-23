@@ -1,14 +1,17 @@
-namespace Pluton.Rust.Events {
+namespace Pluton.Rust.Events
+{
 	using Core;
 	using Rust;
 	using Rust.Objects;
 
-	public class ItemConditionEvent : CountedInstance {
+	public class ItemConditionEvent : CountedInstance
+	{
 		public readonly InvItem Item;
 		public readonly float Amount;
 		public readonly Player Player;
 
-		public ItemConditionEvent(Item item, float amount) {
+		public ItemConditionEvent(Item item, float amount)
+		{
 			Item = new InvItem(item);
 			Amount = amount;
 

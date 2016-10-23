@@ -1,9 +1,11 @@
-﻿namespace Pluton.Rust.Events {
+﻿namespace Pluton.Rust.Events
+{
 	using Core;
 	using Rust;
 	using Rust.Objects;
 
-	public class CraftEvent : CountedInstance {
+	public class CraftEvent : CountedInstance
+	{
 		public readonly Player Crafter;
 
 		public ItemCrafter itemCrafter;
@@ -15,11 +17,12 @@
 		public int SkinID;
 
 		public CraftEvent(ItemCrafter itemCrafter,
-		                        ItemBlueprint itemBlueprint,
-		                        BasePlayer owner,
-		                        ProtoBuf.Item.InstanceData instanceData,
-		                        int amount,
-		                        int skinid) {
+								ItemBlueprint itemBlueprint,
+								BasePlayer owner,
+								ProtoBuf.Item.InstanceData instanceData,
+								int amount,
+								int skinid)
+		{
 			this.itemCrafter = itemCrafter;
 			bluePrint = itemBlueprint;
 			Crafter = Server.GetPlayer(owner);
@@ -28,7 +31,8 @@
 			SkinID = skinid;
 		}
 
-		public void Stop(string reason = "A plugin stops you from crafting that!") {
+		public void Stop(string reason = "A plugin stops you from crafting that!")
+		{
 			cancelReason = reason;
 			Cancel = true;
 		}

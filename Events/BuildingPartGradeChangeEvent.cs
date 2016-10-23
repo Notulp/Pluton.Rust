@@ -1,9 +1,11 @@
-﻿namespace Pluton.Rust.Events {
+﻿namespace Pluton.Rust.Events
+{
 	using Core;
 	using Rust;
 	using Rust.Objects;
 
-	public class BuildingPartGradeChangeEvent: CountedInstance {
+	public class BuildingPartGradeChangeEvent : CountedInstance
+	{
 		public readonly BuildingPart BuildingPart;
 		public readonly Player Builder;
 
@@ -16,8 +18,9 @@
 		private BuildingGrade.Enum grade;
 
 		public BuildingPartGradeChangeEvent(BuildingBlock buildingBlock,
-		                                          BuildingGrade.Enum buildingGrade,
-		                                          BasePlayer basePlayer) {
+												  BuildingGrade.Enum buildingGrade,
+												  BasePlayer basePlayer)
+		{
 			BuildingPart = new BuildingPart(buildingBlock);
 			Builder = Server.GetPlayer(basePlayer);
 			grade = buildingGrade;
@@ -35,7 +38,8 @@
 			set { grade = (BuildingGrade.Enum)value; }
 		}
 
-		public void Destroy(string reason = "Plugin blocks building!") {
+		public void Destroy(string reason = "Plugin blocks building!")
+		{
 			DoDestroy = true;
 			DestroyReason = reason;
 		}

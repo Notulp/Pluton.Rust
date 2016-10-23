@@ -1,4 +1,5 @@
-namespace Pluton.Rust.Serialize {
+namespace Pluton.Rust.Serialize
+{
 	using Objects;
 	using Core.Serialize;
 	using System;
@@ -7,13 +8,15 @@ namespace Pluton.Rust.Serialize {
 	using UnityEngine;
 	using Logger = Core.Logger;
 
-	public class SerializedZone2D : ISerializable {
+	public class SerializedZone2D : ISerializable
+	{
 		public string Name;
 		public int[] Tris;
 		public int TrisCount;
 		public List<SerializedVector3> Verts;
 
-		public Zone2D ToZone2D() {
+		public Zone2D ToZone2D()
+		{
 			try {
 				GameObject obj = new GameObject(Name);
 				GameObject gobj = UnityEngine.Object.Instantiate(obj, Vector3.zero, Quaternion.identity) as GameObject;
@@ -33,7 +36,8 @@ namespace Pluton.Rust.Serialize {
 			}
 		}
 
-		public object Deserialize() {
+		public object Deserialize()
+		{
 			return null;
 		}
 	}

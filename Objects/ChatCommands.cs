@@ -1,11 +1,13 @@
-﻿namespace Pluton.Rust.Objects {
+﻿namespace Pluton.Rust.Objects
+{
 	using System;
 	using System.Linq;
 	using System.Collections.Generic;
 	using Core.PluginLoaders;
 
-	public class ChatCommand {
-		public delegate void CallbackDelegate(string[] args,Player player);
+	public class ChatCommand
+	{
+		public delegate void CallbackDelegate(string[] args, Player player);
 
 		public string _command;
 		public string _description;
@@ -13,13 +15,15 @@
 		public BasePlugin plugin;
 		public CallbackDelegate callback;
 
-		public ChatCommand setCallback(CallbackDelegate function) {
+		public ChatCommand setCallback(CallbackDelegate function)
+		{
 			callback = function;
 
 			return this;
 		}
 
-		public ChatCommand setCallback(string function) {
+		public ChatCommand setCallback(string function)
+		{
 			callback = new CallbackDelegate((cmd, player) => {
 				plugin.Invoke(function, new[] { (object)cmd, player });
 			});
@@ -27,43 +31,51 @@
 			return this;
 		}
 
-		public ChatCommand setUsage(string usage) {
+		public ChatCommand setUsage(string usage)
+		{
 			_usage = usage;
 
 			return this;
 		}
 
-		public ChatCommand setDescription(string description) {
+		public ChatCommand setDescription(string description)
+		{
 			_description = description;
 
 			return this;
 		}
 
-		public ChatCommand setCommand(string command) {
+		public ChatCommand setCommand(string command)
+		{
 			_command = command;
 
 			return this;
 		}
 
-		public ChatCommand(string command) {
+		public ChatCommand(string command)
+		{
 			_command = command;
 		}
 
-		public ChatCommand() {
+		public ChatCommand()
+		{
 			_command = "";
 		}
 	}
 
-	public class ChatCommands {
+	public class ChatCommands
+	{
 		public BasePlugin plugin;
 
 		public Dictionary<int, ChatCommand> Commands = new Dictionary<int, ChatCommand>();
 
-		public ChatCommands(BasePlugin pl) {
+		public ChatCommands(BasePlugin pl)
+		{
 			plugin = pl;
 		}
 
-		public ChatCommand Register(string command) {
+		public ChatCommand Register(string command)
+		{
 			if (String.IsNullOrEmpty(command))
 				return null;
 
@@ -74,9 +86,10 @@
 		}
 
 		public List<ChatCommand> RegisterWithMultipleNames(string[] commands,
-		                                                         string callback,
-		                                                         string usage,
-		                                                         string description) {
+																 string callback,
+																 string usage,
+																 string description)
+		{
 			List<ChatCommand> chatCommands = new List<ChatCommand>();
 
 			foreach (string command in commands) {
@@ -87,33 +100,38 @@
 			return chatCommands;
 		}
 
-		public ChatCommand Register(ChatCommand command) {
+		public ChatCommand Register(ChatCommand command)
+		{
 			Commands.Add(Commands.Count, command);
 
 			return command;
 		}
 
-		public List<string> getCommands() {
+		public List<string> getCommands()
+		{
 			return (from c in Commands.Values
-			                 select c._command).ToList<string>();
+					select c._command).ToList<string>();
 		}
 
-		public ChatCommand[] getChatCommands(string command) {
+		public ChatCommand[] getChatCommands(string command)
+		{
 			return (from c in Commands.Values
-			                 where c._command == command
-			                 select c).ToArray<ChatCommand>();
+					where c._command == command
+					select c).ToArray<ChatCommand>();
 		}
 
-		public string[] getDescriptions(string command) {
+		public string[] getDescriptions(string command)
+		{
 			return (from c in Commands.Values
-			                 where c._command == command
-			                 select c._description).ToArray<string>();
+					where c._command == command
+					select c._description).ToArray<string>();
 		}
 
-		public string[] getUsages(string command) {
+		public string[] getUsages(string command)
+		{
 			return (from c in Commands.Values
-			                 where c._command == command
-			                 select c._usage).ToArray<string>();
+					where c._command == command
+					select c._usage).ToArray<string>();
 		}
 	}
 }

@@ -1,4 +1,5 @@
-namespace Pluton.Rust.Objects {
+namespace Pluton.Rust.Objects
+{
 	using System;
 	using System.Runtime.Serialization;
 	using UnityEngine;
@@ -7,7 +8,8 @@ namespace Pluton.Rust.Objects {
 	using Server = Rust.Server;
 
 	[Serializable]
-	public class Player : Entity {
+	public class Player : Entity
+	{
 		[NonSerialized]
 		private BasePlayer _basePlayer;
 
@@ -16,7 +18,8 @@ namespace Pluton.Rust.Objects {
 		public readonly string SteamID;
 
 		public Player(BasePlayer player)
-			: base(player) {
+			: base(player)
+		{
 			GameID = player.userID;
 			SteamID = player.userID.ToString();
 			_basePlayer = player;
@@ -30,7 +33,8 @@ namespace Pluton.Rust.Objects {
 		}
 
 		[OnDeserialized]
-		public void OnPlayerDeserialized(StreamingContext context) {
+		public void OnPlayerDeserialized(StreamingContext context)
+		{
 			Logger.LogWarning("Deserializing player with id: " + SteamID);
 
 			_basePlayer = BasePlayer.FindByID(GameID);
@@ -41,7 +45,8 @@ namespace Pluton.Rust.Objects {
 				Logger.LogWarning("basePlayer found: " + _basePlayer.displayName);
 		}
 
-		public static Player Find(string nameOrSteamidOrIP) {
+		public static Player Find(string nameOrSteamidOrIP)
+		{
 			BasePlayer player = BasePlayer.Find(nameOrSteamidOrIP);
 
 			if (player != null)
@@ -52,7 +57,8 @@ namespace Pluton.Rust.Objects {
 			return null;
 		}
 
-		public static Player FindByGameID(ulong steamID) {
+		public static Player FindByGameID(ulong steamID)
+		{
 			BasePlayer player = BasePlayer.FindByID(steamID);
 
 			if (player != null)
@@ -63,30 +69,36 @@ namespace Pluton.Rust.Objects {
 			return null;
 		}
 
-		public static Player FindBySteamID(string steamID) {
+		public static Player FindBySteamID(string steamID)
+		{
 			return FindByGameID(UInt64.Parse(steamID));
 		}
 
-		public void Ban(string reason = "no reason") {
+		public void Ban(string reason = "no reason")
+		{
 			ServerUsers.Set(GameID, ServerUsers.UserGroup.Banned, Name, reason);
 			ServerUsers.Save();
 
 			Kick("[BAN] " + reason);
 		}
 
-		public void Kick(string reason = "no reason") {
+		public void Kick(string reason = "no reason")
+		{
 			Net.sv.Kick(basePlayer.net.connection, reason);
 		}
 
-		public void Reject(string reason = "no reason") {
+		public void Reject(string reason = "no reason")
+		{
 			ConnectionAuth.Reject(basePlayer.net.connection, reason);
 		}
 
-		public Vector3 GetLookPoint(float maxDist = 500f) {
+		public Vector3 GetLookPoint(float maxDist = 500f)
+		{
 			return GetLookHit(maxDist).point;
 		}
 
-		public RaycastHit GetLookHit(float maxDist = 500f, int layers = Physics.AllLayers) {
+		public RaycastHit GetLookHit(float maxDist = 500f, int layers = Physics.AllLayers)
+		{
 			RaycastHit hit;
 			Ray orig = basePlayer.eyes.HeadRay();
 			Physics.Raycast(orig, out hit, maxDist, layers);
@@ -94,7 +106,8 @@ namespace Pluton.Rust.Objects {
 			return hit;
 		}
 
-		public Player GetLookPlayer(float maxDist = 500f) {
+		public Player GetLookPlayer(float maxDist = 500f)
+		{
 			RaycastHit hit = GetLookHit(maxDist, LayerMask.GetMask("Player (Server)"));
 
 			if (hit.collider != null) {
@@ -107,7 +120,8 @@ namespace Pluton.Rust.Objects {
 			return null;
 		}
 
-		public BuildingPart GetLookBuildingPart(float maxDist = 500f) {
+		public BuildingPart GetLookBuildingPart(float maxDist = 500f)
+		{
 			RaycastHit hit = GetLookHit(maxDist, LayerMask.GetMask("Construction", "Deployed"));
 
 			if (hit.collider != null) {
@@ -120,7 +134,8 @@ namespace Pluton.Rust.Objects {
 			return null;
 		}
 
-		public override void Kill() {
+		public override void Kill()
+		{
 			HitInfo info = new HitInfo();
 
 			info.damageTypes.Add(global::Rust.DamageType.Suicide, Single.MaxValue);
@@ -129,53 +144,64 @@ namespace Pluton.Rust.Objects {
 			basePlayer.Die(info);
 		}
 
-		public void MakeNone(string reason = "no reason") {
+		public void MakeNone(string reason = "no reason")
+		{
 			ServerUsers.Set(GameID, ServerUsers.UserGroup.None, Name, reason);
 			basePlayer.net.connection.authLevel = 0;
 			ServerUsers.Save();
 		}
 
-		public void MakeModerator(string reason = "no reason") {
+		public void MakeModerator(string reason = "no reason")
+		{
 			ServerUsers.Set(GameID, ServerUsers.UserGroup.Moderator, Name, reason);
 			basePlayer.net.connection.authLevel = 1;
 			ServerUsers.Save();
 		}
 
-		public void MakeOwner(string reason = "no reason") {
+		public void MakeOwner(string reason = "no reason")
+		{
 			ServerUsers.Set(GameID, ServerUsers.UserGroup.Owner, Name, reason);
 			basePlayer.net.connection.authLevel = 2;
 			ServerUsers.Save();
 		}
 
-		public void Message(string msg) {
+		public void Message(string msg)
+		{
 			MessageFrom(Server.server_message_name, msg);
 		}
 
-		public void MessageFrom(string from, string msg) {
+		public void MessageFrom(string from, string msg)
+		{
 			basePlayer.SendConsoleCommand("chat.add", 0, from.ColorText("fa5") + ": " + msg);
 		}
 
-		public void ConsoleMessage(string msg) {
+		public void ConsoleMessage(string msg)
+		{
 			basePlayer.SendConsoleCommand("echo", msg);
 		}
 
-		public override bool IsPlayer() {
+		public override bool IsPlayer()
+		{
 			return true;
 		}
 
-		public void SendConsoleCommand(string cmd) {
+		public void SendConsoleCommand(string cmd)
+		{
 			basePlayer.SendConsoleCommand(cmd.QuoteSafe());
 		}
 
-		public bool GroundTeleport(float x, float y, float z) {
+		public bool GroundTeleport(float x, float y, float z)
+		{
 			return Teleport(x, World.GetInstance().GetGround(x, z), z);
 		}
 
-		public bool GroundTeleport(Vector3 v3) {
+		public bool GroundTeleport(Vector3 v3)
+		{
 			return Teleport(v3.x, World.GetInstance().GetGround(v3.x, v3.z), v3.z);
 		}
 
-		public bool Teleport(Vector3 v3) {
+		public bool Teleport(Vector3 v3)
+		{
 			return Teleport(v3.x, v3.y, v3.z);
 		}
 
@@ -188,7 +214,8 @@ namespace Pluton.Rust.Objects {
 			new Vector3(-worldSizeHalf, 0, -worldSizeHalf)
 		};
 
-		public bool Teleport(float x, float y, float z) {
+		public bool Teleport(float x, float y, float z)
+		{
 			if (teleporting || basePlayer.IsDead())
 				return false;
 

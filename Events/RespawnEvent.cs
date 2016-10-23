@@ -1,9 +1,11 @@
-namespace Pluton.Rust.Events {
+namespace Pluton.Rust.Events
+{
 	using Core;
 	using Rust.Objects;
 	using UnityEngine;
 
-	public class RespawnEvent : CountedInstance {
+	public class RespawnEvent : CountedInstance
+	{
 		public readonly Player Player;
 		public readonly Vector3 SpawnPos;
 		public readonly Quaternion SpawnRot;
@@ -13,7 +15,8 @@ namespace Pluton.Rust.Events {
 		public bool WakeUp = false;
 		public float StartHealth = -1;
 
-		public RespawnEvent(Player player, Vector3 position, Quaternion quaternion) {
+		public RespawnEvent(Player player, Vector3 position, Quaternion quaternion)
+		{
 			Player = player;
 			SpawnPos = position;
 			SpawnRot = quaternion;

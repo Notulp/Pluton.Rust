@@ -1,5 +1,7 @@
-﻿namespace Pluton.Rust.Objects.PlutonUI {
-	public class Text : BaseComponent {
+﻿namespace Pluton.Rust.Objects.PlutonUI
+{
+	public class Text : BaseComponent
+	{
 		public string align {
 			get {
 				return _obj.GetString("align", "UpperLeft");
@@ -66,7 +68,8 @@
 			}
 		}
 
-		public Text() {
+		public Text()
+		{
 			this["type"] = new JSON.Value(type);
 		}
 	}

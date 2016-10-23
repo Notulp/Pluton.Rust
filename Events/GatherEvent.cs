@@ -1,9 +1,11 @@
-namespace Pluton.Rust.Events {
+namespace Pluton.Rust.Events
+{
 	using Core;
 	using Rust;
 	using Rust.Objects;
 
-	public class GatherEvent : CountedInstance {
+	public class GatherEvent : CountedInstance
+	{
 		public readonly ResourceDispenser ResourceDispenser;
 		public readonly Entity Resource;
 		public readonly Player Gatherer;
@@ -12,10 +14,11 @@ namespace Pluton.Rust.Events {
 		public int Amount;
 
 		public GatherEvent(ResourceDispenser resourceDispenser,
-		                         BaseEntity from,
-		                         BaseEntity to,
-		                         ItemAmount itemAmount,
-		                         int amount) {
+								 BaseEntity from,
+								 BaseEntity to,
+								 ItemAmount itemAmount,
+								 int amount)
+		{
 			if (to is BasePlayer) {
 				ResourceDispenser = resourceDispenser;
 				Resource = new Entity(from);

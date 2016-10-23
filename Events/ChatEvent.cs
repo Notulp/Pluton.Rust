@@ -1,9 +1,11 @@
-﻿namespace Pluton.Rust.Events {
+﻿namespace Pluton.Rust.Events
+{
 	using Core;
 	using Rust;
 	using Rust.Objects;
 
-	public class ChatEvent : CountedInstance {
+	public class ChatEvent : CountedInstance
+	{
 		public readonly ConsoleSystem.Arg Arg;
 		public readonly string OriginalText;
 		public readonly Player User;
@@ -13,7 +15,8 @@
 		public string Reply;
 		public bool AllowFormatting = false;
 
-		public ChatEvent(Player player, ConsoleSystem.Arg args) {
+		public ChatEvent(Player player, ConsoleSystem.Arg args)
+		{
 			Arg = args;
 			OriginalText = args.ArgsStr.Substring(1, args.ArgsStr.Length - 2).Replace("\\", "");
 			User = player;
@@ -27,7 +30,8 @@
 			Reply = "";
 		}
 
-		public void Cancel(string reply = "Your message was not sent") {
+		public void Cancel(string reply = "Your message was not sent")
+		{
 			FinalText = "";
 			Reply = reply;
 		}

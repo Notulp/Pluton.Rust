@@ -1,5 +1,7 @@
-﻿namespace Pluton.Rust.Objects.PlutonUI {
-	public class Outline : BaseComponent {
+﻿namespace Pluton.Rust.Objects.PlutonUI
+{
+	public class Outline : BaseComponent
+	{
 		public string color {
 			get {
 				return _obj.GetString("color", "1.0 1.0 1.0 1.0");
@@ -38,11 +40,12 @@
 				if (_obj.ContainsKey("useGraphicAlpha") && !value)
 					_obj.Remove("useGraphicAlpha");
 				else if (!_obj.ContainsKey("useGraphicAlpha") && value)
-						_obj.Add("useGraphicAlpha", new JSON.Value(value));
+					_obj.Add("useGraphicAlpha", new JSON.Value(value));
 			}
 		}
 
-		public Outline() {
+		public Outline()
+		{
 			this["type"] = new JSON.Value(type);
 		}
 	}

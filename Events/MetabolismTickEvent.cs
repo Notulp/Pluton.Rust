@@ -1,9 +1,11 @@
-﻿namespace Pluton.Rust.Events {
+﻿namespace Pluton.Rust.Events
+{
 	using Core;
 	using Rust;
 	using Rust.Objects;
 
-	public class MetabolismTickEvent : CountedInstance {
+	public class MetabolismTickEvent : CountedInstance
+	{
 		public readonly Player Victim;
 
 		public float CurrentTemperature = 0.0f;
@@ -24,7 +26,8 @@
 		public float RadiationValue = 0.0f;
 		public bool PreventDamage = false;
 
-		public MetabolismTickEvent(BasePlayer basePlayer) {
+		public MetabolismTickEvent(BasePlayer basePlayer)
+		{
 			Victim = Server.GetPlayer(basePlayer);
 		}
 

@@ -1,9 +1,11 @@
-﻿namespace Pluton.Rust.Objects {
+﻿namespace Pluton.Rust.Objects
+{
 	using Core;
 	using System;
 
 	[Serializable]
-	public class OfflinePlayer : CountedInstance {
+	public class OfflinePlayer : CountedInstance
+	{
 		public string Name;
 		public string SteamID;
 		public string IP;
@@ -14,7 +16,8 @@
 		public ulong totalTimeOnline;
 		public bool Admin;
 
-		public OfflinePlayer(Player player) {
+		public OfflinePlayer(Player player)
+		{
 			Name = player.Name;
 			SteamID = player.SteamID;
 			IP = player.IP;
@@ -28,7 +31,8 @@
 
 		public static OfflinePlayer Get(string steamID) => Get(UInt64.Parse(steamID));
 
-		public static OfflinePlayer Get(ulong steamID) {
+		public static OfflinePlayer Get(ulong steamID)
+		{
 			OfflinePlayer op = Server.GetInstance().OfflinePlayers[steamID];
 
 			if (op == null) {
@@ -39,7 +43,8 @@
 			return op;
 		}
 
-		public void Update(Player player) {
+		public void Update(Player player)
+		{
 			if (Name != player.Name) {
 				Logger.LogDebug("[OfflinePlayer] " + Name + " changed name to: " + player.Name);
 				Name = player.Name;

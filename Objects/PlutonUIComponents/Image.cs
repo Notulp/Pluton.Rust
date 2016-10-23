@@ -1,5 +1,7 @@
-﻿namespace Pluton.Rust.Objects.PlutonUI {
-	public class Image : BaseComponent {
+﻿namespace Pluton.Rust.Objects.PlutonUI
+{
+	public class Image : BaseComponent
+	{
 		public string color {
 			get {
 				return _obj.GetString("color", "1.0 1.0 1.0 1.0");
@@ -66,7 +68,8 @@
 			}
 		}
 
-		public Image() {
+		public Image()
+		{
 			this["type"] = new JSON.Value(type);
 		}
 	}

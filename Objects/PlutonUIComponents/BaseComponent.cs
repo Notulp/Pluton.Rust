@@ -1,8 +1,10 @@
-﻿namespace Pluton.Rust.Objects.PlutonUI {
+﻿namespace Pluton.Rust.Objects.PlutonUI
+{
 	using Core;
 
-	public class BaseComponent : CountedInstance, IComponent {
-		public JSON.Value this [string key] {
+	public class BaseComponent : CountedInstance, IComponent
+	{
+		public JSON.Value this[string key] {
 			get {
 				return _obj[key];
 			}

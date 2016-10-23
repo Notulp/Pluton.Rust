@@ -1,14 +1,17 @@
-﻿namespace Pluton.Rust.Events {
+﻿namespace Pluton.Rust.Events
+{
 	using Core;
 	using Rust;
 	using Rust.Objects;
 
-	public class HammerEvent : CountedInstance {
+	public class HammerEvent : CountedInstance
+	{
 		public readonly HitInfo _info;
 		public readonly string HitBone;
 		public readonly BasePlayer basePlayer;
 
-		public HammerEvent(HitInfo info, BasePlayer player) {
+		public HammerEvent(HitInfo info, BasePlayer player)
+		{
 			_info = info;
 			basePlayer = player;
 			string bonename = StringPool.Get(info.HitBone);

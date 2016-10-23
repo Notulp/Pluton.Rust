@@ -1,9 +1,11 @@
-﻿namespace Pluton.Rust.Events {
+﻿namespace Pluton.Rust.Events
+{
 	using Core;
 	using Rust;
 	using Rust.Objects;
 
-	public class MetabolismDamageEvent : CountedInstance {
+	public class MetabolismDamageEvent : CountedInstance
+	{
 		public readonly Player Victim;
 
 		public float HungerDamage = 0.0f;
@@ -15,7 +17,8 @@
 		public float PoisonDamage = 0.0f;
 		public float RadiationDamage = 0.0f;
 
-		public MetabolismDamageEvent(BasePlayer player) {
+		public MetabolismDamageEvent(BasePlayer player)
+		{
 			Victim = Server.GetPlayer(player);
 		}
 

@@ -1,10 +1,12 @@
-namespace Pluton.Rust.Events {
+namespace Pluton.Rust.Events
+{
 	using System;
 	using Core;
 	using Rust;
 	using Rust.Objects;
 
-	public class BuildingEvent : CountedInstance {
+	public class BuildingEvent : CountedInstance
+	{
 		public readonly Construction Construction;
 		public readonly Construction.Target Target;
 		public readonly BuildingPart BuildingPart;
@@ -15,9 +17,10 @@ namespace Pluton.Rust.Events {
 		public bool DoDestroy = false;
 
 		public BuildingEvent(Construction construction,
-		                     Construction.Target target,
-		                     BuildingBlock buildingBlock,
-		                     bool needsValidPlacement) {
+							 Construction.Target target,
+							 BuildingBlock buildingBlock,
+							 bool needsValidPlacement)
+		{
 			Construction = construction;
 			Target = target;
 			BuildingPart = new BuildingPart(buildingBlock);
@@ -25,7 +28,8 @@ namespace Pluton.Rust.Events {
 			NeedsValidPlacement = needsValidPlacement;
 		}
 
-		public void Destroy(string reason = "Plugin blocks building!") {
+		public void Destroy(string reason = "Plugin blocks building!")
+		{
 			DoDestroy = true;
 			DestroyReason = reason;
 		}

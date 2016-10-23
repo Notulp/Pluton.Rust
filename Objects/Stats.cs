@@ -1,9 +1,11 @@
-namespace Pluton.Rust.Objects {
+namespace Pluton.Rust.Objects
+{
 	using System;
 	using Core;
 
 	[Serializable]
-	public class PlayerStats : CountedInstance {
+	public class PlayerStats : CountedInstance
+	{
 		public uint Kills;
 		public uint Deaths;
 
@@ -26,7 +28,8 @@ namespace Pluton.Rust.Objects {
 
 		public double FallDamage;
 
-		public PlayerStats(string steamid) {
+		public PlayerStats(string steamid)
+		{
 			if (!Server.GetInstance().serverData.ContainsKey("PlayerStats", steamid)) {
 				Kills = 0;
 				Deaths = 0;
@@ -63,44 +66,48 @@ namespace Pluton.Rust.Objects {
 			}
 		}
 
-		public void AddKill(bool player, bool npc) {
+		public void AddKill(bool player, bool npc)
+		{
 			Kills++;
 
 			if (player)
 				PlayerKills++;
 			else if (npc)
-					NPCKills++;
+				NPCKills++;
 		}
 
-		public void AddDeath(bool player, bool npc) {
+		public void AddDeath(bool player, bool npc)
+		{
 			Deaths++;
 
 			if (player)
 				PlayerDeaths++;
 			else if (npc)
-					NPCDeaths++;
+				NPCDeaths++;
 		}
 
-		public void AddDamageFrom(float dmgAmount, bool player, bool npc, bool fall) {
+		public void AddDamageFrom(float dmgAmount, bool player, bool npc, bool fall)
+		{
 			TotalDamageTaken += dmgAmount;
 
 			if (player)
 				DamageFromPlayers += dmgAmount;
 			else if (npc)
-					DamageFromNPCs += dmgAmount;
-				else if (fall)
-						FallDamage += dmgAmount;
+				DamageFromNPCs += dmgAmount;
+			else if (fall)
+				FallDamage += dmgAmount;
 		}
 
-		public void AddDamageTo(float dmgAmount, bool player, bool npc, bool entity) {
+		public void AddDamageTo(float dmgAmount, bool player, bool npc, bool entity)
+		{
 			TotalDamageDone += dmgAmount;
 
 			if (player)
 				DamageToPlayers += dmgAmount;
 			else if (npc)
-					DamageToNPCs += dmgAmount;
-				else if (entity)
-						DamageToEntities += dmgAmount;
+				DamageToNPCs += dmgAmount;
+			else if (entity)
+				DamageToEntities += dmgAmount;
 		}
 	}
 }

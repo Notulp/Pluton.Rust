@@ -1,29 +1,33 @@
-namespace Pluton.Rust.Events {
+namespace Pluton.Rust.Events
+{
 	using Network;
 	using Core;
 
-    public class AuthEvent : CountedInstance {
-        public readonly Connection Connection;
+	public class AuthEvent : CountedInstance
+	{
+		public readonly Connection Connection;
 
-        public bool Approved;
-        public string Reason;
-        
-        public AuthEvent(Connection connection) {
-            Connection = connection;
-            Approved = true;
-        }
+		public bool Approved;
+		public string Reason;
 
-        public void Reject(string reason = "No reason.") {
-            Approved = false;
-            Reason = reason;
-        }
+		public AuthEvent(Connection connection)
+		{
+			Connection = connection;
+			Approved = true;
+		}
 
-        public ulong GameID => Connection.userid;
+		public void Reject(string reason = "No reason.")
+		{
+			Approved = false;
+			Reason = reason;
+		}
 
-        public string IP => Connection.ipaddress;
+		public ulong GameID => Connection.userid;
 
-        public string Name => Connection.username;
+		public string IP => Connection.ipaddress;
 
-        public string OS => Connection.os;
-    }
+		public string Name => Connection.username;
+
+		public string OS => Connection.os;
+	}
 }

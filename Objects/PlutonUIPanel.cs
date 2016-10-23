@@ -1,10 +1,12 @@
-﻿namespace Pluton.Rust.Objects {
+﻿namespace Pluton.Rust.Objects
+{
 	using System;
 
-	public class PlutonUIPanel {
+	public class PlutonUIPanel
+	{
 		public JSON.Object obj = new JSON.Object();
 
-		public JSON.Value this [string key] {
+		public JSON.Value this[string key] {
 			get {
 				return obj[key];
 			}
@@ -61,7 +63,8 @@
 			}
 		}
 
-		public PlutonUIPanel(string nam = null, string par = null, float? fade = null) {
+		public PlutonUIPanel(string nam = null, string par = null, float? fade = null)
+		{
 			components = new JSON.Array();
 
 			if (nam != null)
@@ -74,20 +77,23 @@
 				fadeOut = (float)fade;
 		}
 
-		public PlutonUI.BaseComponent AddComponent(PlutonUI.BaseComponent comp) {
+		public PlutonUI.BaseComponent AddComponent(PlutonUI.BaseComponent comp)
+		{
 			components.Add(comp.obj);
 
 			return comp;
 		}
 
-		public PlutonUI.BaseComponent AddComponent <T>() where T : PlutonUI.BaseComponent {
+		public PlutonUI.BaseComponent AddComponent<T>() where T : PlutonUI.BaseComponent
+		{
 			PlutonUI.BaseComponent t = Activator.CreateInstance<T>();
 			components.Add(t.obj);
 
 			return t;
 		}
 
-		public bool RemoveComponent(PlutonUI.BaseComponent comp) {
+		public bool RemoveComponent(PlutonUI.BaseComponent comp)
+		{
 			for (int i = 0; i < components.Length; i++) {
 				if (components[i].Obj == comp.obj) {
 					components.Remove(i);
