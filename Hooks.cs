@@ -970,6 +970,7 @@ namespace Pluton.Rust
 			basePlayer.SendNetworkUpdateImmediate(false);
 			basePlayer.ClearEntityQueue();
 			basePlayer.ClientRPCPlayer(null, basePlayer, "StartLoading");
+			if (player.basePlayer.IsConnected())
 			basePlayer.SendFullSnapshot();
 			// player.SetPlayerFlag (BasePlayer.PlayerFlags.ReceivingSnapshot, false);
 			// player.ClientRPCPlayer(null, player, "FinishLoading");
