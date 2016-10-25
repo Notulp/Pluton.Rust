@@ -172,12 +172,14 @@ namespace Pluton.Rust.Objects
 
 		public void MessageFrom(string from, string msg)
 		{
-			basePlayer.SendConsoleCommand("chat.add", 0, from.ColorText("fa5") + ": " + msg);
+			if (basePlayer.IsConnected())
+				basePlayer.SendConsoleCommand("chat.add", 0, from.ColorText("fa5") + ": " + msg);
 		}
 
 		public void ConsoleMessage(string msg)
 		{
-			basePlayer.SendConsoleCommand("echo", msg);
+			if (basePlayer.IsConnected())
+				basePlayer.SendConsoleCommand("echo", msg);
 		}
 
 		public override bool IsPlayer()
@@ -187,7 +189,8 @@ namespace Pluton.Rust.Objects
 
 		public void SendConsoleCommand(string cmd)
 		{
-			basePlayer.SendConsoleCommand(cmd.QuoteSafe());
+			if (basePlayer.IsConnected())
+				basePlayer.SendConsoleCommand(cmd.QuoteSafe());
 		}
 
 		public bool GroundTeleport(float x, float y, float z)
@@ -238,7 +241,9 @@ namespace Pluton.Rust.Objects
 			basePlayer.UpdateNetworkGroup();
 			basePlayer.SendNetworkUpdateImmediate(false);
 			basePlayer.ClientRPCPlayer(null, basePlayer, "StartLoading");
-			basePlayer.SendFullSnapshot();
+
+			if (basePlayer.IsConnected())
+				basePlayer.SendFullSnapshot();
 
 			teleporting = false;
 
