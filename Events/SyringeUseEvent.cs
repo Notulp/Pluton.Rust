@@ -4,23 +4,17 @@ namespace Pluton.Rust.Events
 	using Rust;
 	using Rust.Objects;
 
-	public class SyringeUseEvent : CountedInstance
+	public class SyringeUseEvent : Event
 	{
 		public readonly MedicalTool Syringe;
-		public readonly BaseEntity.RPCMessage RPCMessage;
 		public readonly Player User;
 		public readonly Player Receiver;
 
-		public SyringeUseEvent(MedicalTool syringe, BaseEntity.RPCMessage msg, bool isSelf)
+		public SyringeUseEvent(MedicalTool syringe, BasePlayer owner, BasePlayer target)
 		{
 			Syringe = syringe;
-			RPCMessage = msg;
-			User = Server.GetPlayer(syringe.GetOwnerPlayer());
-
-			if (isSelf)
-				Receiver = User;
-			else
-				Receiver = new Player(BaseNetworkable.serverEntities.Find(msg.read.UInt32()) as BasePlayer);
+			User = Server.GetPlayer(owner);
+		    Receiver = Server.GetPlayer(target);
 		}
-	}
+    }
 }
