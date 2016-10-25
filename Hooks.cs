@@ -894,7 +894,30 @@ namespace Pluton.Rust
 			return true;
 		}
 
-		public static void On_PlayerSyringeSelf(MedicalTool mt, BaseEntity.RPCMessage msg) => OnNext("On_PlayerSyringeSelf", new SyringeUseEvent(mt, mt.GetOwnerPlayer(), mt.GetOwnerPlayer()));
+	    public static void On_PlayerSyringeSelf(MedicalTool medicalTool, BaseEntity.RPCMessage msg)
+        {
+            BasePlayer messagePlayer = msg.player;
+
+            if (messagePlayer.CanInteract() == false)
+                return;
+
+            if ((bool) medicalTool.CallMethod("HasItemAmount") == false)
+                return;
+
+	        BasePlayer owner = medicalTool.GetOwnerPlayer();
+
+            Pre<SyringeUseEvent> preSyringeUseEvent = new Pre<SyringeUseEvent>(medicalTool, owner, owner);
+
+            OnNext("Pre_PlayerSyringeSelf", preSyringeUseEvent);
+
+            if (preSyringeUseEvent.IsCanceled == false) {
+                medicalTool.ClientRPCPlayer(null, messagePlayer, "Reset");
+                medicalTool.CallMethod("GiveEffectsTo", owner);
+                medicalTool.CallMethod("UseItemAmount", 1);
+
+                OnNext("On_PlayerSyringeSelf", preSyringeUseEvent.Event);
+            }
+        }
 
         public static void On_PlayerSyringeOther(MedicalTool medicalTool, BaseEntity.RPCMessage msg)
 	    {
