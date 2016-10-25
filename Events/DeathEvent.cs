@@ -5,7 +5,7 @@ namespace Pluton.Rust.Events
 	using Rust.Objects;
 	using System;
 
-	public class DeathEvent : CountedInstance
+	public class DeathEvent : Event
 	{
 		public readonly HitInfo _info;
 		public readonly string HitBone;

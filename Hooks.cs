@@ -23,6 +23,7 @@ namespace Pluton.Rust
 			"On_BuildingPartDestroyed",
 			"On_BuildingPartGradeChange",
 			"On_Chat",
+			"Pre_ClientAuth",
 			"On_ClientAuth",
 			"On_ClientConsole",
 			"On_CombatEntityHurt",
@@ -893,10 +894,63 @@ namespace Pluton.Rust
 			return true;
 		}
 
-		public static void On_PlayerSyringeSelf(MedicalTool mt, BaseEntity.RPCMessage msg) => OnNext("On_PlayerSyringeSelf", new SyringeUseEvent(mt, msg, true));
+	    public static void On_PlayerSyringeSelf(MedicalTool medicalTool, BaseEntity.RPCMessage msg)
+        {
+            BasePlayer messagePlayer = msg.player;
 
-		public static void On_PlayerSyringeOther(MedicalTool mt, BaseEntity.RPCMessage msg) => OnNext("On_PlayerSyringeOther", new SyringeUseEvent(mt, msg, false));
+            if (messagePlayer.CanInteract() == false)
+                return;
 
+            if ((bool) medicalTool.CallMethod("HasItemAmount") == false)
+                return;
+
+	        BasePlayer owner = medicalTool.GetOwnerPlayer();
+
+            Pre<SyringeUseEvent> preSyringeUseEvent = new Pre<SyringeUseEvent>(medicalTool, owner, owner);
+
+            OnNext("Pre_PlayerSyringeSelf", preSyringeUseEvent);
+
+            if (preSyringeUseEvent.IsCanceled == false) {
+                medicalTool.ClientRPCPlayer(null, messagePlayer, "Reset");
+                medicalTool.CallMethod("GiveEffectsTo", owner);
+                medicalTool.CallMethod("UseItemAmount", 1);
+
+                OnNext("On_PlayerSyringeSelf", preSyringeUseEvent.Event);
+            }
+        }
+
+        public static void On_PlayerSyringeOther(MedicalTool medicalTool, BaseEntity.RPCMessage msg)
+	    {
+	        BasePlayer messagePlayer = msg.player;
+
+	        if (messagePlayer.CanInteract() == false)
+                return;
+
+	        if ((bool) medicalTool.CallMethod("HasItemAmount") == false || medicalTool.canUseOnOther == false)
+	            return;
+
+            BasePlayer owner = medicalTool.GetOwnerPlayer();
+
+	        if (owner == null)
+	            return;
+
+            BasePlayer target = BaseNetworkable.serverEntities.Find(msg.read.UInt32()) as BasePlayer;
+
+	        if (target != null && Vector3.Distance(target.transform.position, owner.transform.position) < 4f){
+                Pre<SyringeUseEvent> preSyringeUseEvent = new Pre<SyringeUseEvent>(medicalTool, owner, target);
+                
+                OnNext("Pre_PlayerSyringeOther", preSyringeUseEvent);
+
+	            if (preSyringeUseEvent.IsCanceled == false) {
+                    medicalTool.ClientRPCPlayer(null, messagePlayer, "Reset");
+                    medicalTool.CallMethod("GiveEffectsTo", target);
+                    medicalTool.CallMethod("UseItemAmount", 1);
+
+                    OnNext("On_PlayerSyringeOther", preSyringeUseEvent.Event);
+                }
+            }
+        }
+        
 		// BasePlayer.UpdateRadiation()
 		public static void On_PlayerTakeRadiation(BasePlayer basePlayer, float radAmount)
 		{
@@ -915,14 +969,16 @@ namespace Pluton.Rust
 		// ConnectionAuth.Approve()
 		public static void On_ClientAuth(ConnectionAuth ca, Connection connection)
 		{
-			var ae = new AuthEvent(connection);
+			var ae = new Pre<AuthEvent>(connection);
 
-			OnNext("On_ClientAuth", ae);
+			OnNext("Pre_ClientAuth", ae);
+			if(!ae.IsCanceled)
+				OnNext("On_ClientAuth", ae.Event);
 
 			ConnectionAuth.m_AuthConnection.Remove(connection);
 
-			if (!ae.Approved) {
-				ConnectionAuth.Reject(connection, ae.Reason);
+			if (!ae.Event.Approved) {
+				ConnectionAuth.Reject(connection, ae.Event.Reason);
 				return;
 			}
 

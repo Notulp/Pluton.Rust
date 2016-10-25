@@ -1,9 +1,9 @@
-﻿namespace Pluton.Rust.Events
+namespace Pluton.Rust.Events
 {
 	using Core;
 	using Rust.Objects;
 
-	public class DoorUseEvent : CountedInstance
+	public class DoorUseEvent : Event
 	{
 		public readonly Player Player;
 		public readonly Entity Door;

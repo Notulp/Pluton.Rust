@@ -4,7 +4,7 @@ namespace Pluton.Rust.Events
 	using Rust;
 	using Rust.Objects;
 
-	public class PlayerClothingEvent : CountedInstance
+	public class PlayerClothingEvent : Event
 	{
 		public readonly Player Player;
 		public readonly InvItem Item;

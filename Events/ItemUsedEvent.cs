@@ -1,9 +1,9 @@
-﻿namespace Pluton.Rust.Events
+namespace Pluton.Rust.Events
 {
 	using Core;
 	using Rust.Objects;
 
-	public class ItemUsedEvent : CountedInstance
+	public class ItemUsedEvent : Event
 	{
 		public readonly InvItem Item;
 		public readonly int Amount;

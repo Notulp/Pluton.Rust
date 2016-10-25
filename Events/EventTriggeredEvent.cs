@@ -2,7 +2,7 @@ namespace Pluton.Rust.Events
 {
 	using Core;
 
-	public class EventTriggeredEvent : CountedInstance
+	public class EventTriggeredEvent : Event
 	{
 		public GameObjectRef PrefabRef;
 		public bool Stop;

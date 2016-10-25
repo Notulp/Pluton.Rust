@@ -1,4 +1,4 @@
-﻿namespace Pluton.Rust.Events
+namespace Pluton.Rust.Events
 {
 	using Core;
 	using Rust;
@@ -6,7 +6,7 @@
 	using System;
 	using System.Collections.Generic;
 
-	public class DoorCodeEvent : CountedInstance
+	public class DoorCodeEvent : Event
 	{
 		public Player Player;
 		public CodeLock codeLock;

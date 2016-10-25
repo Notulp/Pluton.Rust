@@ -4,7 +4,7 @@ namespace Pluton.Rust.Events
 	using Rust;
 	using Rust.Objects;
 
-	public class LandmineTriggerEvent : CountedInstance
+	public class LandmineTriggerEvent : Event
 	{
 		public readonly Landmine Landmine;
 		public readonly Player Player;

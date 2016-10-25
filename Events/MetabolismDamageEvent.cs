@@ -1,10 +1,10 @@
-﻿namespace Pluton.Rust.Events
+namespace Pluton.Rust.Events
 {
 	using Core;
 	using Rust;
 	using Rust.Objects;
 
-	public class MetabolismDamageEvent : CountedInstance
+	public class MetabolismDamageEvent : Event
 	{
 		public readonly Player Victim;
 

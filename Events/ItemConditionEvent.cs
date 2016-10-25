@@ -4,7 +4,7 @@ namespace Pluton.Rust.Events
 	using Rust;
 	using Rust.Objects;
 
-	public class ItemConditionEvent : CountedInstance
+	public class ItemConditionEvent : Event
 	{
 		public readonly InvItem Item;
 		public readonly float Amount;

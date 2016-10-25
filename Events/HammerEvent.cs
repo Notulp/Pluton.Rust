@@ -1,10 +1,10 @@
-﻿namespace Pluton.Rust.Events
+namespace Pluton.Rust.Events
 {
 	using Core;
 	using Rust;
 	using Rust.Objects;
 
-	public class HammerEvent : CountedInstance
+	public class HammerEvent : Event
 	{
 		public readonly HitInfo _info;
 		public readonly string HitBone;

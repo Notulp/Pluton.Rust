@@ -1,11 +1,11 @@
-﻿namespace Pluton.Rust.Events
+namespace Pluton.Rust.Events
 {
 	using Core;
 	using System;
 	using System.Linq;
 	using System.Collections.Generic;
 
-	public class ServerConsoleEvent : CountedInstance
+	public class ServerConsoleEvent : Event
 	{
 		public readonly ConsoleSystem.Arg _args;
 

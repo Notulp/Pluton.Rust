@@ -1,10 +1,10 @@
-﻿namespace Pluton.Rust.Events
+namespace Pluton.Rust.Events
 {
 	using Core;
 	using Rust;
 	using Rust.Objects;
 
-	public class CraftEvent : CountedInstance
+	public class CraftEvent : Event
 	{
 		public readonly Player Crafter;
 

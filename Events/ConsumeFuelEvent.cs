@@ -3,7 +3,7 @@ namespace Pluton.Rust.Events
 	using Core;
 	using Rust.Objects;
 
-	public class ConsumeFuelEvent : CountedInstance
+	public class ConsumeFuelEvent : Event
 	{
 		public readonly BaseOven BaseOven;
 		public readonly InvItem Item;

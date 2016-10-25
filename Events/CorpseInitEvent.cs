@@ -1,9 +1,9 @@
-﻿namespace Pluton.Rust.Events
+namespace Pluton.Rust.Events
 {
 	using Core;
 	using Rust.Objects;
 
-	public class CorpseInitEvent : CountedInstance
+	public class CorpseInitEvent : Event
 	{
 		public readonly BaseCorpse Corpse;
 		public readonly Entity Parent;

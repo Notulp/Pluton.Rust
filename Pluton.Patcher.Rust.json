@@ -829,44 +829,50 @@
 			"Methods": [{
 				"TargetMethod": "UseSelf",
 				"Instructions": [{
+					"InstructionType": "Clear"
+				}, {
 					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBefore",
-					"OperandType": "None",
-					"InsertOffset": "0"
+					"InstructionType": "Append",
+					"OperandType": "None"
 				}, {
 					"OpCode": "Ldarg_1",
-					"InstructionType": "InsertBefore",
-					"OperandType": "None",
-					"InsertOffset": "1"
+					"InstructionType": "Append",
+					"OperandType": "None"
 				}, {
 					"OpCode": "Call",
-					"InstructionType": "InsertBefore",
+					"InstructionType": "Append",
 					"OperandType": "Method",
-					"InsertOffset": "2",
 					"TargetMethod": "On_PlayerSyringeSelf",
 					"TargetType": "Pluton.Rust.Hooks",
 					"TargetAssembly": "Pluton.Rust.dll"
+				}, {
+					"OpCode": "Ret",
+					"InstructionType": "Append",
+					"OperandType": "None"
 				}]
 			}, {
 				"TargetMethod": "UseOther",
 				"Instructions": [{
+					"InstructionType": "Clear"
+				}, {
 					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBefore",
-					"OperandType": "None",
-					"InsertOffset": "0"
+					"InstructionType": "Append",
+					"OperandType": "None"
 				}, {
 					"OpCode": "Ldarg_1",
-					"InstructionType": "InsertBefore",
-					"OperandType": "None",
-					"InsertOffset": "1"
+					"InstructionType": "Append",
+					"OperandType": "None"
 				}, {
 					"OpCode": "Call",
-					"InstructionType": "InsertBefore",
+					"InstructionType": "Append",
 					"OperandType": "Method",
-					"InsertOffset": "2",
 					"TargetMethod": "On_PlayerSyringeOther",
 					"TargetType": "Pluton.Rust.Hooks",
 					"TargetAssembly": "Pluton.Rust.dll"
+				}, {
+					"OpCode": "Ret",
+					"InstructionType": "Append",
+					"OperandType": "None"
 				}]
 			}]
 		},

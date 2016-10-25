@@ -4,7 +4,7 @@ namespace Pluton.Rust.Events
 	using Rust.Objects;
 	using UnityEngine;
 
-	public class RespawnEvent : CountedInstance
+	public class RespawnEvent : Core.Event
 	{
 		public readonly Player Player;
 		public readonly Vector3 SpawnPos;

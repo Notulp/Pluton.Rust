@@ -1,10 +1,10 @@
-﻿namespace Pluton.Rust.Events
+namespace Pluton.Rust.Events
 {
 	using Core;
 	using Rust;
 	using Rust.Objects;
 
-	public class InventoryModEvent : CountedInstance
+	public class InventoryModEvent : Event
 	{
 		public readonly InvItem Item;
 		public readonly ItemContainer ItemContainer;

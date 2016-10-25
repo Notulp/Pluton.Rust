@@ -4,7 +4,7 @@ namespace Pluton.Rust.Events
 	using Rust;
 	using Rust.Objects;
 
-	public class GatherEvent : CountedInstance
+	public class GatherEvent : Event
 	{
 		public readonly ResourceDispenser ResourceDispenser;
 		public readonly Entity Resource;

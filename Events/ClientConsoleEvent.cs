@@ -1,4 +1,4 @@
-﻿namespace Pluton.Rust.Events
+namespace Pluton.Rust.Events
 {
 	using System;
 	using System.Collections.Generic;
@@ -6,7 +6,7 @@
 	using Rust;
 	using Rust.Objects;
 
-	public class ClientConsoleEvent : CountedInstance
+	public class ClientConsoleEvent : Event
 	{
 		public readonly ConsoleSystem.Arg _args;
 		public readonly Player User;
