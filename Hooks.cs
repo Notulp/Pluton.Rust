@@ -642,7 +642,7 @@ namespace Pluton.Rust
 			if ((open && door.IsOpen()) || (!open && !door.IsOpen()))
 				return;
 
-			Pre<DoorUseEvent> preDoorUseEvent = new Pre<DoorUseEvent>(door, msg, open);
+			var preDoorUseEvent = new Pre<DoorUseEvent>(door, msg, open);
 
 			OnNext("Pre_DoorUse", preDoorUseEvent);
 
@@ -918,7 +918,7 @@ namespace Pluton.Rust
 
 	        BasePlayer owner = medicalTool.GetOwnerPlayer();
 
-            Pre<SyringeUseEvent> preSyringeUseEvent = new Pre<SyringeUseEvent>(medicalTool, owner, owner);
+            var preSyringeUseEvent = new Pre<SyringeUseEvent>(medicalTool, owner, owner);
 
             OnNext("Pre_PlayerSyringeSelf", preSyringeUseEvent);
 
@@ -949,7 +949,7 @@ namespace Pluton.Rust
             BasePlayer target = BaseNetworkable.serverEntities.Find(msg.read.UInt32()) as BasePlayer;
 
 	        if (target != null && Vector3.Distance(target.transform.position, owner.transform.position) < 4f){
-                Pre<SyringeUseEvent> preSyringeUseEvent = new Pre<SyringeUseEvent>(medicalTool, owner, target);
+                var preSyringeUseEvent = new Pre<SyringeUseEvent>(medicalTool, owner, target);
                 
                 OnNext("Pre_PlayerSyringeOther", preSyringeUseEvent);
 
