@@ -8,18 +8,11 @@ namespace Pluton.Rust.Events
 	{
 		public readonly Landmine Landmine;
 		public readonly Player Player;
-
-		public bool Explode = true;
-
+        
 		public LandmineTriggerEvent(Landmine landmine, BasePlayer player)
 		{
 			Landmine = landmine;
 			Player = Server.GetPlayer(player);
-		}
-
-		public void CancelExplosion()
-		{
-			Explode = false;
 		}
 	}
 }

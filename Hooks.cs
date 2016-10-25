@@ -43,6 +43,7 @@ namespace Pluton.Rust
 			"On_ItemUsed",
 			"On_LandmineArmed",
 			"On_LandmineExploded",
+            "Pre_LandmineTriggered",
 			"On_LandmineTriggered",
 			"On_LootingEntity",
 			"On_LootingItem",
@@ -588,16 +589,19 @@ namespace Pluton.Rust
 
 		public static void On_LandmineTriggered(Landmine landmine, BasePlayer basePlayer)
 		{
-			LandmineTriggerEvent landmineTriggerEvent = new LandmineTriggerEvent(landmine, basePlayer);
+			Pre<LandmineTriggerEvent> preLandmineTriggerEvent = new Pre<LandmineTriggerEvent>(landmine, basePlayer);
 
-			OnNext("On_LandmineTriggered", landmineTriggerEvent);
+			OnNext("Pre_LandmineTriggered", preLandmineTriggerEvent);
 
-			if (landmineTriggerEvent.Explode) {
-				if (basePlayer != null)
-					landmine.SetFieldValue("triggerPlayerID", basePlayer.userID);
+			if (preLandmineTriggerEvent.IsCanceled == false) {
+			    if (basePlayer != null) {
+                    landmine.SetFieldValue("triggerPlayerID", basePlayer.userID);
+                }
 
 				landmine.SetFlag(BaseEntity.Flags.Open, true);
 				landmine.SendNetworkUpdate(BasePlayer.NetworkQueue.Update);
+
+                OnNext("On_LandmineTriggered", preLandmineTriggerEvent.Event);
 			}
 		}
 
