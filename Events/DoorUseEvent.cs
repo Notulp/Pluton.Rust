@@ -7,24 +7,17 @@ namespace Pluton.Rust.Events
 	{
 		public readonly Player Player;
 		public readonly Entity Door;
-
-		public bool Allow = true;
+        
 		public bool Open;
 		public bool IgnoreLock = false;
 
 		public string DenyReason = "";
 
-		public DoorUseEvent(Entity door, Player player, bool open)
+		public DoorUseEvent(Door door, BaseEntity.RPCMessage msg, bool open)
 		{
-			Door = door;
-			Player = player;
+			Door = new Entity(door);
+			Player = Server.GetPlayer(msg.player);
 			Open = open;
-		}
-
-		public void Deny(string reason = "")
-		{
-			Allow = false;
-			DenyReason = reason;
 		}
 	}
 }

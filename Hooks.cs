@@ -32,7 +32,8 @@ namespace Pluton.Rust
 			"On_ConsumeFuel",
 			"On_CorpseHurt",
 			"On_DoorCode",
-			"On_DoorUse",
+            "Pre_DoorUse",
+            "On_DoorUse",
 			"On_EventTriggered",
 			"On_ItemAdded",
 			"On_ItemLoseCondition",
@@ -627,7 +628,7 @@ namespace Pluton.Rust
 
 			List<ulong> whitelist = new List<ulong>();
 
-			whitelist = (List<ulong>)codeLock.GetFieldValue("whitelistPlayers");
+			whitelist = (List<ulong>) codeLock.GetFieldValue("whitelistPlayers");
 
 			if (!whitelist.Contains(rpc.player.userID)) {
 				whitelist.Add(rpc.player.userID);
@@ -641,37 +642,39 @@ namespace Pluton.Rust
 			if ((open && door.IsOpen()) || (!open && !door.IsOpen()))
 				return;
 
-			DoorUseEvent due = new DoorUseEvent(new Entity(door), Server.GetPlayer(msg.player), open);
+			Pre<DoorUseEvent> preDoorUseEvent = new Pre<DoorUseEvent>(door, msg, open);
 
-			OnNext("On_DoorUse", due);
+			OnNext("Pre_DoorUse", preDoorUseEvent);
 
-			if (!due.Allow) {
-				if (due.DenyReason != "")
-					msg.player.SendConsoleCommand("chat.add",
-												  0,
-												  String.Format("{0}: {1}",
-																Server.server_message_name.ColorText("fa5"),
-																due.DenyReason));
+		    if (preDoorUseEvent.IsCanceled) {
+                if (preDoorUseEvent.Reason != "")
+                    msg.player.SendConsoleCommand("chat.add",
+                                                  0,
+                                                  String.Format("{0}: {1}",
+                                                  Server.server_message_name.ColorText("fa5"),
+                                                  preDoorUseEvent.Reason));
 
-				return;
-			}
+                return;
+            }
 
-			bool doaction = true;
+			bool doAction = true;
 			BaseLock baseLock = door.GetSlot(BaseEntity.Slot.Lock) as BaseLock;
 
-			if (!due.IgnoreLock && baseLock != null) {
-				doaction = open ? baseLock.OnTryToOpen(msg.player) : baseLock.OnTryToClose(msg.player);
+			if (baseLock != null && preDoorUseEvent.Event.IgnoreLock == false) {
+				doAction = open ? baseLock.OnTryToOpen(msg.player) : baseLock.OnTryToClose(msg.player);
 
-				if (doaction && open && (baseLock.IsLocked() && Time.realtimeSinceStartup - (float)door.GetFieldValue("decayResetTimeLast") > 60)) {
+				if (doAction && open && (baseLock.IsLocked() && Time.realtimeSinceStartup - (float) door.GetFieldValue("decayResetTimeLast") > 60)) {
 					Decay.RadialDecayTouch(door.transform.position, 40, 270532608);
 					door.SetFieldValue("decayResetTimeLast", Time.realtimeSinceStartup);
 				}
 			}
 
-			if (doaction) {
+			if (doAction) {
 				door.SetFlag(BaseEntity.Flags.Open, open);
 				door.SendNetworkUpdateImmediate(false);
 				door.CallMethod("UpdateDoorAnimationParameters", false);
+
+                OnNext("On_DoorUse", preDoorUseEvent.Event);
 			}
 		}
 
