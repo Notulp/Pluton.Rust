@@ -4,7 +4,7 @@ namespace Pluton.Rust.Events
 	using Rust;
 	using Rust.Objects;
 
-	public class WeaponThrowEvent : CountedInstance
+	public class WeaponThrowEvent : Event
 	{
 		public readonly ThrownWeapon Weapon;
 		public readonly BaseEntity.RPCMessage RPCMessage;

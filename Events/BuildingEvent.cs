@@ -5,7 +5,7 @@ namespace Pluton.Rust.Events
 	using Rust;
 	using Rust.Objects;
 
-	public class BuildingEvent : CountedInstance
+	public class BuildingEvent : Event
 	{
 		public readonly Construction Construction;
 		public readonly Construction.Target Target;

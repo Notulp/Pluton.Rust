@@ -1,10 +1,10 @@
-﻿namespace Pluton.Rust.Events
+namespace Pluton.Rust.Events
 {
 	using System;
 	using Core;
 	using Rust.Objects;
 
-	public class CommandEvent : CountedInstance
+	public class CommandEvent : Event
 	{
 		public readonly Player User;
 		public readonly string[] Args;

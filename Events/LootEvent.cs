@@ -3,7 +3,7 @@ namespace Pluton.Rust.Events
 	using Core;
 	using Rust.Objects;
 
-	public class LootEvent : CountedInstance
+	public class LootEvent : Event
 	{
 		public readonly Player Looter;
 		public readonly PlayerLoot pLoot;

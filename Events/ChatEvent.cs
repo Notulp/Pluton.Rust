@@ -1,10 +1,10 @@
-﻿namespace Pluton.Rust.Events
+namespace Pluton.Rust.Events
 {
 	using Core;
 	using Rust;
 	using Rust.Objects;
 
-	public class ChatEvent : CountedInstance
+	public class ChatEvent : Event
 	{
 		public readonly ConsoleSystem.Arg Arg;
 		public readonly string OriginalText;

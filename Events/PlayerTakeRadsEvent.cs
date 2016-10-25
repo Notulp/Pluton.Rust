@@ -4,7 +4,7 @@ namespace Pluton.Rust.Events
 	using Rust.Objects;
 	using UnityEngine;
 
-	public class PlayerTakeRadsEvent : CountedInstance
+	public class PlayerTakeRadsEvent : Event
 	{
 		public readonly Player Victim;
 		public readonly float Current;

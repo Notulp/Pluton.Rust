@@ -4,7 +4,7 @@ namespace Pluton.Rust.Events
 	using Rust;
 	using Rust.Objects;
 
-	public class ItemRepairEvent : CountedInstance
+	public class ItemRepairEvent : Event
 	{
 		public readonly RepairBench RepairBench;
 		public readonly Player Player;

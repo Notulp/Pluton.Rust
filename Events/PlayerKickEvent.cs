@@ -1,9 +1,9 @@
-﻿namespace Pluton
+namespace Pluton
 {
 	using Core;
 	using Network;
 
-	public class PlayerKickEvent : CountedInstance
+	public class PlayerKickEvent : Event
 	{
 		public bool Kick = false;
 		public string Reason;

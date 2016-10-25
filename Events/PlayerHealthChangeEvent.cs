@@ -4,7 +4,7 @@ namespace Pluton.Rust.Events
 	using Rust;
 	using Rust.Objects;
 
-	public class PlayerHealthChangeEvent : CountedInstance
+	public class PlayerHealthChangeEvent : Event
 	{
 		public readonly Player Player;
 		public readonly float OldHealth;

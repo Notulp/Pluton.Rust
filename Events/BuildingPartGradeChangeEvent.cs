@@ -1,11 +1,11 @@
-﻿namespace Pluton.Rust.Events
+namespace Pluton.Rust.Events
 {
 	using Core;
 	using Rust;
 	using Rust.Objects;
 
-	public class BuildingPartGradeChangeEvent : CountedInstance
-	{
+	public class BuildingPartGradeChangeEvent : Event
+    {
 		public readonly BuildingPart BuildingPart;
 		public readonly Player Builder;
 
