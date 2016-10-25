@@ -231,6 +231,11 @@
 					"OperandType": "Parameter",
 					"ParamVarOffset": "4"
 				}, {
+					"OpCode": "Ldarg",
+					"InstructionType": "Append",
+					"OperandType": "Parameter",
+					"ParamVarOffset": "5"
+				}, {
 					"OpCode": "Call",
 					"InstructionType": "Append",
 					"OperandType": "Method",

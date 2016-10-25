@@ -845,11 +845,12 @@ namespace Pluton.Rust
 
 		// ItemCrafter.CraftItem()
 		public static bool On_PlayerStartCrafting(ItemCrafter self,
-												  ItemBlueprint bp,
-												  BasePlayer owner,
-												  ProtoBuf.Item.InstanceData instanceData = null,
-												  int amount = 1,
-												  int skinID = 0)
+		                                          ItemBlueprint bp,
+		                                          BasePlayer owner,
+		                                          ProtoBuf.Item.InstanceData instanceData = null,
+		                                          int amount = 1,
+		                                          int skinID = 0,
+		                                          Item fromTempBlueprint = null)
 		{
 			var ce = new CraftEvent(self, bp, owner, instanceData, amount, skinID);
 
@@ -868,7 +869,7 @@ namespace Pluton.Rust
 
 			ItemCraftTask itemCraftTask = Facepunch.Pool.Get<ItemCraftTask>();
 			itemCraftTask.blueprint = bp;
-			self.CallMethod("CollectIngredients", bp, ce.Amount, owner);
+			self.CallMethod("CollectIngredients", bp, itemCraftTask, ce.Amount, owner);
 			itemCraftTask.endTime = 0;
 			itemCraftTask.taskUID = self.taskUID;
 			itemCraftTask.owner = owner;
@@ -880,6 +881,12 @@ namespace Pluton.Rust
 
 			itemCraftTask.amount = ce.Amount;
 			itemCraftTask.skinID = ce.SkinID;
+
+			if (fromTempBlueprint != null) {
+				fromTempBlueprint.RemoveFromContainer();
+				itemCraftTask.takenItems.Add(fromTempBlueprint);
+				itemCraftTask.conditionScale = 0.5f;
+			}
 
 			self.queue.Enqueue(itemCraftTask);
 
