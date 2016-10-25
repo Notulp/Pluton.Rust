@@ -23,6 +23,7 @@ namespace Pluton.Rust
 			"On_BuildingPartDestroyed",
 			"On_BuildingPartGradeChange",
 			"On_Chat",
+			"Pre_ClientAuth",
 			"On_ClientAuth",
 			"On_ClientConsole",
 			"On_CombatEntityHurt",
@@ -915,14 +916,16 @@ namespace Pluton.Rust
 		// ConnectionAuth.Approve()
 		public static void On_ClientAuth(ConnectionAuth ca, Connection connection)
 		{
-			var ae = new AuthEvent(connection);
+			var ae = new Pre<AuthEvent>(connection);
 
-			OnNext("On_ClientAuth", ae);
+			OnNext("Pre_ClientAuth", ae);
+			if(!ae.IsCanceled)
+				OnNext("On_ClientAuth", ae.Event);
 
 			ConnectionAuth.m_AuthConnection.Remove(connection);
 
-			if (!ae.Approved) {
-				ConnectionAuth.Reject(connection, ae.Reason);
+			if (!ae.Event.Approved) {
+				ConnectionAuth.Reject(connection, ae.Event.Reason);
 				return;
 			}
 

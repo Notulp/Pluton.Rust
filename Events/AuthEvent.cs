@@ -3,7 +3,7 @@ namespace Pluton.Rust.Events
 	using Network;
 	using Core;
 
-	public class AuthEvent : CountedInstance
+	public class AuthEvent : Event
 	{
 		public readonly Connection Connection;
 
