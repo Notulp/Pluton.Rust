@@ -11,7 +11,7 @@ namespace Pluton.Rust.Events
 
 		public PlayerClothingEvent(PlayerInventory playerInventory, Item item)
 		{
-			Player = Server.GetPlayer(playerInventory.GetComponent<BasePlayer>());
+			Player = Server.GetPlayer(playerInventory.containerMain.playerOwner);
 			Item = new InvItem(item);
 		}
 	}
