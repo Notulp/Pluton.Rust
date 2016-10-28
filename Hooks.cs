@@ -251,12 +251,14 @@ namespace Pluton.Rust
 
 		public static void On_QuarryMining(MiningQuarry mq) => OnNext("On_QuarryMining", mq);
 
-		#endregion
+        #endregion
 
-		#region Chat Hooks
-
-		// ConVar.Chat.say()
-		public static void On_Chat(ConsoleSystem.Arg arg)
+        #region Chat Hooks
+        
+        /// <summary>
+        /// Called from <c>ConVar.Chat.say(ConsoleSystem.Arg)</c> .
+        /// </summary>
+        public static void On_Chat(ConsoleSystem.Arg arg)
 		{
 			if (arg.ArgsStr.StartsWith("\"/") && !arg.ArgsStr.StartsWith("\"/ ")) {
 				On_Command(arg);
@@ -539,9 +541,11 @@ namespace Pluton.Rust
 		}
 
 		public static void On_BuildingPartDemolished(BuildingBlock bb, BaseEntity.RPCMessage msg) => OnNext("On_BuildingPartDemolished", new BuildingPartDemolishedEvent(bb, msg.player));
-
-		// Construiction.Common.CreateConstruction()
-		public static BaseEntity On_Placement(Construction construction,
+        
+        /// <summary>
+        /// Called from <c>Construction.CreateConstruction(Construction.Target, bool)</c> .
+        /// </summary>
+        public static BaseEntity On_Placement(Construction construction,
 											  Construction.Target target,
 											  bool needsValidPlacement)
 		{
@@ -639,9 +643,11 @@ namespace Pluton.Rust
 				codeLock.SetFieldValue("whitelistPlayers", whitelist);
 			}
 		}
-
-		// Door.RPC_CloseDoor()/RPC_OpenDoor()
-		public static void On_DoorUse(Door door, BaseEntity.RPCMessage msg, bool open)
+        
+        /// <summary>
+        /// Called from <c>Door.RPC_OpenDoor(BaseEntity.RPCMessage)</c> and <c>Door.RPC_CloseDoor(BaseEntity.RPCMessage)</c> .
+        /// </summary>
+        public static void On_DoorUse(Door door, BaseEntity.RPCMessage msg, bool open)
 		{
 			if ((open && door.IsOpen()) || (!open && !door.IsOpen()))
 				return;
@@ -682,12 +688,14 @@ namespace Pluton.Rust
 			}
 		}
 
-		#endregion
+        #endregion
 
-		#region NPC Hooks
+        #region NPC Hooks
 
-		// BaseAnimal.Die()
-		public static void On_NPCKilled(BaseNPC baseNPC, HitInfo info)
+        /// <summary>
+        /// Called from <c>BaseNPC.OnKilled(HitInfo)</c> .
+        /// </summary>
+        public static void On_NPCKilled(BaseNPC baseNPC, HitInfo info)
 		{
 			if (info.Initiator != null && info.Initiator.ToPlayer() != null) {
 				Server.GetPlayer(info.Initiator as BasePlayer).Stats.AddKill(false, true);
@@ -719,8 +727,10 @@ namespace Pluton.Rust
 			OnNext("On_PlayerConnected", player);
 		}
 
-		// BasePlayer.OnDisconnected()
-		public static void On_PlayerDisconnected(BasePlayer basePlayer)
+        /// <summary>
+        /// Called from <c>BasePlayer.OnDisconnected()</c> .
+        /// </summary>
+        public static void On_PlayerDisconnected(BasePlayer basePlayer)
 		{
 			Player player = Server.GetPlayer(basePlayer);
 
@@ -742,8 +752,10 @@ namespace Pluton.Rust
 			OnNext("On_PlayerDisconnected", player);
 		}
 
-		// BasePlayer.Die()
-		public static void On_PlayerDied(BasePlayer basePlayer, HitInfo info)
+        /// <summary>
+        /// Called from <c>BasePlayer.Die(HitInfo)</c> .
+        /// </summary>
+        public static void On_PlayerDied(BasePlayer basePlayer, HitInfo info)
 		{
 			using (TimeWarning.New("Player.Die", 0.1f)) {
 				if (!basePlayer.IsDead()) {
@@ -851,9 +863,11 @@ namespace Pluton.Rust
 		public static void On_PlayerLoaded(BasePlayer bp) => OnNext("On_PlayerLoaded", Server.GetPlayer(bp));
 
 		public static void On_PlayerSleep(BasePlayer bp) => OnNext("On_PlayerSleep", Server.GetPlayer(bp));
-
-		// ItemCrafter.CraftItem()
-		public static bool On_PlayerStartCrafting(ItemCrafter self,
+        
+        /// <summary>
+        /// Called from <c>ItemCrafter.CraftItem(ItemBlueprint, BasePlayer, ProtoBuf.Item.InstanceData, int, int, Item)</c> .
+        /// </summary>
+        public static bool On_PlayerStartCrafting(ItemCrafter self,
 		                                          ItemBlueprint bp,
 		                                          BasePlayer owner,
 		                                          ProtoBuf.Item.InstanceData instanceData = null,
@@ -967,8 +981,10 @@ namespace Pluton.Rust
             }
         }
         
-		// BasePlayer.UpdateRadiation()
-		public static void On_PlayerTakeRadiation(BasePlayer basePlayer, float radAmount)
+        /// <summary>
+        /// Called from <c>BasePlayer.UpdateRadiation(float)</c> .
+        /// </summary>
+        public static void On_PlayerTakeRadiation(BasePlayer basePlayer, float radAmount)
 		{
 			var ptr = new PlayerTakeRadsEvent(basePlayer, basePlayer.metabolism.radiation_level.value, radAmount);
 
@@ -981,9 +997,10 @@ namespace Pluton.Rust
 
 		public static void On_PlayerWounded(BasePlayer bp) => OnNext("On_PlayerWounded", Server.GetPlayer(bp));
 
-
-		// ConnectionAuth.Approve()
-		public static void On_ClientAuth(ConnectionAuth ca, Connection connection)
+        /// <summary>
+        /// Called from <c>ConnectionAuth.Approve(Connection)</c> .
+        /// </summary>
+        public static void On_ClientAuth(ConnectionAuth ca, Connection connection)
 		{
 			var ae = new Pre<AuthEvent>(connection);
 
@@ -1001,7 +1018,10 @@ namespace Pluton.Rust
 			SingletonComponent<ServerMgr>.Instance.ConnectionApproved(connection);
 		}
 
-		public static void On_Respawn(BasePlayer basePlayer, Vector3 pos, Quaternion quat)
+        /// <summary>
+        /// Called from <c>BasePlayer.RespawnAt(Vector3, Quaternion)</c> .
+        /// </summary>
+        public static void On_Respawn(BasePlayer basePlayer, Vector3 pos, Quaternion quat)
 		{
 			Player player = Server.GetPlayer(basePlayer);
 			var re = new RespawnEvent(player, pos, quat);
@@ -1056,12 +1076,14 @@ namespace Pluton.Rust
 
 		public static void On_WeaponThrow(ThrownWeapon thrownWeapon, BaseEntity.RPCMessage msg) => OnNext("On_WeaponThrow", new WeaponThrowEvent(thrownWeapon, msg));
 
-		#endregion
+        #endregion
 
-		#region Looting Hooks
-
-		// PlayerLoot.StartLootingEntity()
-		public static void On_LootingEntity(PlayerLoot playerLoot)
+        #region Looting Hooks
+        
+        /// <summary>
+        /// Called from <c>PlayerLoot.StartLootingEntity(BaseEntity, bool)</c> .
+        /// </summary>
+        public static void On_LootingEntity(PlayerLoot playerLoot)
 		{
 			BasePlayer looter = playerLoot.GetComponent<BasePlayer>();
 			var ele = new EntityLootEvent(playerLoot, Server.GetPlayer(looter), new Entity(playerLoot.entitySource));
@@ -1078,8 +1100,10 @@ namespace Pluton.Rust
 			}
 		}
 
-		// PlayerLoot.StartLootingItem()
-		public static void On_LootingItem(PlayerLoot playerLoot)
+        /// <summary>
+        /// Called from <c>PlayerLoot.StartLootingItem(Item)</c> .
+        /// </summary>
+        public static void On_LootingItem(PlayerLoot playerLoot)
 		{
 			BasePlayer looter = playerLoot.GetComponent<BasePlayer>();
 			var ile = new ItemLootEvent(playerLoot, Server.GetPlayer(looter), playerLoot.itemSource);
@@ -1096,8 +1120,10 @@ namespace Pluton.Rust
 			}
 		}
 
-		// PlayerLoot.StartLootingPlayer()
-		public static void On_LootingPlayer(PlayerLoot playerLoot)
+        /// <summary>
+        /// Called from <c>PlayerLoot.StartLootingItem(BasePlayer)</c> .
+        /// </summary>
+        public static void On_LootingPlayer(PlayerLoot playerLoot)
 		{
 			BasePlayer looter = playerLoot.GetComponent<BasePlayer>();
 			var ple = new PlayerLootEvent(playerLoot,
@@ -1145,12 +1171,14 @@ namespace Pluton.Rust
 			Core.Bootstrap.SaveAll();
 		}
 
-		#endregion
+        #endregion
 
-		#region Console Hooks
-
-		// ConsoleSystem.OnClientCommand()
-		public static void On_ClientConsole(ConsoleSystem.Arg arg, string rconCmd)
+        #region Console Hooks
+        
+        /// <summary>
+        /// Called from <c>ConsoleNetwork.OnClientCommand(Message)</c> .
+        /// </summary>
+        public static void On_ClientConsole(ConsoleSystem.Arg arg, string rconCmd)
 		{
 			var ce = new ClientConsoleEvent(arg, rconCmd);
 
@@ -1170,9 +1198,11 @@ namespace Pluton.Rust
 				}
 			}
 		}
-
-		// ConsoleSystem.SystemRealm.Normal
-		public static void On_ServerConsole(ConsoleSystem.Arg arg, string cmd)
+        
+        /// <summary>
+        /// Called from <c>ConsoleSystem.SystemRealm.Normal(RunOptions, string, params object[])</c> .
+        /// </summary>
+        public static void On_ServerConsole(ConsoleSystem.Arg arg, string cmd)
 		{
 			try {
 				if (!Core.Bootstrap.PlutonLoaded)
