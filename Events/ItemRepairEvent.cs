@@ -1,22 +1,22 @@
 namespace Pluton.Rust.Events
 {
-	using Core;
-	using Rust;
-	using Rust.Objects;
+    using Core;
+    using Rust;
+    using Rust.Objects;
 
-	public class ItemRepairEvent : Event
-	{
-		public readonly RepairBench RepairBench;
-		public readonly Player Player;
-		public readonly InvItem Item;
-		public readonly BaseEntity.RPCMessage RPCMessage;
+    public class ItemRepairEvent : Event
+    {
+        public readonly RepairBench RepairBench;
+        public readonly Player Player;
+        public readonly InvItem Item;
+        public readonly BaseEntity.RPCMessage RPCMessage;
 
-		public ItemRepairEvent(RepairBench repairBench, BaseEntity.RPCMessage msg)
-		{
-			RepairBench = repairBench;
-			RPCMessage = msg;
-			Player = Server.GetPlayer(msg.player);
-			Item = new InvItem(repairBench.inventory.GetSlot(0));
-		}
-	}
+        public ItemRepairEvent(RepairBench repairBench, BaseEntity.RPCMessage msg)
+        {
+            RepairBench = repairBench;
+            RPCMessage = msg;
+            Player = Server.GetPlayer(msg.player);
+            Item = new InvItem(repairBench.inventory.GetSlot(0));
+        }
+    }
 }

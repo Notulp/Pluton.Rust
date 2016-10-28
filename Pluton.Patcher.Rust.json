@@ -1,1201 +1,1201 @@
 [{
-	"TargetAssembly": "Assembly-CSharp.dll",
-	"Instructions": [{
-		"InstructionType": "CreateType",
-		"Name": "PlutonPatched"
-	},
-	{
-		"InstructionType": "WriteToFile",
-		"Name": "Assembly-CSharp.dll"
-	}],
-	"Types": {
-		"PlutonPatched": {
-			"Instructions": [{
-				"InstructionType": "CreateField",
-				"Name": "Version"
-			}],
-			"Fields": [{
-				"TargetField": "Version",
-				"Instructions": [{
-					"InstructionType": "SetVisibility",
-					"Public": true,
-					"Static": true
-				},
-				{
-					"InstructionType": "SetValue",
-					"Value": "%PatcherVersion%",
-					"ValueSource": "PreDefined",
-					"Constant": true
-				}]
-			}]
-		},
-		"Bootstrap": {
-			"Methods": [{
-				"TargetMethod": "Init_Config",
-				"Instructions": [{
-					"OpCode": "Call",
-					"InstructionType": "InsertBefore",
-					"OperandType": "Method",
-					"InsertOffset": "0",
-					"TargetMethod": "AttachBootstrap",
-					"TargetType": "Pluton.Core.Bootstrap",
-					"TargetAssembly": "Pluton.Core.dll"
-				}]
-			}]
-		},
-		"ConVar.Chat": {
-			"Methods": [{
-				"TargetMethod": "say",
-				"Instructions": [{
-					"InstructionType": "Clear"
-				}, {
-					"OpCode": "Ldarg_0",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "Append",
-					"OperandType": "Method",
-					"TargetMethod": "On_Chat",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}, {
-					"OpCode": "Ret",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}]
-			}]
-		},
-		"ConnectionAuth": {
-			"Methods": [{
-				"TargetMethod": "Approve",
-				"Instructions": [{
-					"InstructionType": "Clear"
-				}, {
-					"OpCode": "Ldarg_0",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "Append",
-					"OperandType": "Method",
-					"TargetMethod": "On_ClientAuth",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}, {
-					"OpCode": "Ret",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}]
-			}]
-		},
-		"Hammer": {
-			"Methods": [{
-				"TargetMethod": "DoAttackShared",
-				"Instructions": [{
-					"OpCode": "Ldarg_1",
-					"InstructionType": "InsertAfter",
-					"OperandType": "None",
-					"InsertOffset": "10"
-				}, {
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertAfter",
-					"OperandType": "None",
-					"InsertOffset": "11"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertAfter",
-					"OperandType": "Method",
-					"InsertOffset": "12",
-					"TargetMethod": "GetOwnerPlayer",
-					"TargetType": "HeldEntity",
-					"TargetAssembly": "Assembly-CSharp.dll"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertAfter",
-					"OperandType": "Method",
-					"InsertOffset": "13",
-					"TargetMethod": "On_BeingHammered",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}]
-		},
-		"BuildingBlock": {
-			"Methods": [{
-				"TargetMethod": "DoDemolish",
-				"Instructions": [{
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "Method",
-					"TargetMethod": "On_BuildingPartDemolished",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}, {
-				"TargetMethod": "DoImmediateDemolish",
-				"Instructions": [{
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "Method",
-					"TargetMethod": "On_BuildingPartDemolished",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}]
-		},
-		"BaseCombatEntity": {
-			"Methods": [{
-				"TargetMethod": "Hurt",
-				"TargetMethodSigniture": "Hurt(HitInfo)",
-				"Instructions": [{
-					"InstructionType": "Clear"
-				}, {
-					"OpCode": "Ret",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "Method",
-					"TargetMethod": "On_CombatEntityHurt",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}]
-		},
-		"ItemCrafter": {
-			"Methods": [{
-				"TargetMethod": "CraftItem",
-				"Instructions": [{
-					"InstructionType": "Clear"
-				}, {
-					"OpCode": "Nop",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_0",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg",
-					"InstructionType": "Append",
-					"OperandType": "Parameter",
-					"ParamVarOffset": "0"
-				}, {
-					"OpCode": "Ldarg",
-					"InstructionType": "Append",
-					"OperandType": "Parameter",
-					"ParamVarOffset": "1"
-				}, {
-					"OpCode": "Ldarg",
-					"InstructionType": "Append",
-					"OperandType": "Parameter",
-					"ParamVarOffset": "2"
-				}, {
-					"OpCode": "Ldarg",
-					"InstructionType": "Append",
-					"OperandType": "Parameter",
-					"ParamVarOffset": "3"
-				}, {
-					"OpCode": "Ldarg",
-					"InstructionType": "Append",
-					"OperandType": "Parameter",
-					"ParamVarOffset": "4"
-				}, {
-					"OpCode": "Ldarg",
-					"InstructionType": "Append",
-					"OperandType": "Parameter",
-					"ParamVarOffset": "5"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "Append",
-					"OperandType": "Method",
-					"TargetMethod": "On_PlayerStartCrafting",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}, {
-					"OpCode": "Ret",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}]
-			}]
-		},
-		"BaseOven": {
-			"Methods": [{
-				"TargetMethod": "ConsumeFuel",
-				"Instructions": [{
-					"OpCode": "Call",
-					"InstructionType": "InsertBefore",
-					"OperandType": "Method",
-					"InsertOffset": "0",
-					"TargetMethod": "On_ConsumeFuel",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}, {
-					"OpCode": "Ldarg_2",
-					"InstructionType": "InsertBefore",
-					"OperandType": "None",
-					"InsertOffset": "0"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "InsertBefore",
-					"OperandType": "None",
-					"InsertOffset": "0"
-				}, {
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBefore",
-					"OperandType": "None",
-					"InsertOffset": "0"
-				}]
-			}]
-		},
-		"Construction": {
-			"Methods": [{
-				"TargetMethod": "CreateConstruction",
-				"Instructions": [{
-					"InstructionType": "Clear"
-				}, {
-					"OpCode": "Nop",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_0",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_2",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "Append",
-					"OperandType": "Method",
-					"TargetMethod": "On_Placement",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}, {
-					"OpCode": "Ret",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}]
-			}]
-		},
-		"CodeLock": {
-			"Methods": [{
-				"TargetMethod": "UnlockWithCode",
-				"Instructions": [{
-					"InstructionType": "Clear"
-				}, {
-					"OpCode": "Ldarg_0",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "Append",
-					"OperandType": "Method",
-					"TargetMethod": "On_DoorCode",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}, {
-					"OpCode": "Ret",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}]
-			}]
-		},
-		"Door": {
-			"Methods": [{
-				"TargetMethod": "RPC_CloseDoor",
-				"Instructions": [{
-					"InstructionType": "Clear"
-				}, {
-					"OpCode": "Ldarg_0",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldc_I4_0",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "Append",
-					"OperandType": "Method",
-					"TargetMethod": "On_DoorUse",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}, {
-					"OpCode": "Ret",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}]
-			}, {
-				"TargetMethod": "RPC_OpenDoor",
-				"Instructions": [{
-					"InstructionType": "Clear"
-				}, {
-					"OpCode": "Ldarg_0",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldc_I4_1",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "Append",
-					"OperandType": "Method",
-					"TargetMethod": "On_DoorUse",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}, {
-					"OpCode": "Ret",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}]
-			}]
-		},
-		"CollectibleEntity": {
-			"Methods": [{
-				"TargetMethod": "Pickup",
-				"Instructions": [{
+    "TargetAssembly": "Assembly-CSharp.dll",
+    "Instructions": [{
+        "InstructionType": "CreateType",
+        "Name": "PlutonPatched"
+    },
+    {
+        "InstructionType": "WriteToFile",
+        "Name": "Assembly-CSharp.dll"
+    }],
+    "Types": {
+        "PlutonPatched": {
+            "Instructions": [{
+                "InstructionType": "CreateField",
+                "Name": "Version"
+            }],
+            "Fields": [{
+                "TargetField": "Version",
+                "Instructions": [{
+                    "InstructionType": "SetVisibility",
+                    "Public": true,
+                    "Static": true
+                },
+                {
+                    "InstructionType": "SetValue",
+                    "Value": "%PatcherVersion%",
+                    "ValueSource": "PreDefined",
+                    "Constant": true
+                }]
+            }]
+        },
+        "Bootstrap": {
+            "Methods": [{
+                "TargetMethod": "Init_Config",
+                "Instructions": [{
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "Method",
+                    "InsertOffset": "0",
+                    "TargetMethod": "AttachBootstrap",
+                    "TargetType": "Pluton.Core.Bootstrap",
+                    "TargetAssembly": "Pluton.Core.dll"
+                }]
+            }]
+        },
+        "ConVar.Chat": {
+            "Methods": [{
+                "TargetMethod": "say",
+                "Instructions": [{
                     "InstructionType": "Clear"
                 }, {
-					"OpCode": "Ldarg_0",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "Append",
-					"OperandType": "Method",
-					"TargetMethod": "On_ItemPickup",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "Append",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_Chat",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }, {
                     "OpCode": "Ret",
                     "InstructionType": "Append",
                     "OperandType": "None"
                 }]
-			}]
-		},
-		"Item": {
-			"Methods": [{
-				"TargetMethod": "UseItem",
-				"Instructions": [{
-					"OpCode": "Call",
-					"InstructionType": "InsertBefore",
-					"OperandType": "Method",
-					"InsertOffset": "0",
-					"TargetMethod": "On_ItemUsed",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "InsertBefore",
-					"OperandType": "None",
-					"InsertOffset": "0"
-				}, {
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBefore",
-					"OperandType": "None",
-					"InsertOffset": "0"
-				}]
-			}, {
-				"TargetMethod": "LoseCondition",
-				"Instructions": [{
-					"OpCode": "Call",
-					"InstructionType": "InsertBefore",
-					"OperandType": "Method",
-					"InsertOffset": "56",
-					"TargetMethod": "On_ItemLoseCondition",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "InsertBefore",
-					"OperandType": "None",
-					"InsertOffset": "56"
-				}, {
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBefore",
-					"OperandType": "None",
-					"InsertOffset": "56"
-				}]
-			}]
-		},
-		"RepairBench": {
-			"Methods": [{
-				"TargetMethod": "RepairItem",
-				"Instructions": [{
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "Method",
-					"TargetMethod": "On_ItemRepaired",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}]
-		},
-		"Landmine": {
-			"Methods": [{
-				"TargetMethod": "Arm",
-				"Instructions": [{
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "Method",
-					"TargetMethod": "On_LandmineArmed",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}, {
-				"TargetMethod": "Explode",
-				"Instructions": [{
-					"OpCode": "Call",
-					"InstructionType": "InsertBefore",
-					"OperandType": "Method",
-					"InsertOffset": "36",
-					"TargetMethod": "On_LandmineExploded",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}, {
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBefore",
-					"OperandType": "None",
-					"InsertOffset": "36"
-				}]
-			}, {
-				"TargetMethod": "Trigger",
-				"Instructions": [{
-					"InstructionType": "Clear"
-				}, {
-					"OpCode": "Ldarg_0",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "Append",
-					"OperandType": "Method",
-					"TargetMethod": "On_LandmineTriggered",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}, {
-					"OpCode": "Ret",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}]
-			}]
-		},
-		"ResourceDispenser": {
-			"Methods": [{
-				"TargetMethod": "GiveResourceFromItem",
-				"Instructions": [{
-					"InstructionType": "Clear"
-				}, {
-					"OpCode": "Nop",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_0",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg",
-					"InstructionType": "Append",
-					"OperandType": "Parameter",
-					"ParamVarOffset": "0"
-				}, {
-					"OpCode": "Ldarg",
-					"InstructionType": "Append",
-					"OperandType": "Parameter",
-					"ParamVarOffset": "1"
-				}, {
-					"OpCode": "Ldarg",
-					"InstructionType": "Append",
-					"OperandType": "Parameter",
-					"ParamVarOffset": "2"
-				}, {
-					"OpCode": "Ldarg",
-					"InstructionType": "Append",
-					"OperandType": "Parameter",
-					"ParamVarOffset": "3"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "Append",
-					"OperandType": "Method",
-					"TargetMethod": "On_PlayerGathering",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}, {
-					"OpCode": "Ret",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}]
-			}]
-		},
-		"BasePlayer": {
-			"Methods": [{
-				"TargetMethod": "PlayerInit",
-				"Instructions": [{
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBefore",
-					"OperandType": "None",
-					"InsertOffset": "91"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertBefore",
-					"OperandType": "Method",
-					"InsertOffset": "92",
-					"TargetMethod": "On_PlayerConnected",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}, {
-				"TargetMethod": "OnDisconnected",
-				"Instructions": [{
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBefore",
-					"OperandType": "None",
-					"InsertOffset": "0"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertBefore",
-					"OperandType": "Method",
-					"InsertOffset": "1",
-					"TargetMethod": "On_PlayerDisconnected",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}, {
-				"TargetMethod": "UpdateRadiation",
-				"Instructions": [{
-					"InstructionType": "Clear"
-				}, {
-					"OpCode": "Ldarg_0",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "Append",
-					"OperandType": "Method",
-					"TargetMethod": "On_PlayerTakeRadiation",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}, {
-					"OpCode": "Ret",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}]
-			}, {
-				"TargetMethod": "Die",
-				"Instructions": [{
+            }]
+        },
+        "ConnectionAuth": {
+            "Methods": [{
+                "TargetMethod": "Approve",
+                "Instructions": [{
                     "InstructionType": "Clear"
                 }, {
-					"OpCode": "Ldarg_0",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "Append",
-					"OperandType": "Method",
-					"TargetMethod": "On_PlayerDied",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "Append",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_ClientAuth",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }, {
                     "OpCode": "Ret",
                     "InstructionType": "Append",
                     "OperandType": "None"
                 }]
-			}, {
-				"TargetMethod": "StartSleeping",
-				"Instructions": [{
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "Method",
-					"TargetMethod": "On_PlayerSleep",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}, {
-				"TargetMethod": "EndSleeping",
-				"Instructions": [{
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "Method",
-					"TargetMethod": "On_PlayerWakeUp",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}, {
-				"TargetMethod": "EnterGame",
-				"Instructions": [{
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "Method",
-					"TargetMethod": "On_PlayerLoaded",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}, {
-				"TargetMethod": "StartWounded",
-				"Instructions": [{
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "Method",
-					"TargetMethod": "On_PlayerWounded",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}, {
-				"TargetMethod": "OnHealthChanged",
-				"Instructions": [{
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_2",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "Method",
-					"TargetMethod": "On_PlayerHealthChange",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}, {
-				"TargetMethod": "RespawnAt",
-				"Instructions": [{
-					"InstructionType": "Clear"
-				}, {
-					"OpCode": "Ldarg_0",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_2",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "Append",
-					"OperandType": "Method",
-					"TargetMethod": "On_Respawn",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}, {
-					"OpCode": "Ret",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}]
-			}]
-		},
-		"PlayerLoot": {
-			"Methods": [{
-				"TargetMethod": "StartLootingEntity",
-				"Instructions": [{
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "Method",
-					"TargetMethod": "On_LootingEntity",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}, {
-				"TargetMethod": "StartLootingPlayer",
-				"Instructions": [{
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "Method",
-					"TargetMethod": "On_LootingPlayer",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}, {
-				"TargetMethod": "StartLootingItem",
-				"Instructions": [{
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "Method",
-					"TargetMethod": "On_LootingItem",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}]
-		},
-		"MedicalTool": {
-			"Methods": [{
-				"TargetMethod": "UseSelf",
-				"Instructions": [{
-					"InstructionType": "Clear"
-				}, {
-					"OpCode": "Ldarg_0",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "Append",
-					"OperandType": "Method",
-					"TargetMethod": "On_PlayerSyringeSelf",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}, {
-					"OpCode": "Ret",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}]
-			}, {
-				"TargetMethod": "UseOther",
-				"Instructions": [{
-					"InstructionType": "Clear"
-				}, {
-					"OpCode": "Ldarg_0",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "Append",
-					"OperandType": "Method",
-					"TargetMethod": "On_PlayerSyringeOther",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}, {
-					"OpCode": "Ret",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}]
-			}]
-		},
-		"PlayerInventory": {
-			"Methods": [{
-				"TargetMethod": "OnClothingChanged",
-				"Instructions": [{
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "Method",
-					"TargetMethod": "On_PlayerClothingChanged",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}]
-		},
-		"ItemContainer": {
-			"Methods": [{
-				"TargetMethod": "Insert",
-				"Instructions": [{
-					"OpCode": "Call",
-					"InstructionType": "InsertBefore",
-					"OperandType": "Method",
-					"InsertOffset": "35",
-					"TargetMethod": "On_ItemAdded",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "InsertBefore",
-					"OperandType": "None",
-					"InsertOffset": "35"
-				}, {
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBefore",
-					"OperandType": "None",
-					"InsertOffset": "35"
-				}]
-			}, {
-				"TargetMethod": "Remove",
-				"Instructions": [{
-					"OpCode": "Call",
-					"InstructionType": "InsertBefore",
-					"OperandType": "Method",
-					"InsertOffset": "32",
-					"TargetMethod": "On_ItemRemoved",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "InsertBefore",
-					"OperandType": "None",
-					"InsertOffset": "32"
-				}, {
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBefore",
-					"OperandType": "None",
-					"InsertOffset": "32"
-				}]
-			}]
-		},
-		"BaseNetworkable": {
-			"Methods": [{
-				"TargetMethod": "Kill",
-				"Instructions": [{
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertAfter",
-					"OperandType": "None",
-					"InsertOffset": "8"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertAfter",
-					"OperandType": "Method",
-					"InsertOffset": "9",
-					"TargetMethod": "On_NetworkableKill",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}]
-		},
-		"BaseNPC": {
-			"Methods": [{
-				"TargetMethod": "OnKilled",
-				"Instructions": [{
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBefore",
-					"OperandType": "None",
-					"InsertOffset": "0"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "InsertBefore",
-					"OperandType": "None",
-					"InsertOffset": "1"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertBefore",
-					"OperandType": "Method",
-					"InsertOffset": "2",
-					"TargetMethod": "On_NPCKilled",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}]
-		},
-		"BaseLauncher": {
-			"Methods": [{
-				"TargetMethod": "SV_Launch",
-				"Instructions": [{
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldloc_S",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "Variable",
-					"ParamVarOffset": "7"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "Method",
-					"TargetMethod": "On_RocketShooting",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}]
-		},
-		"ServerMgr": {
-			"Methods": [{
-				"TargetMethod": "OnDisable",
-				"Instructions": [{
-					"OpCode": "Call",
-					"InstructionType": "InsertBefore",
-					"OperandType": "Method",
-					"InsertOffset": "0",
-					"TargetMethod": "On_ServerShutdown",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}, {
-				"TargetMethod": "Initialize",
-				"Instructions": [{
-					"OpCode": "Call",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "Method",
-					"TargetMethod": "On_ServerInit",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}, {
-				"TargetMethod": "UpdateServerInformation",
-				"Instructions": [{
-					"InstructionType": "Clear"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "Append",
-					"OperandType": "Method",
-					"TargetMethod": "SetModded",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}, {
-					"OpCode": "Ret",
-					"InstructionType": "Append",
-					"OperandType": "None"
-				}]
-			}]
-		},
-		"SaveRestore": {
-			"Methods": [{
-				"TargetMethod": "DoAutomatedSave",
-				"Instructions": [{
-					"OpCode": "Call",
-					"InstructionType": "InsertBefore",
-					"OperandType": "Method",
-					"InsertOffset": "11",
-					"TargetMethod": "On_ServerSaved",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}]
-		},
-		"ConsoleNetwork": {
-			"Methods": [{
-				"TargetMethod": "OnClientCommand",
-				"Instructions": [{
-					"InstructionType": "RemoveRange",
-					"RemoveEnd": "19",
-					"RemoveStart": "14"
-				}, {
-					"OpCode": "Ldloc_1",
-					"InstructionType": "InsertAfter",
-					"OperandType": "None",
-					"InsertOffset": "10"
-				}, {
-					"OpCode": "Ldloc_0",
-					"InstructionType": "InsertAfter",
-					"OperandType": "None",
-					"InsertOffset": "11"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertAfter",
-					"OperandType": "Method",
-					"InsertOffset": "12",
-					"TargetMethod": "On_ClientConsole",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}]
-		},
-		"BaseProjectile": {
-			"Methods": [{
-				"TargetMethod": "CLProject",
-				"Instructions": [{
-					"OpCode": "Call",
-					"InstructionType": "InsertBefore",
-					"OperandType": "Method",
-					"InsertOffset": "0",
-					"TargetMethod": "On_Shooting",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "InsertBefore",
-					"OperandType": "None",
-					"InsertOffset": "0"
-				}, {
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBefore",
-					"OperandType": "None",
-					"InsertOffset": "0"
-				}]
-			}]
-		},
-		"MiningQuarry": {
-			"Methods": [{
-				"TargetMethod": "ProcessResources",
-				"Instructions": [{
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "Method",
-					"TargetMethod": "On_QuarryMining",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}]
-		},
-		"ThrownWeapon": {
-			"Methods": [{
-				"TargetMethod": "DoThrow",
-				"Instructions": [{
-					"OpCode": "Ldarg_0",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Ldarg_1",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "None"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertBeforeRet",
-					"OperandType": "Method",
-					"TargetMethod": "On_WeaponThrow",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}]
-		}
-	}
+            }]
+        },
+        "Hammer": {
+            "Methods": [{
+                "TargetMethod": "DoAttackShared",
+                "Instructions": [{
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "InsertAfter",
+                    "OperandType": "None",
+                    "InsertOffset": "10"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertAfter",
+                    "OperandType": "None",
+                    "InsertOffset": "11"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertAfter",
+                    "OperandType": "Method",
+                    "InsertOffset": "12",
+                    "TargetMethod": "GetOwnerPlayer",
+                    "TargetType": "HeldEntity",
+                    "TargetAssembly": "Assembly-CSharp.dll"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertAfter",
+                    "OperandType": "Method",
+                    "InsertOffset": "13",
+                    "TargetMethod": "On_BeingHammered",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }]
+        },
+        "BuildingBlock": {
+            "Methods": [{
+                "TargetMethod": "DoDemolish",
+                "Instructions": [{
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_BuildingPartDemolished",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }, {
+                "TargetMethod": "DoImmediateDemolish",
+                "Instructions": [{
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_BuildingPartDemolished",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }]
+        },
+        "BaseCombatEntity": {
+            "Methods": [{
+                "TargetMethod": "Hurt",
+                "TargetMethodSigniture": "Hurt(HitInfo)",
+                "Instructions": [{
+                    "InstructionType": "Clear"
+                }, {
+                    "OpCode": "Ret",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_CombatEntityHurt",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }]
+        },
+        "ItemCrafter": {
+            "Methods": [{
+                "TargetMethod": "CraftItem",
+                "Instructions": [{
+                    "InstructionType": "Clear"
+                }, {
+                    "OpCode": "Nop",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg",
+                    "InstructionType": "Append",
+                    "OperandType": "Parameter",
+                    "ParamVarOffset": "0"
+                }, {
+                    "OpCode": "Ldarg",
+                    "InstructionType": "Append",
+                    "OperandType": "Parameter",
+                    "ParamVarOffset": "1"
+                }, {
+                    "OpCode": "Ldarg",
+                    "InstructionType": "Append",
+                    "OperandType": "Parameter",
+                    "ParamVarOffset": "2"
+                }, {
+                    "OpCode": "Ldarg",
+                    "InstructionType": "Append",
+                    "OperandType": "Parameter",
+                    "ParamVarOffset": "3"
+                }, {
+                    "OpCode": "Ldarg",
+                    "InstructionType": "Append",
+                    "OperandType": "Parameter",
+                    "ParamVarOffset": "4"
+                }, {
+                    "OpCode": "Ldarg",
+                    "InstructionType": "Append",
+                    "OperandType": "Parameter",
+                    "ParamVarOffset": "5"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "Append",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_PlayerStartCrafting",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }, {
+                    "OpCode": "Ret",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }]
+            }]
+        },
+        "BaseOven": {
+            "Methods": [{
+                "TargetMethod": "ConsumeFuel",
+                "Instructions": [{
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "Method",
+                    "InsertOffset": "0",
+                    "TargetMethod": "On_ConsumeFuel",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }, {
+                    "OpCode": "Ldarg_2",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "None",
+                    "InsertOffset": "0"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "None",
+                    "InsertOffset": "0"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "None",
+                    "InsertOffset": "0"
+                }]
+            }]
+        },
+        "Construction": {
+            "Methods": [{
+                "TargetMethod": "CreateConstruction",
+                "Instructions": [{
+                    "InstructionType": "Clear"
+                }, {
+                    "OpCode": "Nop",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_2",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "Append",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_Placement",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }, {
+                    "OpCode": "Ret",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }]
+            }]
+        },
+        "CodeLock": {
+            "Methods": [{
+                "TargetMethod": "UnlockWithCode",
+                "Instructions": [{
+                    "InstructionType": "Clear"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "Append",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_DoorCode",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }, {
+                    "OpCode": "Ret",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }]
+            }]
+        },
+        "Door": {
+            "Methods": [{
+                "TargetMethod": "RPC_CloseDoor",
+                "Instructions": [{
+                    "InstructionType": "Clear"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldc_I4_0",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "Append",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_DoorUse",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }, {
+                    "OpCode": "Ret",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }]
+            }, {
+                "TargetMethod": "RPC_OpenDoor",
+                "Instructions": [{
+                    "InstructionType": "Clear"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldc_I4_1",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "Append",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_DoorUse",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }, {
+                    "OpCode": "Ret",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }]
+            }]
+        },
+        "CollectibleEntity": {
+            "Methods": [{
+                "TargetMethod": "Pickup",
+                "Instructions": [{
+                    "InstructionType": "Clear"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "Append",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_ItemPickup",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }, {
+                    "OpCode": "Ret",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }]
+            }]
+        },
+        "Item": {
+            "Methods": [{
+                "TargetMethod": "UseItem",
+                "Instructions": [{
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "Method",
+                    "InsertOffset": "0",
+                    "TargetMethod": "On_ItemUsed",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "None",
+                    "InsertOffset": "0"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "None",
+                    "InsertOffset": "0"
+                }]
+            }, {
+                "TargetMethod": "LoseCondition",
+                "Instructions": [{
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "Method",
+                    "InsertOffset": "56",
+                    "TargetMethod": "On_ItemLoseCondition",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "None",
+                    "InsertOffset": "56"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "None",
+                    "InsertOffset": "56"
+                }]
+            }]
+        },
+        "RepairBench": {
+            "Methods": [{
+                "TargetMethod": "RepairItem",
+                "Instructions": [{
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_ItemRepaired",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }]
+        },
+        "Landmine": {
+            "Methods": [{
+                "TargetMethod": "Arm",
+                "Instructions": [{
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_LandmineArmed",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }, {
+                "TargetMethod": "Explode",
+                "Instructions": [{
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "Method",
+                    "InsertOffset": "36",
+                    "TargetMethod": "On_LandmineExploded",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "None",
+                    "InsertOffset": "36"
+                }]
+            }, {
+                "TargetMethod": "Trigger",
+                "Instructions": [{
+                    "InstructionType": "Clear"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "Append",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_LandmineTriggered",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }, {
+                    "OpCode": "Ret",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }]
+            }]
+        },
+        "ResourceDispenser": {
+            "Methods": [{
+                "TargetMethod": "GiveResourceFromItem",
+                "Instructions": [{
+                    "InstructionType": "Clear"
+                }, {
+                    "OpCode": "Nop",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg",
+                    "InstructionType": "Append",
+                    "OperandType": "Parameter",
+                    "ParamVarOffset": "0"
+                }, {
+                    "OpCode": "Ldarg",
+                    "InstructionType": "Append",
+                    "OperandType": "Parameter",
+                    "ParamVarOffset": "1"
+                }, {
+                    "OpCode": "Ldarg",
+                    "InstructionType": "Append",
+                    "OperandType": "Parameter",
+                    "ParamVarOffset": "2"
+                }, {
+                    "OpCode": "Ldarg",
+                    "InstructionType": "Append",
+                    "OperandType": "Parameter",
+                    "ParamVarOffset": "3"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "Append",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_PlayerGathering",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }, {
+                    "OpCode": "Ret",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }]
+            }]
+        },
+        "BasePlayer": {
+            "Methods": [{
+                "TargetMethod": "PlayerInit",
+                "Instructions": [{
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "None",
+                    "InsertOffset": "91"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "Method",
+                    "InsertOffset": "92",
+                    "TargetMethod": "On_PlayerConnected",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }, {
+                "TargetMethod": "OnDisconnected",
+                "Instructions": [{
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "None",
+                    "InsertOffset": "0"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "Method",
+                    "InsertOffset": "1",
+                    "TargetMethod": "On_PlayerDisconnected",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }, {
+                "TargetMethod": "UpdateRadiation",
+                "Instructions": [{
+                    "InstructionType": "Clear"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "Append",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_PlayerTakeRadiation",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }, {
+                    "OpCode": "Ret",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }]
+            }, {
+                "TargetMethod": "Die",
+                "Instructions": [{
+                    "InstructionType": "Clear"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "Append",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_PlayerDied",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }, {
+                    "OpCode": "Ret",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }]
+            }, {
+                "TargetMethod": "StartSleeping",
+                "Instructions": [{
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_PlayerSleep",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }, {
+                "TargetMethod": "EndSleeping",
+                "Instructions": [{
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_PlayerWakeUp",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }, {
+                "TargetMethod": "EnterGame",
+                "Instructions": [{
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_PlayerLoaded",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }, {
+                "TargetMethod": "StartWounded",
+                "Instructions": [{
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_PlayerWounded",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }, {
+                "TargetMethod": "OnHealthChanged",
+                "Instructions": [{
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_2",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_PlayerHealthChange",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }, {
+                "TargetMethod": "RespawnAt",
+                "Instructions": [{
+                    "InstructionType": "Clear"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_2",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "Append",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_Respawn",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }, {
+                    "OpCode": "Ret",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }]
+            }]
+        },
+        "PlayerLoot": {
+            "Methods": [{
+                "TargetMethod": "StartLootingEntity",
+                "Instructions": [{
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_LootingEntity",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }, {
+                "TargetMethod": "StartLootingPlayer",
+                "Instructions": [{
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_LootingPlayer",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }, {
+                "TargetMethod": "StartLootingItem",
+                "Instructions": [{
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_LootingItem",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }]
+        },
+        "MedicalTool": {
+            "Methods": [{
+                "TargetMethod": "UseSelf",
+                "Instructions": [{
+                    "InstructionType": "Clear"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "Append",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_PlayerSyringeSelf",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }, {
+                    "OpCode": "Ret",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }]
+            }, {
+                "TargetMethod": "UseOther",
+                "Instructions": [{
+                    "InstructionType": "Clear"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "Append",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_PlayerSyringeOther",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }, {
+                    "OpCode": "Ret",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }]
+            }]
+        },
+        "PlayerInventory": {
+            "Methods": [{
+                "TargetMethod": "OnClothingChanged",
+                "Instructions": [{
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_PlayerClothingChanged",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }]
+        },
+        "ItemContainer": {
+            "Methods": [{
+                "TargetMethod": "Insert",
+                "Instructions": [{
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "Method",
+                    "InsertOffset": "35",
+                    "TargetMethod": "On_ItemAdded",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "None",
+                    "InsertOffset": "35"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "None",
+                    "InsertOffset": "35"
+                }]
+            }, {
+                "TargetMethod": "Remove",
+                "Instructions": [{
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "Method",
+                    "InsertOffset": "32",
+                    "TargetMethod": "On_ItemRemoved",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "None",
+                    "InsertOffset": "32"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "None",
+                    "InsertOffset": "32"
+                }]
+            }]
+        },
+        "BaseNetworkable": {
+            "Methods": [{
+                "TargetMethod": "Kill",
+                "Instructions": [{
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertAfter",
+                    "OperandType": "None",
+                    "InsertOffset": "8"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertAfter",
+                    "OperandType": "Method",
+                    "InsertOffset": "9",
+                    "TargetMethod": "On_NetworkableKill",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }]
+        },
+        "BaseNPC": {
+            "Methods": [{
+                "TargetMethod": "OnKilled",
+                "Instructions": [{
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "None",
+                    "InsertOffset": "0"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "None",
+                    "InsertOffset": "1"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "Method",
+                    "InsertOffset": "2",
+                    "TargetMethod": "On_NPCKilled",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }]
+        },
+        "BaseLauncher": {
+            "Methods": [{
+                "TargetMethod": "SV_Launch",
+                "Instructions": [{
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldloc_S",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "Variable",
+                    "ParamVarOffset": "7"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_RocketShooting",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }]
+        },
+        "ServerMgr": {
+            "Methods": [{
+                "TargetMethod": "OnDisable",
+                "Instructions": [{
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "Method",
+                    "InsertOffset": "0",
+                    "TargetMethod": "On_ServerShutdown",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }, {
+                "TargetMethod": "Initialize",
+                "Instructions": [{
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_ServerInit",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }, {
+                "TargetMethod": "UpdateServerInformation",
+                "Instructions": [{
+                    "InstructionType": "Clear"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "Append",
+                    "OperandType": "Method",
+                    "TargetMethod": "SetModded",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }, {
+                    "OpCode": "Ret",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }]
+            }]
+        },
+        "SaveRestore": {
+            "Methods": [{
+                "TargetMethod": "DoAutomatedSave",
+                "Instructions": [{
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "Method",
+                    "InsertOffset": "11",
+                    "TargetMethod": "On_ServerSaved",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }]
+        },
+        "ConsoleNetwork": {
+            "Methods": [{
+                "TargetMethod": "OnClientCommand",
+                "Instructions": [{
+                    "InstructionType": "RemoveRange",
+                    "RemoveEnd": "19",
+                    "RemoveStart": "14"
+                }, {
+                    "OpCode": "Ldloc_1",
+                    "InstructionType": "InsertAfter",
+                    "OperandType": "None",
+                    "InsertOffset": "10"
+                }, {
+                    "OpCode": "Ldloc_0",
+                    "InstructionType": "InsertAfter",
+                    "OperandType": "None",
+                    "InsertOffset": "11"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertAfter",
+                    "OperandType": "Method",
+                    "InsertOffset": "12",
+                    "TargetMethod": "On_ClientConsole",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }]
+        },
+        "BaseProjectile": {
+            "Methods": [{
+                "TargetMethod": "CLProject",
+                "Instructions": [{
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "Method",
+                    "InsertOffset": "0",
+                    "TargetMethod": "On_Shooting",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "None",
+                    "InsertOffset": "0"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBefore",
+                    "OperandType": "None",
+                    "InsertOffset": "0"
+                }]
+            }]
+        },
+        "MiningQuarry": {
+            "Methods": [{
+                "TargetMethod": "ProcessResources",
+                "Instructions": [{
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_QuarryMining",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }]
+        },
+        "ThrownWeapon": {
+            "Methods": [{
+                "TargetMethod": "DoThrow",
+                "Instructions": [{
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_WeaponThrow",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }]
+        }
+    }
 }, {
     "TargetAssembly": "Facepunch.Console.dll",
-	"Instructions": [{
-		"InstructionType": "CreateType",
-		"Name": "PlutonPatched"
-	},
-	{
-		"InstructionType": "WriteToFile",
-		"Name": "Facepunch.Console.dll"
-	}],
-	"Types": {
-		"ConsoleSystem/SystemRealm": {
-			"Methods": [{
-				"TargetMethod": "Normal",
-				"TargetMethodSigniture": "Normal(RunOptions,String,Object[])",
-				"Instructions": [{
-					"OpCode": "Ldloc_1",
-					"InstructionType": "InsertAfter",
-					"OperandType": "None",
-					"InsertOffset": "12"
-				}, {
-					"OpCode": "Ldarg_2",
-					"InstructionType": "InsertAfter",
-					"OperandType": "None",
-					"InsertOffset": "13"
-				}, {
-					"OpCode": "Call",
-					"InstructionType": "InsertAfter",
-					"OperandType": "Method",
-					"InsertOffset": "14",
-					"TargetMethod": "On_ServerConsole",
-					"TargetType": "Pluton.Rust.Hooks",
-					"TargetAssembly": "Pluton.Rust.dll"
-				}]
-			}]
-		}
+    "Instructions": [{
+        "InstructionType": "CreateType",
+        "Name": "PlutonPatched"
+    },
+    {
+        "InstructionType": "WriteToFile",
+        "Name": "Facepunch.Console.dll"
+    }],
+    "Types": {
+        "ConsoleSystem/SystemRealm": {
+            "Methods": [{
+                "TargetMethod": "Normal",
+                "TargetMethodSigniture": "Normal(RunOptions,String,Object[])",
+                "Instructions": [{
+                    "OpCode": "Ldloc_1",
+                    "InstructionType": "InsertAfter",
+                    "OperandType": "None",
+                    "InsertOffset": "12"
+                }, {
+                    "OpCode": "Ldarg_2",
+                    "InstructionType": "InsertAfter",
+                    "OperandType": "None",
+                    "InsertOffset": "13"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertAfter",
+                    "OperandType": "Method",
+                    "InsertOffset": "14",
+                    "TargetMethod": "On_ServerConsole",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
+            }]
+        }
     }
 }]

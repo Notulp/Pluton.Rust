@@ -193,9 +193,14 @@
       <Properties>
         <Policies>
           <DotNetNamingPolicy DirectoryNamespaceAssociation="PrefixedHierarchical" ResourceNamePolicy="FileFormatDefault" />
-          <TextStylePolicy FileWidth="120" TabsToSpaces="False" EolMarker="Unix" inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/x-csharp" />
-          <CSharpFormattingPolicy IndentSwitchBody="True" AlignEmbeddedStatements="False" NamespaceBraceStyle="EndOfLine" ClassBraceStyle="EndOfLine" InterfaceBraceStyle="EndOfLine" StructBraceStyle="EndOfLine" EnumBraceStyle="EndOfLine" MethodBraceStyle="EndOfLine" ConstructorBraceStyle="EndOfLine" DestructorBraceStyle="EndOfLine" BeforeMethodDeclarationParentheses="False" BeforeMethodCallParentheses="False" BeforeConstructorDeclarationParentheses="False" NewLineBeforeConstructorInitializerColon="NewLine" NewLineAfterConstructorInitializerColon="SameLine" BeforeDelegateDeclarationParentheses="False" NewParentheses="False" SpacesBeforeBrackets="False" MethodCallArgumentWrapping="WrapIfTooLong" AlignToFirstMethodCallArgument="True" MethodDeclarationParameterWrapping="WrapIfTooLong" IndexerDeclarationParameterWrapping="WrapIfTooLong" NewLineAferIndexerDeclarationOpenBracket="NewLine" IndexerDeclarationClosingBracketOnNewLine="NewLine" IndexerArgumentWrapping="DoNotWrap" AlignToFirstIndexerArgument="True" inheritsSet="Mono" inheritsScope="text/x-csharp" scope="text/x-csharp" />
-          <TextStylePolicy FileWidth="120" TabsToSpaces="False" inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/plain" />
+          <TextStylePolicy FileWidth="120" EolMarker="Unix" inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/x-csharp" />
+          <CSharpFormattingPolicy IndentSwitchBody="True" AlignEmbeddedStatements="False" BeforeMethodDeclarationParentheses="False" BeforeMethodCallParentheses="False" BeforeConstructorDeclarationParentheses="False" NewLineBeforeConstructorInitializerColon="NewLine" NewLineAfterConstructorInitializerColon="SameLine" BeforeDelegateDeclarationParentheses="False" NewParentheses="False" SpacesBeforeBrackets="False" MethodCallArgumentWrapping="WrapIfTooLong" AlignToFirstMethodCallArgument="True" MethodDeclarationParameterWrapping="WrapIfTooLong" IndexerDeclarationParameterWrapping="WrapIfTooLong" NewLineAferIndexerDeclarationOpenBracket="NewLine" IndexerDeclarationClosingBracketOnNewLine="NewLine" IndexerArgumentWrapping="DoNotWrap" AlignToFirstIndexerArgument="True" inheritsSet="Mono" inheritsScope="text/x-csharp" scope="text/x-csharp" />
+          <TextStylePolicy FileWidth="120" inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/plain" />
+          <TextStylePolicy inheritsSet="null" scope="application/json" />
+          <TextStylePolicy inheritsSet="null" scope="application/config+xml" />
+          <XmlFormattingPolicy inheritsSet="null" scope="application/config+xml" />
+          <TextStylePolicy inheritsSet="null" scope="application/xml" />
+          <XmlFormattingPolicy inheritsSet="Mono" inheritsScope="application/xml" scope="application/xml" />
         </Policies>
       </Properties>
     </MonoDevelop>

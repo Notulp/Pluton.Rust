@@ -1,18 +1,18 @@
 namespace Pluton.Rust.Events
 {
-	using Core;
-	using Rust.Objects;
-	using Rust;
+    using Core;
+    using Rust.Objects;
+    using Rust;
 
-	public class BuildingPartDemolishedEvent : Event
+    public class BuildingPartDemolishedEvent : Event
     {
-		public readonly BuildingPart BuildingPart;
-		public readonly Player Player;
+        public readonly BuildingPart BuildingPart;
+        public readonly Player Player;
 
-		public BuildingPartDemolishedEvent(BuildingBlock buildingBlock, BasePlayer basePlayer)
-		{
-			BuildingPart = new BuildingPart(buildingBlock);
-			Player = Server.GetPlayer(basePlayer);
-		}
-	}
+        public BuildingPartDemolishedEvent(BuildingBlock buildingBlock, BasePlayer basePlayer)
+        {
+            BuildingPart = new BuildingPart(buildingBlock);
+            Player = Server.GetPlayer(basePlayer);
+        }
+    }
 }

@@ -1,11 +1,11 @@
 ﻿namespace Pluton.Rust.Objects.PlutonUI
 {
-	public interface IComponent
-	{
-		float fadeIn { get; }
+    public interface IComponent
+    {
+        float fadeIn { get; }
 
-		JSON.Object obj { get; }
+        JSON.Object obj { get; }
 
-		string type { get; }
-	}
+        string type { get; }
+    }
 }

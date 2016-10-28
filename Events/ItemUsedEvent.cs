@@ -1,17 +1,17 @@
 namespace Pluton.Rust.Events
 {
-	using Core;
-	using Rust.Objects;
+    using Core;
+    using Rust.Objects;
 
-	public class ItemUsedEvent : Event
-	{
-		public readonly InvItem Item;
-		public readonly int Amount;
+    public class ItemUsedEvent : Event
+    {
+        public readonly InvItem Item;
+        public readonly int Amount;
 
-		public ItemUsedEvent(Item item, int amount)
-		{
-			Item = new InvItem(item);
-			Amount = amount;
-		}
-	}
+        public ItemUsedEvent(Item item, int amount)
+        {
+            Item = new InvItem(item);
+            Amount = amount;
+        }
+    }
 }

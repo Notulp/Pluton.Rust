@@ -1,128 +1,128 @@
 namespace Pluton.Rust.Objects
 {
-	using System;
-	using System.Linq;
-	using System.Collections.Generic;
-	using Core.PluginLoaders;
-	using Core;
+    using System;
+    using System.Linq;
+    using System.Collections.Generic;
+    using Core.PluginLoaders;
+    using Core;
 
-	public class ConsoleCommand
-	{
-		public delegate void CallbackDelegate(string[] args);
+    public class ConsoleCommand
+    {
+        public delegate void CallbackDelegate(string[] args);
 
-		public string _command;
-		public string _description;
-		public string _usage;
-		public BasePlugin plugin;
-		public CallbackDelegate callback;
+        public string _command;
+        public string _description;
+        public string _usage;
+        public BasePlugin plugin;
+        public CallbackDelegate callback;
 
-		public ConsoleCommand setCallback(CallbackDelegate function)
-		{
-			callback = function;
+        public ConsoleCommand setCallback(CallbackDelegate function)
+        {
+            callback = function;
 
-			return this;
-		}
+            return this;
+        }
 
-		public ConsoleCommand setCallback(string function)
-		{
-			callback = new CallbackDelegate(cmd => {
-				try {
-					plugin.Invoke(function, (object)cmd);
-				} catch (Exception ex) {
-					Logger.Log("there");
-					Logger.Log(ex.ToString());
-				}
-			});
+        public ConsoleCommand setCallback(string function)
+        {
+            callback = new CallbackDelegate(cmd => {
+                try {
+                    plugin.Invoke(function, (object)cmd);
+                } catch (Exception ex) {
+                    Logger.Log("there");
+                    Logger.Log(ex.ToString());
+                }
+            });
 
-			return this;
-		}
+            return this;
+        }
 
-		public ConsoleCommand setUsage(string usage)
-		{
-			_usage = usage;
+        public ConsoleCommand setUsage(string usage)
+        {
+            _usage = usage;
 
-			return this;
-		}
+            return this;
+        }
 
-		public ConsoleCommand setDescription(string description)
-		{
-			_description = description;
+        public ConsoleCommand setDescription(string description)
+        {
+            _description = description;
 
-			return this;
-		}
+            return this;
+        }
 
-		public ConsoleCommand setCommand(string command)
-		{
-			_command = command;
+        public ConsoleCommand setCommand(string command)
+        {
+            _command = command;
 
-			return this;
-		}
+            return this;
+        }
 
-		public ConsoleCommand(string command)
-		{
-			_command = command;
-		}
+        public ConsoleCommand(string command)
+        {
+            _command = command;
+        }
 
-		public ConsoleCommand()
-		{
-			_command = "";
-		}
-	}
+        public ConsoleCommand()
+        {
+            _command = "";
+        }
+    }
 
-	public class ConsoleCommands
-	{
-		public BasePlugin plugin;
+    public class ConsoleCommands
+    {
+        public BasePlugin plugin;
 
-		public Dictionary<int, ConsoleCommand> Commands = new Dictionary<int, ConsoleCommand>();
+        public Dictionary<int, ConsoleCommand> Commands = new Dictionary<int, ConsoleCommand>();
 
-		public ConsoleCommands(BasePlugin pl)
-		{
-			plugin = pl;
-		}
+        public ConsoleCommands(BasePlugin pl)
+        {
+            plugin = pl;
+        }
 
-		public ConsoleCommand Register(string command)
-		{
-			if (String.IsNullOrEmpty(command))
-				return null;
+        public ConsoleCommand Register(string command)
+        {
+            if (String.IsNullOrEmpty(command))
+                return null;
 
-			ConsoleCommand cc = new ConsoleCommand(command);
-			cc.plugin = plugin;
+            ConsoleCommand cc = new ConsoleCommand(command);
+            cc.plugin = plugin;
 
-			return Register(cc);
-		}
+            return Register(cc);
+        }
 
-		public ConsoleCommand Register(ConsoleCommand command)
-		{
-			Commands.Add(Commands.Count, command);
+        public ConsoleCommand Register(ConsoleCommand command)
+        {
+            Commands.Add(Commands.Count, command);
 
-			return command;
-		}
+            return command;
+        }
 
-		public List<string> getCommands()
-		{
-			return (from c in Commands.Values
-					select c._command).ToList();
-		}
+        public List<string> getCommands()
+        {
+            return (from c in Commands.Values
+                             select c._command).ToList();
+        }
 
-		public ConsoleCommand[] getConsoleCommands(string command)
-		{
-			return (from c in Commands.Values
-					where c._command == command
-					select c).ToArray();
-		}
+        public ConsoleCommand[] getConsoleCommands(string command)
+        {
+            return (from c in Commands.Values
+                             where c._command == command
+                             select c).ToArray();
+        }
 
-		public string[] getDescriptions(string command)
-		{
-			return (from c in Commands.Values
-					where c._command == command
-					select c._description).ToArray();
-		}
+        public string[] getDescriptions(string command)
+        {
+            return (from c in Commands.Values
+                             where c._command == command
+                             select c._description).ToArray();
+        }
 
-		public string[] getUsages(string command)
-		{
-			return (from c in Commands.Values
-					where c._command == command
-					select c._usage).ToArray();
-		}
-	}
+        public string[] getUsages(string command)
+        {
+            return (from c in Commands.Values
+                             where c._command == command
+                             select c._usage).ToArray();
+        }
+    }
 }
