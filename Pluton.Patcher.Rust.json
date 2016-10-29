@@ -1154,7 +1154,7 @@
                     "OpCode": "Call",
                     "InstructionType": "InsertBeforeRet",
                     "OperandType": "Method",
-                    "TargetMethod": "On_WeaponThrow",
+                    "TargetMethod": "On_PlayerThrowExplosive",
                     "TargetType": "Pluton.Rust.Hooks",
                     "TargetAssembly": "Pluton.Rust.dll"
                 }]

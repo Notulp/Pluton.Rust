@@ -72,6 +72,9 @@ namespace Pluton.Rust
             "Pre_PlayerSyringeSelf",
             "On_PlayerHealthChange",
             "On_PlayerTakeRadiation",
+            "On_PlayerThrowCharge",
+            "On_PlayerThrowGrenade",
+            "On_PlayerThrowSignal",
             "On_PlayerWakeUp",
             "On_PlayerWounded",
             "On_QuarryMining",
@@ -82,7 +85,6 @@ namespace Pluton.Rust
             "On_ServerInit",
             "On_ServerSaved",
             "On_ServerShutdown",
-            "On_WeaponThrow"
         };
 
         new public void Initialize()
@@ -1080,6 +1082,32 @@ namespace Pluton.Rust
         }
 
         /// <summary>
+        /// Called from <c>ThrownWeapon.DoThrow(BaseEntity.RPCMessage)</c> .
+        /// </summary>
+        public static void On_PlayerThrowExplosive(ThrownWeapon thrownWeapon, BaseEntity.RPCMessage msg)
+        {
+            ThrowEvent evt = new ThrowEvent(thrownWeapon, msg);
+
+            switch (evt.ProjectileName)
+            {
+                case "F1 Grenade":
+                case "Beancan Grenade":
+                    OnNext("On_PlayerThrowGrenade", evt);
+                    break;
+
+                case "Timed Explosive Charge":
+                case "Survey Charge":
+                case "Satchel Charge":
+                    OnNext("On_PlayerThrowCharge", evt);
+                    break;
+
+                case "Supply Signal":
+                    OnNext("On_PlayerThrowSignal", evt);
+                    break;
+            }
+        }
+
+        /// <summary>
         /// Called from <c>BasePlayer.EndSleeping()</c> .
         /// </summary>
         public static void On_PlayerWakeUp(BasePlayer bp) => OnNext("On_PlayerWakeUp", Server.GetPlayer(bp));
@@ -1171,12 +1199,7 @@ namespace Pluton.Rust
         /// Called from <c>BaseProjectile.CLProject(BaseEntity.RPCMessage)</c> .
         /// </summary>
         public static void On_Shooting(BaseProjectile baseProjectile, BaseEntity.RPCMessage msg) => OnNext("On_Shooting", new ShootEvent(baseProjectile, msg));
-
-        /// <summary>
-        /// Called from <c>ThrownWeapon.DoThrow(BaseEntity.RPCMessage)</c> .
-        /// </summary>
-        public static void On_WeaponThrow(ThrownWeapon thrownWeapon, BaseEntity.RPCMessage msg) => OnNext("On_WeaponThrow", new WeaponThrowEvent(thrownWeapon, msg));
-
+        
         #endregion
 
         #region Looting Hooks
