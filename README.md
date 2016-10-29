@@ -25,3 +25,10 @@
 </a>
   
 Pluton.Rust is the library containing hooks/objects related tothe active branch of the survival sandbox game Rust. By using our simple API, you can easily change the gameplay drastically.
+
+* [Homepage](http://pluton.team) 
+* [Forum](http://forum.pluton.team)
+* [Wiki](http://forum.pluton.team/wiki/index/)
+* [Binaries](http://dl.pluton.team)
+* [Compiling](http://forum.pluton.team/wiki/compiling/)
+* [FAQ](http://forum.pluton.team/wiki/faq/)
