@@ -14,6 +14,9 @@ namespace Pluton.Rust
     using Logger = Core.Logger;
     using Steamworks;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class Hooks : Core.Hooks
     {
         internal static List<string> hookNames = new List<string>() {
