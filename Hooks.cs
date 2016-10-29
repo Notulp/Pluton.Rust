@@ -94,8 +94,14 @@ namespace Pluton.Rust
 
         #region General Hooks
 
+        /// <summary>
+        /// Called from <c>Hammer.DoAttackShared(HitInfo)</c> .
+        /// </summary>
         public static void On_BeingHammered(HitInfo info, BasePlayer ownerPlayer) => OnNext("On_BeingHammered", new HammerEvent(info, ownerPlayer));
 
+        /// <summary>
+        /// Called from <c>BaseCombatEntity.Hurt(HitInfo)</c> .
+        /// </summary>
         public static void On_CombatEntityHurt(BaseCombatEntity combatEntity, HitInfo info)
         {
             try {
@@ -231,8 +237,14 @@ namespace Pluton.Rust
             }
         }
 
+        /// <summary>
+        /// Called from <c>BaseOven.ConsumeFuel(Item, ItemModBurnable)</c> .
+        /// </summary>
         public static void On_ConsumeFuel(BaseOven bo, Item fuel, ItemModBurnable burn) => OnNext("On_ConsumeFuel", new ConsumeFuelEvent(bo, fuel, burn));
 
+        /// <summary>
+        /// Called from <c>nothing</c> .
+        /// </summary>
         public static void On_EventTriggered(TriggeredEventPrefab tep)
         {
             var ete = new EventTriggeredEvent(tep);
@@ -250,8 +262,14 @@ namespace Pluton.Rust
                 baseEntity.Spawn();
         }
 
+        /// <summary>
+        /// Called from <c>BaseNetworkable.Kill(BaseNetworkable.DestroyMode)</c> .
+        /// </summary>
         public static void On_NetworkableKill(BaseNetworkable bn) => OnNext("On_NetworkableKill", bn);
 
+        /// <summary>
+        /// Called from <c>MiningQuarry.ProcessResources()</c> .
+        /// </summary>
         public static void On_QuarryMining(MiningQuarry mq) => OnNext("On_QuarryMining", mq);
 
         #endregion
@@ -449,10 +467,19 @@ namespace Pluton.Rust
 
         #region Item Hooks
 
+        /// <summary>
+        /// Called from <c>ItemContainer.Insert(Item)</c> .
+        /// </summary>
         public static void On_ItemAdded(ItemContainer ic, Item i) => OnNext("On_ItemAdded", new InventoryModEvent(ic, i));
 
+        /// <summary>
+        /// Called from <c>Item.LoseCondition(float)</c> .
+        /// </summary>
         public static void On_ItemLoseCondition(Item i, float f) => OnNext("On_ItemLoseCondition", new ItemConditionEvent(i, f));
 
+        /// <summary>
+        /// Called from <c>CollectibleEntity.Pickup(BaseEntity.RPCMessage)</c> .
+        /// </summary>
         public static void On_ItemPickup(CollectibleEntity entity, BaseEntity.RPCMessage msg)
         {
             if (!msg.player.IsAlive() || entity.itemList == null)
@@ -487,16 +514,28 @@ namespace Pluton.Rust
             entity.Kill(BaseNetworkable.DestroyMode.None);
         }
 
+        /// <summary>
+        /// Called from <c>ItemContainer.Remove(Item)</c> .
+        /// </summary>
         public static void On_ItemRemoved(ItemContainer ic, Item i) => OnNext("On_ItemRemoved", new InventoryModEvent(ic, i));
 
+        /// <summary>
+        /// Called from <c>RepairBench.RepairItem(BaseEntity.RPCMessage)</c> .
+        /// </summary>
         public static void On_ItemRepaired(RepairBench rb, BaseEntity.RPCMessage msg) => OnNext("On_ItemRepaired", new ItemRepairEvent(rb, msg));
 
+        /// <summary>
+        /// Called from <c>Item.UseItem(int)</c> .
+        /// </summary>
         public static void On_ItemUsed(Item item, int amountToConsume) => OnNext("On_ItemUsed", new ItemUsedEvent(item, amountToConsume));
 
         #endregion
 
         #region Construction Hooks
 
+        /// <summary>
+        /// Called from <c>nothing</c> .
+        /// </summary>
         public static void On_BuildingPartGradeChange(BuildingBlock block, BaseEntity.RPCMessage msg)
         {
             BasePlayer player = msg.player;
@@ -543,6 +582,9 @@ namespace Pluton.Rust
                               Vector3.zero);
         }
 
+        /// <summary>
+        /// Called from <c>BuildingBlock.DoDemolish(BaseEntity.RPCMessage)</c> .
+        /// </summary>
         public static void On_BuildingPartDemolished(BuildingBlock bb, BaseEntity.RPCMessage msg) => OnNext("On_BuildingPartDemolished", new BuildingPartDemolishedEvent(bb, msg.player));
 
         /// <summary>
@@ -590,10 +632,19 @@ namespace Pluton.Rust
 
         #region Trap Hooks
 
+        /// <summary>
+        /// Called from <c>Landmine.Arm()</c>
+        /// </summary>
         public static void On_LandmineArmed(Landmine l) => OnNext("On_LandmineArmed", l);
 
+        /// <summary>
+        /// Called from <c>Landmine.Explode()</c>
+        /// </summary>
         public static void On_LandmineExploded(Landmine l) => OnNext("On_LandmineExploded", l);
 
+        /// <summary>
+        /// Called from <c>Landmine.Trigger(BasePlayer)</c>
+        /// </summary>
         public static void On_LandmineTriggered(Landmine landmine, BasePlayer basePlayer)
         {
             Pre<LandmineTriggerEvent> preLandmineTriggerEvent = new Pre<LandmineTriggerEvent>(landmine, basePlayer);
@@ -616,6 +667,9 @@ namespace Pluton.Rust
 
         #region Door Hooks
 
+        /// <summary>
+        /// Called from <c>CodeLock.UnlockWithCode(BaseEntity.RPCMessage)</c>
+        /// </summary>
         public static void On_DoorCode(CodeLock codeLock, BaseEntity.RPCMessage rpc)
         {
             if (!codeLock.IsLocked())
@@ -713,10 +767,19 @@ namespace Pluton.Rust
 
         #region Player Hooks
 
+        /// <summary>
+        /// Called from <c>BasePlayer.RPC_Assist(BaseEntity.RPCMessage)</c> .
+        /// </summary>
         public static void On_PlayerAssisted(BasePlayer bp) => OnNext("On_PlayerAssisted", Server.GetPlayer(bp));
 
+        /// <summary>
+        /// Called from <c>ResourceDispenser.GiveResourceFromItem(BaseEntity, ItemAmount, float, float, AttackEntity)</c> .
+        /// </summary>
         public static void On_PlayerClothingChanged(PlayerInventory pi, Item i) => OnNext("On_PlayerClothingChanged", new PlayerClothingEvent(pi, i));
-
+        
+        /// <summary>
+        /// Called from <c>BasePlayer.PlayerInit(Connection)</c> .
+        /// </summary>
         public static void On_PlayerConnected(BasePlayer basePlayer)
         {
             Player player = new Player(basePlayer);
@@ -805,7 +868,10 @@ namespace Pluton.Rust
                 }
             }
         }
-
+        
+        /// <summary>
+        /// Called from <c>ResourceDispenser.GiveResourceFromItem(BaseEntity, ItemAmount, float, float, AttackEntity)</c> .
+        /// </summary>
         public static void On_PlayerGathering(ResourceDispenser dispenser,
                                               BaseEntity to,
                                               ItemAmount itemAmount,
@@ -860,10 +926,19 @@ namespace Pluton.Rust
             to.GiveItem(item, BaseEntity.GiveItemReason.ResourceHarvested);
         }
 
+        /// <summary>
+        /// Called from <c>BasePlayer.OnHealthChanged(float, float)</c> .
+        /// </summary>
         public static void On_PlayerHealthChange(BasePlayer p, float f, float f2) => OnNext("On_PlayerHealthChange", new PlayerHealthChangeEvent(p, f, f2));
 
+        /// <summary>
+        /// Called from <c>BasePlayer.EnterGame()</c> .
+        /// </summary>
         public static void On_PlayerLoaded(BasePlayer bp) => OnNext("On_PlayerLoaded", Server.GetPlayer(bp));
 
+        /// <summary>
+        /// Called from <c>BasePlayer.StartSleeping()</c> .
+        /// </summary>
         public static void On_PlayerSleep(BasePlayer bp) => OnNext("On_PlayerSleep", Server.GetPlayer(bp));
 
         /// <summary>
@@ -926,6 +1001,9 @@ namespace Pluton.Rust
             return true;
         }
 
+        /// <summary>
+        /// Called from <c>MedicalTool.UseSelf(BaseEntity.RPCMessage)</c> .
+        /// </summary>
         public static void On_PlayerSyringeSelf(MedicalTool medicalTool, BaseEntity.RPCMessage msg)
         {
             BasePlayer messagePlayer = msg.player;
@@ -951,6 +1029,9 @@ namespace Pluton.Rust
             }
         }
 
+        /// <summary>
+        /// Called from <c>MedicalTool.UseOther(BaseEntity.RPCMessage)</c> .
+        /// </summary>
         public static void On_PlayerSyringeOther(MedicalTool medicalTool, BaseEntity.RPCMessage msg)
         {
             BasePlayer messagePlayer = msg.player;
@@ -995,8 +1076,14 @@ namespace Pluton.Rust
             basePlayer.metabolism.radiation_level.value = ptr.Next;
         }
 
+        /// <summary>
+        /// Called from <c>BasePlayer.EndSleeping()</c> .
+        /// </summary>
         public static void On_PlayerWakeUp(BasePlayer bp) => OnNext("On_PlayerWakeUp", Server.GetPlayer(bp));
 
+        /// <summary>
+        /// Called from <c>BasePlayer.StartWounded()</c> .
+        /// </summary>
         public static void On_PlayerWounded(BasePlayer bp) => OnNext("On_PlayerWounded", Server.GetPlayer(bp));
 
         /// <summary>
@@ -1070,12 +1157,21 @@ namespace Pluton.Rust
             // player.ClientRPCPlayer(null, player, "FinishLoading");
         }
 
+        /// <summary>
+        /// Called from <c>BaseLauncher.SV_Launch(BaseEntity.RPCMessage)</c> .
+        /// </summary>
         public static void On_RocketShooting(BaseLauncher baseLauncher,
                                              BaseEntity.RPCMessage msg,
                                              BaseEntity baseEntity) => OnNext("On_RocketShooting", new RocketShootEvent(baseLauncher, msg, baseEntity));
 
+        /// <summary>
+        /// Called from <c>BaseProjectile.CLProject(BaseEntity.RPCMessage)</c> .
+        /// </summary>
         public static void On_Shooting(BaseProjectile baseProjectile, BaseEntity.RPCMessage msg) => OnNext("On_Shooting", new ShootEvent(baseProjectile, msg));
 
+        /// <summary>
+        /// Called from <c>ThrownWeapon.DoThrow(BaseEntity.RPCMessage)</c> .
+        /// </summary>
         public static void On_WeaponThrow(ThrownWeapon thrownWeapon, BaseEntity.RPCMessage msg) => OnNext("On_WeaponThrow", new WeaponThrowEvent(thrownWeapon, msg));
 
         #endregion
