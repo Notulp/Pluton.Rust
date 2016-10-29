@@ -34,7 +34,8 @@ namespace Pluton.Rust
             "On_CommandPermission",
             "On_ConsumeFuel",
             "On_CorpseHurt",
-            "On_DoorCode",
+            "Pre_DoorCodeEntered",
+            "On_DoorCodeEntered",
             "Pre_DoorUse",
             "On_DoorUse",
             "On_EventTriggered",
@@ -670,17 +671,17 @@ namespace Pluton.Rust
         /// <summary>
         /// Called from <c>CodeLock.UnlockWithCode(BaseEntity.RPCMessage)</c>
         /// </summary>
-        public static void On_DoorCode(CodeLock codeLock, BaseEntity.RPCMessage rpc)
+        public static void On_DoorCodeEntered(CodeLock codeLock, BaseEntity.RPCMessage rpc)
         {
             if (!codeLock.IsLocked())
                 return;
 
             string code = rpc.read.String();
-            DoorCodeEvent dc = new DoorCodeEvent(codeLock, rpc.player, code);
+            Pre<DoorCodeEvent> preDoorCodeEvent = new Pre<DoorCodeEvent>(codeLock, rpc.player, code);
 
-            OnNext("On_DoorCode", dc);
+            OnNext("Pre_DoorCodeEntered", preDoorCodeEvent);
 
-            if ((!dc.IsCorrect() || !dc.allowed) && !dc.forceAllow) {
+            if (preDoorCodeEvent.IsCanceled || (!preDoorCodeEvent.Event.IsCorrect() && !preDoorCodeEvent.Event.ForceAllow)) {
                 Effect.server.Run(codeLock.effectDenied.resourcePath, codeLock, 0u, Vector3.zero, Vector3.forward);
                 rpc.player.Hurt(1f, global::Rust.DamageType.ElectricShock, codeLock, true);
                 return;
@@ -693,12 +694,14 @@ namespace Pluton.Rust
 
             List<ulong> whitelist = new List<ulong>();
 
-            whitelist = (List<ulong>)codeLock.GetFieldValue("whitelistPlayers");
+            whitelist = (List<ulong>) codeLock.GetFieldValue("whitelistPlayers");
 
             if (!whitelist.Contains(rpc.player.userID)) {
                 whitelist.Add(rpc.player.userID);
                 codeLock.SetFieldValue("whitelistPlayers", whitelist);
             }
+
+            OnNext("On_DoorCodeEntered", preDoorCodeEvent.Event);
         }
 
         /// <summary>

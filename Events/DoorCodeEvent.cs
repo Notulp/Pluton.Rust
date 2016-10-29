@@ -10,15 +10,14 @@ namespace Pluton.Rust.Events
     {
         public Player Player;
         public CodeLock codeLock;
-
-        public bool allowed = true;
-        public bool forceAllow = false;
+        
+        public bool ForceAllow = false;
 
         private string _entered;
 
         public string Code {
             get {
-                return (string)codeLock.GetFieldValue("code");
+                return (string) codeLock.GetFieldValue("code");
             }
             set {
                 int code;
@@ -49,11 +48,7 @@ namespace Pluton.Rust.Events
             _entered = entered;
         }
 
-        public void Allow() => forceAllow = true;
-
         public void ClearWhitelist() => codeLock.SetFieldValue("whitelistPlayers", new List<ulong>());
-
-        public void Deny() => allowed = false;
 
         public bool IsCorrect() => _entered == Code;
 
@@ -62,7 +57,7 @@ namespace Pluton.Rust.Events
             codeLock.SetFieldValue("code", "");
             codeLock.SetFieldValue("hasCode", false);
             codeLock.SetFlag(BaseEntity.Flags.Locked, false);
-            Allow();
+            ForceAllow = true;
         }
 
         public void ResetLock()
@@ -75,8 +70,9 @@ namespace Pluton.Rust.Events
 
         public void Whitelist()
         {
-            var whitelist = new List<ulong>();
+            List<ulong> whitelist = new List<ulong>();
             whitelist = (List<ulong>)codeLock.GetFieldValue("whitelistPlayers");
+
             whitelist.Add(Player.GameID);
             codeLock.SetFieldValue("whitelistPlayers", whitelist);
         }
