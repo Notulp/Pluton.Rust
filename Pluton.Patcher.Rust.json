@@ -1010,7 +1010,7 @@
                     "OpCode": "Call",
                     "InstructionType": "InsertBeforeRet",
                     "OperandType": "Method",
-                    "TargetMethod": "On_RocketShooting",
+                    "TargetMethod": "On_PlayerShootRocket",
                     "TargetType": "Pluton.Rust.Hooks",
                     "TargetAssembly": "Pluton.Rust.dll"
                 }]

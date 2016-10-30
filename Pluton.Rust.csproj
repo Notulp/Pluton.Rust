@@ -150,7 +150,7 @@
     <Compile Include="Events\PlayerLootEvent.cs" />
     <Compile Include="Events\PlayerTakeRadsEvent.cs" />
     <Compile Include="Events\RespawnEvent.cs" />
-    <Compile Include="Events\RocketShootEvent.cs" />
+    <Compile Include="Events\ShootRocketEvent.cs" />
     <Compile Include="Events\ServerConsoleEvent.cs" />
     <Compile Include="Events\ShootEvent.cs" />
     <Compile Include="Events\SyringeUseEvent.cs" />

@@ -80,7 +80,7 @@ namespace Pluton.Rust
             "On_PlayerWounded",
             "On_QuarryMining",
             "On_Respawn",
-            "On_RocketShooting",
+            "On_PlayerShootRocket",
             "On_ServerConsole",
             "On_ServerInit",
             "On_ServerSaved",
@@ -948,7 +948,15 @@ namespace Pluton.Rust
         {
             OnNext("On_PlayerShoot", new ShootEvent(baseProjectile, msg));
         }
-        
+
+        /// <summary>
+        /// Called from <c>BaseLauncher.SV_Launch(BaseEntity.RPCMessage)</c> .
+        /// </summary>
+        public static void On_PlayerShootRocket(BaseLauncher baseLauncher, BaseEntity.RPCMessage msg, BaseEntity baseEntity)
+        {
+            OnNext("On_PlayerShootRocket", new ShootRocketEvent(baseLauncher, msg, baseEntity));
+        }
+
         /// <summary>
         /// Called from <c>BasePlayer.StartSleeping()</c> .
         /// </summary>
@@ -1195,13 +1203,6 @@ namespace Pluton.Rust
             // player.SetPlayerFlag (BasePlayer.PlayerFlags.ReceivingSnapshot, false);
             // player.ClientRPCPlayer(null, player, "FinishLoading");
         }
-
-        /// <summary>
-        /// Called from <c>BaseLauncher.SV_Launch(BaseEntity.RPCMessage)</c> .
-        /// </summary>
-        public static void On_RocketShooting(BaseLauncher baseLauncher,
-                                             BaseEntity.RPCMessage msg,
-                                             BaseEntity baseEntity) => OnNext("On_RocketShooting", new RocketShootEvent(baseLauncher, msg, baseEntity));
 
         #endregion
 
