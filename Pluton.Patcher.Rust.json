@@ -1106,7 +1106,7 @@
                     "InstructionType": "InsertBefore",
                     "OperandType": "Method",
                     "InsertOffset": "0",
-                    "TargetMethod": "On_Shooting",
+                    "TargetMethod": "On_PlayerShoot",
                     "TargetType": "Pluton.Rust.Hooks",
                     "TargetAssembly": "Pluton.Rust.dll"
                 }, {

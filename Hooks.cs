@@ -64,6 +64,7 @@ namespace Pluton.Rust
             "On_PlayerGathering",
             "On_PlayerHurt",
             "On_PlayerLoaded",
+            "On_PlayerShoot",
             "On_PlayerSleep",
             "On_PlayerStartCrafting",
             "On_PlayerSyringeOther",
@@ -80,7 +81,6 @@ namespace Pluton.Rust
             "On_QuarryMining",
             "On_Respawn",
             "On_RocketShooting",
-            "On_Shooting",
             "On_ServerConsole",
             "On_ServerInit",
             "On_ServerSaved",
@@ -940,7 +940,15 @@ namespace Pluton.Rust
         /// Called from <c>BasePlayer.EnterGame()</c> .
         /// </summary>
         public static void On_PlayerLoaded(BasePlayer bp) => OnNext("On_PlayerLoaded", Server.GetPlayer(bp));
-
+        
+        /// <summary>
+        /// Called from <c>BaseProjectile.CLProject(BaseEntity.RPCMessage)</c> .
+        /// </summary>
+        public static void On_PlayerShoot(BaseProjectile baseProjectile, BaseEntity.RPCMessage msg)
+        {
+            OnNext("On_PlayerShoot", new ShootEvent(baseProjectile, msg));
+        }
+        
         /// <summary>
         /// Called from <c>BasePlayer.StartSleeping()</c> .
         /// </summary>
@@ -1195,11 +1203,6 @@ namespace Pluton.Rust
                                              BaseEntity.RPCMessage msg,
                                              BaseEntity baseEntity) => OnNext("On_RocketShooting", new RocketShootEvent(baseLauncher, msg, baseEntity));
 
-        /// <summary>
-        /// Called from <c>BaseProjectile.CLProject(BaseEntity.RPCMessage)</c> .
-        /// </summary>
-        public static void On_Shooting(BaseProjectile baseProjectile, BaseEntity.RPCMessage msg) => OnNext("On_Shooting", new ShootEvent(baseProjectile, msg));
-        
         #endregion
 
         #region Looting Hooks
