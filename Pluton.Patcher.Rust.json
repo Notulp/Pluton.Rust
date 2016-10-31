@@ -775,7 +775,7 @@
                     "OpCode": "Call",
                     "InstructionType": "Append",
                     "OperandType": "Method",
-                    "TargetMethod": "On_Respawn",
+                    "TargetMethod": "On_PlayerRespawn",
                     "TargetType": "Pluton.Rust.Hooks",
                     "TargetAssembly": "Pluton.Rust.dll"
                 }, {

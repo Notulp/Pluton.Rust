@@ -64,6 +64,7 @@ namespace Pluton.Rust
             "On_PlayerGathering",
             "On_PlayerHurt",
             "On_PlayerLoaded",
+            "On_PlayerRespawn",
             "On_PlayerShoot",
             "On_PlayerSleep",
             "On_PlayerStartCrafting",
@@ -79,7 +80,6 @@ namespace Pluton.Rust
             "On_PlayerWakeUp",
             "On_PlayerWounded",
             "On_QuarryMining",
-            "On_Respawn",
             "On_PlayerShootRocket",
             "On_ServerConsole",
             "On_ServerInit",
@@ -942,6 +942,63 @@ namespace Pluton.Rust
         public static void On_PlayerLoaded(BasePlayer bp) => OnNext("On_PlayerLoaded", Server.GetPlayer(bp));
         
         /// <summary>
+        /// Called from <c>BasePlayer.RespawnAt(Vector3, Quaternion)</c> .
+        /// </summary>
+        public static void On_PlayerRespawn(BasePlayer basePlayer, Vector3 pos, Quaternion quat)
+        {
+            Player player = Server.GetPlayer(basePlayer);
+            var re = new RespawnEvent(player, pos, quat);
+
+            OnNext("On_PlayerRespawn", re);
+
+            basePlayer.SetPlayerFlag(BasePlayer.PlayerFlags.Wounded, false);
+            basePlayer.SetPlayerFlag(BasePlayer.PlayerFlags.HasBuildingPrivilege, false);
+            basePlayer.SetPlayerFlag(BasePlayer.PlayerFlags.InBuildingPrivilege, false);
+            basePlayer.SetPlayerFlag(BasePlayer.PlayerFlags.ReceivingSnapshot, true);
+            ++ServerPerformance.spawns;
+            basePlayer.transform.position = re.SpawnPos;
+            basePlayer.transform.rotation = re.SpawnRot;
+            (basePlayer.GetFieldValue("tickInterpolator") as TickInterpolator).Reset(pos);
+            basePlayer.SetFieldValue("lastTickTime", 0f);
+            basePlayer.CancelInvoke("WoundingEnd");
+            basePlayer.StopSpectating();
+            basePlayer.UpdateNetworkGroup();
+            basePlayer.UpdatePlayerCollider(true, false);
+            basePlayer.StartSleeping();
+            basePlayer.Invoke("LifeStoryStart", 0f);
+            basePlayer.metabolism.Reset();
+
+            if (re.StartHealth < Single.Epsilon)
+            {
+                basePlayer.InitializeHealth(basePlayer.StartHealth(), basePlayer.StartMaxHealth());
+            }
+            else
+            {
+                basePlayer.InitializeHealth(re.StartHealth, basePlayer.StartMaxHealth());
+            }
+
+            if (re.GiveDefault)
+            {
+                basePlayer.inventory.GiveDefaultItems();
+            }
+
+            if (re.WakeUp)
+            {
+                basePlayer.EndSleeping();
+            }
+
+            basePlayer.SendNetworkUpdateImmediate(false);
+            basePlayer.ClearEntityQueue();
+            basePlayer.ClientRPCPlayer(null, basePlayer, "StartLoading");
+
+            if (basePlayer.IsConnected())
+                basePlayer.SendFullSnapshot();
+
+            // player.SetPlayerFlag (BasePlayer.PlayerFlags.ReceivingSnapshot, false);
+            // player.ClientRPCPlayer(null, player, "FinishLoading");
+        }
+        
+        /// <summary>
         /// Called from <c>BaseProjectile.CLProject(BaseEntity.RPCMessage)</c> .
         /// </summary>
         public static void On_PlayerShoot(BaseProjectile baseProjectile, BaseEntity.RPCMessage msg)
@@ -1152,56 +1209,6 @@ namespace Pluton.Rust
             }
 
             SingletonComponent<ServerMgr>.Instance.ConnectionApproved(connection);
-        }
-
-        /// <summary>
-        /// Called from <c>BasePlayer.RespawnAt(Vector3, Quaternion)</c> .
-        /// </summary>
-        public static void On_Respawn(BasePlayer basePlayer, Vector3 pos, Quaternion quat)
-        {
-            Player player = Server.GetPlayer(basePlayer);
-            var re = new RespawnEvent(player, pos, quat);
-
-            OnNext("On_Respawn", re);
-
-            basePlayer.SetPlayerFlag(BasePlayer.PlayerFlags.Wounded, false);
-            basePlayer.SetPlayerFlag(BasePlayer.PlayerFlags.HasBuildingPrivilege, false);
-            basePlayer.SetPlayerFlag(BasePlayer.PlayerFlags.InBuildingPrivilege, false);
-            basePlayer.SetPlayerFlag(BasePlayer.PlayerFlags.ReceivingSnapshot, true);
-            ++ServerPerformance.spawns;
-            basePlayer.transform.position = re.SpawnPos;
-            basePlayer.transform.rotation = re.SpawnRot;
-            (basePlayer.GetFieldValue("tickInterpolator") as TickInterpolator).Reset(pos);
-            basePlayer.SetFieldValue("lastTickTime", 0f);
-            basePlayer.CancelInvoke("WoundingEnd");
-            basePlayer.StopSpectating();
-            basePlayer.UpdateNetworkGroup();
-            basePlayer.UpdatePlayerCollider(true, false);
-            basePlayer.StartSleeping();
-            basePlayer.Invoke("LifeStoryStart", 0f);
-            basePlayer.metabolism.Reset();
-
-            if (re.StartHealth < Single.Epsilon) {
-                basePlayer.InitializeHealth(basePlayer.StartHealth(), basePlayer.StartMaxHealth());
-            } else {
-                basePlayer.InitializeHealth(re.StartHealth, basePlayer.StartMaxHealth());
-            }
-
-            if (re.GiveDefault) {
-                basePlayer.inventory.GiveDefaultItems();
-            }
-
-            if (re.WakeUp) {
-                basePlayer.EndSleeping();
-            }
-
-            basePlayer.SendNetworkUpdateImmediate(false);
-            basePlayer.ClearEntityQueue();
-            basePlayer.ClientRPCPlayer(null, basePlayer, "StartLoading");
-            if (basePlayer.IsConnected())
-                basePlayer.SendFullSnapshot();
-            // player.SetPlayerFlag (BasePlayer.PlayerFlags.ReceivingSnapshot, false);
-            // player.ClientRPCPlayer(null, player, "FinishLoading");
         }
 
         #endregion
