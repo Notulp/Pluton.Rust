@@ -1190,27 +1190,6 @@ namespace Pluton.Rust
         /// </summary>
         public static void On_PlayerWounded(BasePlayer bp) => OnNext("On_PlayerWounded", Server.GetPlayer(bp));
 
-        /// <summary>
-        /// Called from <c>ConnectionAuth.Approve(Connection)</c> .
-        /// </summary>
-        public static void On_ClientAuth(ConnectionAuth ca, Connection connection)
-        {
-            var ae = new Pre<AuthEvent>(connection);
-
-            OnNext("Pre_ClientAuth", ae);
-            if (!ae.IsCanceled)
-                OnNext("On_ClientAuth", ae.Event);
-
-            ConnectionAuth.m_AuthConnection.Remove(connection);
-
-            if (!ae.Event.Approved) {
-                ConnectionAuth.Reject(connection, ae.Event.Reason);
-                return;
-            }
-
-            SingletonComponent<ServerMgr>.Instance.ConnectionApproved(connection);
-        }
-
         #endregion
 
         #region Looting Hooks
@@ -1281,6 +1260,56 @@ namespace Pluton.Rust
 
         #region Server Hooks
 
+        /// <summary>
+        /// Called from <c>ConsoleSystem.SystemRealm.Normal(RunOptions, string, params object[])</c> .
+        /// </summary>
+        public static void On_ServerConsole(ConsoleSystem.Arg arg, string cmd)
+        {
+            try
+            {
+                if (!Core.Bootstrap.PlutonLoaded)
+                    return;
+
+                var sce = new ServerConsoleEvent(arg, cmd);
+
+                foreach (KeyValuePair<string, BasePlugin> pl in PluginLoader.GetInstance().Plugins)
+                {
+                    object globalObj = pl.Value.GetGlobalObject("ServerConsoleCommands");
+
+                    if (globalObj is ConsoleCommands)
+                    {
+                        ConsoleCommand[] commands = (globalObj as ConsoleCommands).getConsoleCommands(sce.Cmd);
+
+                        foreach (ConsoleCommand cc in commands)
+                        {
+                            if (cc.callback == null)
+                                continue;
+
+                            try
+                            {
+                                cc.callback(arg.ArgsStr.Split(' '));
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.LogError(cc.plugin.FormatException(ex));
+                            }
+                        }
+                    }
+                }
+
+                OnNext("On_ServerConsole", sce);
+
+                if (arg.Invalid)
+                {
+                    Debug.Log(sce.Reply);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex);
+            }
+        }
+
         public static void On_ServerInit()
         {
             Server.GetInstance().SendCommand("plugins.loaded");
@@ -1308,7 +1337,29 @@ namespace Pluton.Rust
 
         #endregion
 
-        #region Console Hooks
+        #region Client Hooks
+
+        /// <summary>
+        /// Called from <c>ConnectionAuth.Approve(Connection)</c> .
+        /// </summary>
+        public static void On_ClientAuth(ConnectionAuth ca, Connection connection)
+        {
+            var ae = new Pre<AuthEvent>(connection);
+
+            OnNext("Pre_ClientAuth", ae);
+            if (!ae.IsCanceled)
+                OnNext("On_ClientAuth", ae.Event);
+
+            ConnectionAuth.m_AuthConnection.Remove(connection);
+
+            if (!ae.Event.Approved)
+            {
+                ConnectionAuth.Reject(connection, ae.Event.Reason);
+                return;
+            }
+
+            SingletonComponent<ServerMgr>.Instance.ConnectionApproved(connection);
+        }
 
         /// <summary>
         /// Called from <c>ConsoleNetwork.OnClientCommand(Message)</c> .
@@ -1331,46 +1382,6 @@ namespace Pluton.Rust
                 } else {
                     arg.ReplyWith(ce.Reply);
                 }
-            }
-        }
-
-        /// <summary>
-        /// Called from <c>ConsoleSystem.SystemRealm.Normal(RunOptions, string, params object[])</c> .
-        /// </summary>
-        public static void On_ServerConsole(ConsoleSystem.Arg arg, string cmd)
-        {
-            try {
-                if (!Core.Bootstrap.PlutonLoaded)
-                    return;
-
-                var sce = new ServerConsoleEvent(arg, cmd);
-
-                foreach (KeyValuePair<string, BasePlugin> pl in PluginLoader.GetInstance().Plugins) {
-                    object globalObj = pl.Value.GetGlobalObject("ServerConsoleCommands");
-
-                    if (globalObj is ConsoleCommands) {
-                        ConsoleCommand[] commands = (globalObj as ConsoleCommands).getConsoleCommands(sce.Cmd);
-
-                        foreach (ConsoleCommand cc in commands) {
-                            if (cc.callback == null)
-                                continue;
-
-                            try {
-                                cc.callback(arg.ArgsStr.Split(' '));
-                            } catch (Exception ex) {
-                                Logger.LogError(cc.plugin.FormatException(ex));
-                            }
-                        }
-                    }
-                }
-
-                OnNext("On_ServerConsole", sce);
-
-                if (arg.Invalid) {
-                    Debug.Log(sce.Reply);
-                }
-            } catch (Exception ex) {
-                Logger.LogException(ex);
             }
         }
 
