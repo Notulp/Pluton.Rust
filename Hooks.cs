@@ -24,7 +24,8 @@ namespace Pluton.Rust
             "On_BuildingComplete",
             "On_BuildingPartDemolished",
             "On_BuildingPartDestroyed",
-            "On_BuildingPartGradeChange",
+            "Pre_BuildingUpgrade",
+            "On_BuildingUpgrade",
             "On_Chat",
             "On_ClientAuth",
             "Pre_ClientAuth",
@@ -537,52 +538,40 @@ namespace Pluton.Rust
         #region Construction Hooks
 
         /// <summary>
-        /// Called from <c>nothing</c> .
+        /// Called from <c>BuildingBlock.DoUpgradeToGrade(BaseEntity.RPCMessage)</c> .
         /// </summary>
-        public static void On_BuildingPartGradeChange(BuildingBlock block, BaseEntity.RPCMessage msg)
+        public static void On_BuildingUpgrade(BuildingBlock block, BaseEntity.RPCMessage msg)
         {
-            BasePlayer player = msg.player;
-            BuildingGrade.Enum buildingGrade = (BuildingGrade.Enum)msg.read.Int32();
-            ConstructionGrade constructionGrade = (ConstructionGrade)block.CallMethod("GetGrade", buildingGrade);
-            var bpgce = new BuildingPartGradeChangeEvent(block, buildingGrade, player);
+            BasePlayer messagePlayer = msg.player;
+            BuildingGrade.Enum buildingGrade = (BuildingGrade.Enum) msg.read.Int32();
+            ConstructionGrade constructionGrade = (ConstructionGrade) block.CallMethod("GetGrade", buildingGrade);
 
-            OnNext("On_BuildingPartGradeChange", bpgce);
+            Pre<BuildingUpgradeEvent> preBuildingUpgradeEvent = new Pre<BuildingUpgradeEvent>(block, buildingGrade, messagePlayer);
 
-            if (bpgce.DoDestroy) {
-                bpgce.Builder.Message(bpgce.DestroyReason);
-                UnityEngine.Object.Destroy(block);
+            OnNext("Pre_BuildingUpgrade", preBuildingUpgradeEvent);
+
+            if (preBuildingUpgradeEvent.IsCanceled)
                 return;
-            }
 
             if (constructionGrade == null)
                 return;
 
-            if (!bpgce.HasPrivilege)
+            if ((bool) block.CallMethod("CanChangeToGrade", buildingGrade, messagePlayer) == false)
                 return;
 
-            if (bpgce.PayForUpgrade && !(bool)block.CallMethod("CanAffordUpgrade", bpgce.Grade, player))
+            if ((bool)block.CallMethod("CanAffordUpgrade", buildingGrade, messagePlayer) == false)
                 return;
 
-            if (block.TimeSinceAttacked() < 8f)
-                return;
-
-            if (bpgce.PayForUpgrade)
-                block.CallMethod("PayForUpgrade", constructionGrade, player);
-
-            block.SetGrade(bpgce.Grade);
+            block.CallMethod("PayForUpgrade", constructionGrade, messagePlayer);
+            block.SetGrade(buildingGrade);
             block.SetHealthToMax();
+            block.CallMethod("StartBeingRotatable");
+            block.SendNetworkUpdate(BasePlayer.NetworkQueue.Update);
+            block.UpdateSkin(false);
 
-            if (bpgce.Rotatable)
-                block.CallMethod("StartBeingRotatable");
+            Effect.server.Run("assets/bundled/prefabs/fx/build/promote_" + buildingGrade.ToString().ToLower() + ".prefab", block, 0u, Vector3.zero, Vector3.zero);
 
-            block.SendNetworkUpdate();
-            block.CallMethod("UpdateSkin", false);
-
-            Effect.server.Run("assets/bundled/prefabs/fx/build/promote_" + bpgce.Grade.ToString().ToLower() + ".prefab",
-                              block,
-                              0u,
-                              Vector3.zero,
-                              Vector3.zero);
+            OnNext("On_BuildingUpgrade", preBuildingUpgradeEvent.Event);
         }
 
         /// <summary>
@@ -593,9 +582,7 @@ namespace Pluton.Rust
         /// <summary>
         /// Called from <c>Construction.CreateConstruction(Construction.Target, bool)</c> .
         /// </summary>
-        public static BaseEntity On_Placement(Construction construction,
-                                              Construction.Target target,
-                                              bool needsValidPlacement)
+        public static BaseEntity On_Placement(Construction construction, Construction.Target target, bool needsValidPlacement)
         {
             try {
                 GameObject gameObject = GameManager.server.CreatePrefab(construction.fullName,

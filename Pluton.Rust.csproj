@@ -112,7 +112,7 @@
     <Compile Include="Events\BuildingEvent.cs" />
     <Compile Include="Events\BuildingPartDemolishedEvent.cs" />
     <Compile Include="Events\BuildingPartDestroyedEvent.cs" />
-    <Compile Include="Events\BuildingPartGradeChangeEvent.cs" />
+    <Compile Include="Events\BuildingUpgradeEvent.cs" />
     <Compile Include="Events\ChatEvent.cs" />
     <Compile Include="Events\ClientConsoleEvent.cs" />
     <Compile Include="Events\CombatEntityHurtEvent.cs" />

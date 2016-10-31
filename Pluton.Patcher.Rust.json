@@ -162,6 +162,30 @@
                     "TargetType": "Pluton.Rust.Hooks",
                     "TargetAssembly": "Pluton.Rust.dll"
                 }]
+            }, {
+                "TargetMethod": "DoUpgradeToGrade",
+                "Instructions": [{
+                    "InstructionType": "Clear"
+                }, {
+                    "OpCode": "Ret",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "InsertBeforeRet",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_BuildingUpgrade",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }]
             }]
         },
         "BaseCombatEntity": {
