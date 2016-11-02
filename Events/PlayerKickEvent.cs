@@ -1,4 +1,4 @@
-namespace Pluton
+namespace Pluton.Rust.Events
 {
     using Core;
     using Network;
