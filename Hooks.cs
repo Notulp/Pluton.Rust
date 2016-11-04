@@ -6,6 +6,7 @@ namespace Pluton.Rust
     using System.Collections.Generic;
     using Network;
     using UnityEngine;
+    using ProjectileShoot = ProtoBuf.ProjectileShoot;
 
     using Events;
     using Core;
@@ -78,6 +79,8 @@ namespace Pluton.Rust
             "On_PlayerThrowCharge",
             "On_PlayerThrowGrenade",
             "On_PlayerThrowSignal",
+            "Pre_PlayerThrowWeapon",
+            "On_PlayerThrowWeapon",
             "On_PlayerWakeUp",
             "On_PlayerWounded",
             "On_QuarryMining",
@@ -710,8 +713,8 @@ namespace Pluton.Rust
                     msg.player.SendConsoleCommand("chat.add",
                                                   0,
                                                   String.Format("{0}: {1}",
-                                                                Server.server_message_name.ColorText("fa5"),
-                                                                preDoorUseEvent.Event.DenyReason));
+                                                  Server.server_message_name.ColorText("fa5"),
+                                                  preDoorUseEvent.Event.DenyReason));
 
                 return;
             }
@@ -1139,6 +1142,75 @@ namespace Pluton.Rust
             OnNext("On_PlayerTakeRadiation", ptr);
 
             basePlayer.metabolism.radiation_level.value = ptr.Next;
+        }
+
+        /// <summary>
+        /// Called from <c>BaseMelee.CLProject(BaseEntity.RPCMessage)</c> .
+        /// </summary>
+        public static void On_PlayerThrowWeapon(BaseMelee baseMelee, BaseEntity.RPCMessage msg)
+        {
+            BasePlayer messagePlayer = msg.player;
+
+            if ((bool) baseMelee.CallMethod("VerifyClientAttack", messagePlayer) == false) {
+                baseMelee.SendNetworkUpdate(BasePlayer.NetworkQueue.Update);
+                return;
+            }
+
+            if (!baseMelee.canThrowAsProjectile){
+                Debug.LogWarning(messagePlayer + " fired invalid projectile: Not throwable");
+                return;
+            }
+
+            Item item = baseMelee.GetItem();
+
+            if (item == null) {
+                Debug.LogWarning(messagePlayer + " fired invalid projectile: Item not found");
+                return;
+            }
+
+            ItemModProjectile component = item.info.GetComponent<ItemModProjectile>();
+
+            if (component == null) {
+                Debug.LogWarning(messagePlayer + " fired invalid projectile: Item mod not found");
+                return;
+            }
+
+            ProjectileShoot projectileShoot = ProjectileShoot.Deserialize(msg.read);
+
+            if (projectileShoot.projectiles.Count != 1){
+                Debug.LogWarning(messagePlayer + " fired invalid projectile: Projectile count mismatch");
+                return;
+            }
+
+            messagePlayer.CleanupExpiredProjectiles();
+
+            foreach (ProjectileShoot.Projectile current in projectileShoot.projectiles) {
+                if (messagePlayer.HasFiredProjectile(current.projectileID)) {
+                    Debug.LogWarning(messagePlayer + " fired invalid projectile: Duplicate ID ->" + current.projectileID);
+                }
+                else {
+                    Pre<WeaponThrowEvent> preWeaponThrowEvent = new Pre<WeaponThrowEvent>(baseMelee, messagePlayer, projectileShoot, current);
+
+                    OnNext("Pre_PlayerThrowWeapon", preWeaponThrowEvent);
+
+                    if (preWeaponThrowEvent.IsCanceled == false)
+                    {
+                        messagePlayer.NoteFiredProjectile(current.projectileID, current.startPos, current.startVel, baseMelee, item.info, item);
+
+                        Effect effect = new Effect();
+                        effect.Init(Effect.Type.Projectile, current.startPos, current.startVel.normalized, msg.connection);
+                        effect.scale = preWeaponThrowEvent.Event.Magnitude;
+                        effect.pooledString = component.projectileObject.resourcePath;
+                        effect.number = current.seed;
+
+                        EffectNetwork.Send(effect);
+
+                        OnNext("On_PlayerThrowWeapon", preWeaponThrowEvent.Event);
+                    }
+                }
+            }
+
+            item.SetParent(null);
         }
 
         /// <summary>
