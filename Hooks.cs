@@ -12,7 +12,7 @@ namespace Pluton.Rust
     using Core.PluginLoaders;
     using Objects;
     using Logger = Core.Logger;
-    using Steamworks;
+    using Facepunch.Steamworks;
 
     /// <summary>
     /// 
@@ -159,11 +159,11 @@ namespace Pluton.Rust
                     if (ConVar.Vis.attack) {
                         if (info.PointStart != info.PointEnd) {
                             ConsoleNetwork.BroadcastToAllClients("ddraw.arrow", new object[] {
-                                60, Color.cyan, info.PointStart, info.PointEnd, 0.1
+                                60, UnityEngine.Color.cyan, info.PointStart, info.PointEnd, 0.1
                             });
 
                             ConsoleNetwork.BroadcastToAllClients("ddraw.sphere", new object[] {
-                                60, Color.cyan, info.HitPositionWorld, 0.05
+                                60, UnityEngine.Color.cyan, info.HitPositionWorld, 0.05
                             });
                         }
 
@@ -194,7 +194,7 @@ namespace Pluton.Rust
                         });
 
                         ConsoleNetwork.BroadcastToAllClients("ddraw.text", new object[] {
-                            60, Color.white, info.HitPositionWorld, text3
+                            60, UnityEngine.Color.white, info.HitPositionWorld, text3
                         });
                     }
 
@@ -486,13 +486,10 @@ namespace Pluton.Rust
         /// </summary>
         public static void On_ItemPickup(CollectibleEntity entity, BaseEntity.RPCMessage msg)
         {
-            if (!msg.player.IsAlive() || entity.itemList == null)
+            if (!msg.player.IsAlive() || !msg.player.CanInteract() || entity.itemList == null)
                 return;
 
-            ItemAmount[] array = entity.itemList;
-
-            for (int i = 0; i < array.Length; i++) {
-                ItemAmount itemAmount = array[i];
+            foreach (ItemAmount itemAmount in entity.itemList) {
                 Item item = ItemManager.Create(itemAmount.itemDef, (int)itemAmount.amount, 0);
 
                 OnNext("On_ItemPickup", new ItemPickupEvent(entity, msg, item));
@@ -509,11 +506,6 @@ namespace Pluton.Rust
                                   null,
                                   false);
             }
-
-            msg.player.xp.Add(global::Rust.Xp.Definitions.CollectWorldItem,
-                              entity.xpScale,
-                              entity.ShortPrefabName,
-                              0uL);
 
             entity.Kill(BaseNetworkable.DestroyMode.None);
         }
@@ -1377,7 +1369,12 @@ namespace Pluton.Rust
         public static void SetModded()
         {
             try {
+                if (global::Rust.Global.SteamServer == null)
+                    return;
+                
                 using (TimeWarning.New("UpdateServerInformation", 0.1f)) {
+                    var steamServer = global::Rust.Global.SteamServer;
+
                     System.Reflection.Assembly assembly = typeof(ServerMgr).Assembly;
                     byte[] byteArray = System.IO.File.ReadAllBytes(assembly.Location);
                     Ionic.Crc.CRC32 cRC = new Ionic.Crc.CRC32();
@@ -1386,10 +1383,10 @@ namespace Pluton.Rust
 
                     string _AssemblyHash = cRC.Crc32Result.ToString("x");
 
-                    SteamGameServer.SetServerName(ConVar.Server.hostname);
-                    SteamGameServer.SetMaxPlayerCount(ConVar.Server.maxplayers);
-                    SteamGameServer.SetPasswordProtected(false);
-                    SteamGameServer.SetMapName(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+                    steamServer.ServerName = ConVar.Server.hostname;
+                    steamServer.MaxPlayers = ConVar.Server.maxplayers;
+                    steamServer.Passworded = false;
+                    steamServer.MapName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
 
                     string gameTags = string.Format("mp{0},cp{1},qp{5},v{2}{3},h{4}", new object[] {
                         ConVar.Server.maxplayers,
@@ -1398,37 +1395,36 @@ namespace Pluton.Rust
                         ConVar.Server.pve ? ",pve" : string.Empty,
                         pluton.enabled ? ",modded,pluton" : string.Empty,
                         _AssemblyHash,
-                        SingletonComponent<ServerMgr>.Instance.connectionQueue.Queued
+                        ServerMgr.Instance.connectionQueue.Queued
                     });
 
-                    SteamGameServer.SetGameTags(gameTags);
+                    steamServer.GameTags = gameTags;
 
                     string[] array = ConVar.Server.description.SplitToChunks(100).ToArray();
 
                     for (int i = 0; i < 16; i++) {
                         if (i < array.Length) {
-                            SteamGameServer.SetKeyValue(string.Format("description_{0:00}", i), array[i]);
+                            steamServer.SetKey(string.Format("description_{0:00}", i), array[i]);
                         } else {
-                            SteamGameServer.SetKeyValue(string.Format("description_{0:00}", i), string.Empty);
+                            steamServer.SetKey(string.Format("description_{0:00}", i), string.Empty);
                         }
                     }
 
-                    SteamGameServer.SetKeyValue("hash", _AssemblyHash);
-                    SteamGameServer.SetKeyValue("country", SteamGameServerUtils.GetIPCountry());
-                    SteamGameServer.SetKeyValue("world.seed", global::World.Seed.ToString());
-                    SteamGameServer.SetKeyValue("world.size", global::World.Size.ToString());
-                    SteamGameServer.SetKeyValue("pve", ConVar.Server.pve.ToString());
-                    SteamGameServer.SetKeyValue("headerimage", ConVar.Server.headerimage);
-                    SteamGameServer.SetKeyValue("url", ConVar.Server.url);
-                    SteamGameServer.SetKeyValue("uptime", ((int)Time.realtimeSinceStartup).ToString());
-                    SteamGameServer.SetKeyValue("mem_ws", Performance.report.usedMemoryWorkingSetMB.ToString());
-                    SteamGameServer.SetKeyValue("mem_pv", Performance.report.usedMemoryPrivateMB.ToString());
-                    SteamGameServer.SetKeyValue("gc_mb", Performance.report.memoryAllocations.ToString());
-                    SteamGameServer.SetKeyValue("gc_cl", Performance.report.memoryCollections.ToString());
-                    SteamGameServer.SetKeyValue("fps", Performance.report.frameRate.ToString());
-                    SteamGameServer.SetKeyValue("fps_avg", Performance.report.frameRateAverage.ToString("0.00"));
-                    SteamGameServer.SetKeyValue("ent_cnt", BaseNetworkable.serverEntities.Count.ToString());
-                    SteamGameServer.SetKeyValue("build", BuildInformation.VersionStampDays.ToString());
+                    steamServer.SetKey("hash", _AssemblyHash);
+                    steamServer.SetKey("world.seed", global::World.Seed.ToString());
+                    steamServer.SetKey("world.size", global::World.Size.ToString());
+                    steamServer.SetKey("pve", ConVar.Server.pve.ToString());
+                    steamServer.SetKey("headerimage", ConVar.Server.headerimage);
+                    steamServer.SetKey("url", ConVar.Server.url);
+                    steamServer.SetKey("uptime", ((int)Time.realtimeSinceStartup).ToString());
+                    steamServer.SetKey("mem_ws", Performance.report.usedMemoryWorkingSetMB.ToString());
+                    steamServer.SetKey("mem_pv", Performance.report.usedMemoryPrivateMB.ToString());
+                    steamServer.SetKey("gc_mb", Performance.report.memoryAllocations.ToString());
+                    steamServer.SetKey("gc_cl", Performance.report.memoryCollections.ToString());
+                    steamServer.SetKey("fps", Performance.report.frameRate.ToString());
+                    steamServer.SetKey("fps_avg", Performance.report.frameRateAverage.ToString("0.00"));
+                    steamServer.SetKey("ent_cnt", BaseNetworkable.serverEntities.Count.ToString());
+                    steamServer.SetKey("build", BuildInformation.VersionStampDays.ToString());
                 }
             } catch (Exception ex) {
                 Logger.LogError("[Hooks] Error while setting the server modded.");

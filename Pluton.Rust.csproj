@@ -84,13 +84,15 @@
       <HintPath>references\Rust.Data.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Rust.Xp">
-      <HintPath>references\Rust.Xp.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Facepunch.Console">
       <HintPath>references\Facepunch.Console.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="Facepunch.Steamworks">
+      <HintPath>references\Facepunch.Steamworks.dll</HintPath>
+    </Reference>
+    <Reference Include="Rust.Global">
+      <HintPath>references\Rust.Global.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
