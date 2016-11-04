@@ -1146,6 +1146,33 @@
                 }]
             }]
         },
+        "BaseMelee": {
+            "Methods": [{
+                "TargetMethod": "CLProject",
+                "Instructions": [{
+                    "InstructionType": "Clear"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                },  {
+                    "OpCode": "Ldarg_1",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Call",
+                    "InstructionType": "Append",
+                    "OperandType": "Method",
+                    "TargetMethod": "On_PlayerThrowWeapon",
+                    "TargetType": "Pluton.Rust.Hooks",
+                    "TargetAssembly": "Pluton.Rust.dll"
+                }, {
+                    "OpCode": "Ret",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }]
+            }]
+        },
         "MiningQuarry": {
             "Methods": [{
                 "TargetMethod": "ProcessResources",

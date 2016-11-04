@@ -159,6 +159,7 @@
     <Compile Include="Events\ShootEvent.cs" />
     <Compile Include="Events\SyringeUseEvent.cs" />
     <Compile Include="Events\ThrowEvent.cs" />
+    <Compile Include="Events\WeaponThrowEvent.cs" />
     <Compile Include="Objects\BuildingPart.cs" />
     <Compile Include="Objects\Entity.cs" />
     <Compile Include="Objects\Inv.cs" />
