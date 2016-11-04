@@ -90,9 +90,11 @@
     </Reference>
     <Reference Include="Facepunch.Steamworks">
       <HintPath>references\Facepunch.Steamworks.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Rust.Global">
       <HintPath>references\Rust.Global.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
