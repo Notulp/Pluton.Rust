@@ -22,7 +22,6 @@
     <DocumentationFile>bin\Debug\Pluton.Rust.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
@@ -30,6 +29,7 @@
     <ConsolePause>false</ConsolePause>
     <LangVersion>6</LangVersion>
     <DocumentationFile>bin\Release\Pluton.Rust.xml</DocumentationFile>
+    <NoWarn>CS1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
