@@ -692,6 +692,9 @@ namespace Pluton.Rust
             if ((open && door.IsOpen()) || (!open && !door.IsOpen()))
                 return;
 
+            if (door.IsBusy())
+                return;
+
             var preDoorUseEvent = new Pre<DoorUseEvent>(door, msg, open);
 
             OnNext("Pre_DoorUse", preDoorUseEvent);
@@ -718,7 +721,6 @@ namespace Pluton.Rust
             if (doAction) {
                 door.SetFlag(BaseEntity.Flags.Open, open);
                 door.SendNetworkUpdateImmediate(false);
-                door.CallMethod("UpdateDoorAnimationParameters", false);
 
                 OnNext("On_DoorUse", preDoorUseEvent.Event);
             }
