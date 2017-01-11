@@ -1309,53 +1309,56 @@ namespace Pluton.Rust
         #region Server Hooks
 
         /// <summary>
-        /// Called from <c>ConsoleSystem.SystemRealm.Normal(RunOptions, string, params object[])</c> .
+        /// Called from <c>ConsoleSystem.SystemRealm.Normal(RunOptions, string, out string, params object[])</c> .
         /// </summary>
-        public static void On_ServerConsole(ConsoleSystem.Arg arg, string cmd)
+        public static string On_ServerConsole(ConsoleSystem.SystemRealm realm, ConsoleSystem.RunOptions options, string cmd, out string error, params object[] args)
         {
-            try
-            {
-                if (!Core.Bootstrap.PlutonLoaded)
-                    return;
+            error = null;
+            string text = ConsoleSystem.BuildCommand(cmd, args);
+            var arg = new ConsoleSystem.Arg(text);
 
-                var sce = new ServerConsoleEvent(arg, cmd);
+            var sce = new ServerConsoleEvent(arg, cmd);
 
-                foreach (KeyValuePair<string, BasePlugin> pl in PluginLoader.GetInstance().Plugins)
-                {
-                    object globalObj = pl.Value.GetGlobalObject("ServerConsoleCommands");
+            foreach (KeyValuePair<string, BasePlugin> pl in PluginLoader.GetInstance().Plugins) {
+                object globalObj = pl.Value.GetGlobalObject("ServerConsoleCommands");
 
-                    if (globalObj is ConsoleCommands)
-                    {
-                        ConsoleCommand[] commands = (globalObj as ConsoleCommands).getConsoleCommands(sce.Cmd);
+                if (globalObj is ConsoleCommands) {
+                    ConsoleCommand[] commands = (globalObj as ConsoleCommands).getConsoleCommands(sce.Cmd);
 
-                        foreach (ConsoleCommand cc in commands)
-                        {
-                            if (cc.callback == null)
-                                continue;
+                    foreach (ConsoleCommand cc in commands) {
+                        if (cc.callback == null)
+                            continue;
 
-                            try
-                            {
-                                cc.callback(arg.ArgsStr.Split(' '));
-                            }
-                            catch (Exception ex)
-                            {
-                                Logger.LogError(cc.plugin.FormatException(ex));
-                            }
+                        try {
+                            cc.callback(arg.ArgsStr.Split(' '));
+                        } catch (Exception ex) {
+                            Logger.LogError(cc.plugin.FormatException(ex));
                         }
                     }
                 }
+            }
 
-                OnNext("On_ServerConsole", sce);
+            OnNext("On_ServerConsole", sce);
 
-                if (arg.Invalid)
-                {
-                    Debug.Log(sce.Reply);
+            arg.FromClient = !realm.isServer;
+            if (!arg.Invalid && arg.CheckPermissions()) {
+                bool flag = ConsoleSystem.Run.Internal(arg, options.giveFeedback);
+                if ((options.giveFeedback & flag) && arg.Reply != null && arg.Reply.Length > 0) {
+                    Debug.Log(arg.Reply);
                 }
+                return arg.Reply;
             }
-            catch (Exception ex)
-            {
-                Logger.LogException(ex);
+            error = "Command not found";
+            if (!realm.isServer && (!options.forwardToServer || !((bool)typeof(ConsoleSystem).CallStaticMethod("SendToServer", text)))) {
+                if (options.giveFeedback) {
+                    Debug.Log(error);
+                }
+                return null;
             }
+            if (realm.isServer && options.giveFeedback) {
+                Debug.Log(error);
+            }
+            return null;
         }
 
         public static void On_ServerInit()
