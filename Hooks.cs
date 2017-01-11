@@ -1460,7 +1460,7 @@ namespace Pluton.Rust
                     steamServer.Passworded = false;
                     steamServer.MapName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
 
-                    string gameTags = string.Format("mp{0},cp{1},qp{5},v{2}{3},h{4}", new object[] {
+                    string gameTags = string.Format("mp{0},cp{1},qp{6},v{2}{3}{4},h{5}", new object[] {
                         ConVar.Server.maxplayers,
                         BasePlayer.activePlayerList.Count,
                         global::Rust.Protocol.network,
