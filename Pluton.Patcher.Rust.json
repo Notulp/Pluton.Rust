@@ -1226,25 +1226,48 @@
         "ConsoleSystem/SystemRealm": {
             "Methods": [{
                 "TargetMethod": "Normal",
-                "TargetMethodSigniture": "Normal(RunOptions,String,Object[])",
+                "TargetMethodSigniture": "Normal(RunOptions,String,String&,Object[])",
                 "Instructions": [{
-                    "OpCode": "Ldloc_1",
-                    "InstructionType": "InsertAfter",
-                    "OperandType": "None",
-                    "InsertOffset": "12"
+                    "InstructionType": "Clear"
                 }, {
-                    "OpCode": "Ldarg_2",
-                    "InstructionType": "InsertAfter",
-                    "OperandType": "None",
-                    "InsertOffset": "13"
+                    "OpCode": "Nop",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg_0",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
+                }, {
+                    "OpCode": "Ldarg",
+                    "InstructionType": "Append",
+                    "OperandType": "Parameter",
+                    "ParamVarOffset": "0"
+                }, {
+                    "OpCode": "Ldarg",
+                    "InstructionType": "Append",
+                    "OperandType": "Parameter",
+                    "ParamVarOffset": "1"
+                }, {
+                    "OpCode": "Ldarg",
+                    "InstructionType": "Append",
+                    "OperandType": "Parameter",
+                    "ParamVarOffset": "2"
+                }, {
+                    "OpCode": "Ldarg",
+                    "InstructionType": "Append",
+                    "OperandType": "Parameter",
+                    "ParamVarOffset": "3"
                 }, {
                     "OpCode": "Call",
-                    "InstructionType": "InsertAfter",
+                    "InstructionType": "Append",
                     "OperandType": "Method",
-                    "InsertOffset": "14",
                     "TargetMethod": "On_ServerConsole",
                     "TargetType": "Pluton.Rust.Hooks",
                     "TargetAssembly": "Pluton.Rust.dll"
+                }, {
+                    "OpCode": "Ret",
+                    "InstructionType": "Append",
+                    "OperandType": "None"
                 }]
             }]
         }
