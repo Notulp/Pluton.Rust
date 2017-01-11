@@ -13,7 +13,6 @@ namespace Pluton.Rust
     using Core.PluginLoaders;
     using Objects;
     using Logger = Core.Logger;
-    using Facepunch.Steamworks;
 
     public class Hooks : Core.Hooks
     {
