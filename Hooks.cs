@@ -133,15 +133,15 @@ namespace Pluton.Rust
                         HurtEvent he = new PlayerHurtEvent(player, info);
                         OnNext("On_PlayerHurt", he);
                     } else if (baseNPC != null) {
-                            HurtEvent he = new NPCHurtEvent(new NPC(baseNPC), info);
-                            OnNext("On_NPCHurt", he);
-                        } else if (baseCorpse != null) {
-                                HurtEvent he = new CorpseHurtEvent(baseCorpse, info);
-                                OnNext("On_CorpseHurt", he);
-                            } else {
-                                HurtEvent he = new CombatEntityHurtEvent(combatEntity, info);
-                                OnNext("On_CombatEntityHurt", he);
-                            }
+                        HurtEvent he = new NPCHurtEvent(new NPC(baseNPC), info);
+                        OnNext("On_NPCHurt", he);
+                    } else if (baseCorpse != null) {
+                        HurtEvent he = new CorpseHurtEvent(baseCorpse, info);
+                        OnNext("On_CorpseHurt", he);
+                    } else {
+                        HurtEvent he = new CombatEntityHurtEvent(combatEntity, info);
+                        OnNext("On_CombatEntityHurt", he);
+                    }
 
                     if (info.PointStart != Vector3.zero) {
                         DirectionProperties[] directionProperties = (DirectionProperties[])combatEntity.GetFieldValue("propDirection");
@@ -535,8 +535,8 @@ namespace Pluton.Rust
         public static void On_BuildingUpgrade(BuildingBlock block, BaseEntity.RPCMessage msg)
         {
             BasePlayer messagePlayer = msg.player;
-            BuildingGrade.Enum buildingGrade = (BuildingGrade.Enum) msg.read.Int32();
-            ConstructionGrade constructionGrade = (ConstructionGrade) block.CallMethod("GetGrade", buildingGrade);
+            BuildingGrade.Enum buildingGrade = (BuildingGrade.Enum)msg.read.Int32();
+            ConstructionGrade constructionGrade = (ConstructionGrade)block.CallMethod("GetGrade", buildingGrade);
 
             Pre<BuildingUpgradeEvent> preBuildingUpgradeEvent = new Pre<BuildingUpgradeEvent>(block, buildingGrade, messagePlayer);
 
@@ -548,7 +548,7 @@ namespace Pluton.Rust
             if (constructionGrade == null)
                 return;
 
-            if ((bool) block.CallMethod("CanChangeToGrade", buildingGrade, messagePlayer) == false)
+            if ((bool)block.CallMethod("CanChangeToGrade", buildingGrade, messagePlayer) == false)
                 return;
 
             if ((bool)block.CallMethod("CanAffordUpgrade", buildingGrade, messagePlayer) == false)
@@ -675,7 +675,7 @@ namespace Pluton.Rust
 
             List<ulong> whitelist = new List<ulong>();
 
-            whitelist = (List<ulong>) codeLock.GetFieldValue("whitelistPlayers");
+            whitelist = (List<ulong>)codeLock.GetFieldValue("whitelistPlayers");
 
             if (!whitelist.Contains(rpc.player.userID)) {
                 whitelist.Add(rpc.player.userID);
@@ -699,11 +699,7 @@ namespace Pluton.Rust
 
             if (preDoorUseEvent.IsCanceled) {
                 if (preDoorUseEvent.Event.DenyReason != "")
-                    msg.player.SendConsoleCommand("chat.add",
-                                                  0,
-                                                  String.Format("{0}: {1}",
-                                                  Server.server_message_name.ColorText("fa5"),
-                                                  preDoorUseEvent.Event.DenyReason));
+                    msg.player.SendConsoleCommand("chat.add", 0, String.Format("{0}: {1}", Server.server_message_name.ColorText("fa5"), preDoorUseEvent.Event.DenyReason));
 
                 return;
             }
@@ -760,7 +756,7 @@ namespace Pluton.Rust
         /// Called from <c>ResourceDispenser.GiveResourceFromItem(BaseEntity, ItemAmount, float, float, AttackEntity)</c> .
         /// </summary>
         public static void On_PlayerClothingChanged(PlayerInventory pi, Item i) => OnNext("On_PlayerClothingChanged", new PlayerClothingEvent(pi, i));
-        
+
         /// <summary>
         /// Called from <c>BasePlayer.PlayerInit(Connection)</c> .
         /// </summary>
@@ -830,8 +826,8 @@ namespace Pluton.Rust
                                     Server.GetPlayer(info.Initiator as BasePlayer).Stats.AddKill(true, false);
                                     victim.Stats.AddDeath(true, false);
                                 } else if (info.Initiator is BaseNPC) {
-                                        victim.Stats.AddDeath(false, true);
-                                    }
+                                    victim.Stats.AddDeath(false, true);
+                                }
                             }
 
                             if (!pde.dropLoot) {
@@ -852,7 +848,7 @@ namespace Pluton.Rust
                 }
             }
         }
-        
+
         /// <summary>
         /// Called from <c>ResourceDispenser.GiveResourceFromItem(BaseEntity, ItemAmount, float, float, AttackEntity)</c> .
         /// </summary>
@@ -919,7 +915,7 @@ namespace Pluton.Rust
         /// Called from <c>BasePlayer.EnterGame()</c> .
         /// </summary>
         public static void On_PlayerLoaded(BasePlayer bp) => OnNext("On_PlayerLoaded", Server.GetPlayer(bp));
-        
+
         /// <summary>
         /// Called from <c>BasePlayer.RespawnAt(Vector3, Quaternion)</c> .
         /// </summary>
@@ -947,22 +943,17 @@ namespace Pluton.Rust
             basePlayer.Invoke("LifeStoryStart", 0f);
             basePlayer.metabolism.Reset();
 
-            if (re.StartHealth < Single.Epsilon)
-            {
+            if (re.StartHealth < Single.Epsilon) {
                 basePlayer.InitializeHealth(basePlayer.StartHealth(), basePlayer.StartMaxHealth());
-            }
-            else
-            {
+            } else {
                 basePlayer.InitializeHealth(re.StartHealth, basePlayer.StartMaxHealth());
             }
 
-            if (re.GiveDefault)
-            {
+            if (re.GiveDefault) {
                 basePlayer.inventory.GiveDefaultItems();
             }
 
-            if (re.WakeUp)
-            {
+            if (re.WakeUp) {
                 basePlayer.EndSleeping();
             }
 
@@ -976,7 +967,7 @@ namespace Pluton.Rust
             // player.SetPlayerFlag (BasePlayer.PlayerFlags.ReceivingSnapshot, false);
             // player.ClientRPCPlayer(null, player, "FinishLoading");
         }
-        
+
         /// <summary>
         /// Called from <c>BaseProjectile.CLProject(BaseEntity.RPCMessage)</c> .
         /// </summary>
@@ -1108,7 +1099,7 @@ namespace Pluton.Rust
 
             if (target != null && Vector3.Distance(target.transform.position, owner.transform.position) < 4f) {
                 var preSyringeUseEvent = new Pre<SyringeUseEvent>(medicalTool, owner, target);
-                
+
                 OnNext("Pre_PlayerSyringeOther", preSyringeUseEvent);
 
                 if (preSyringeUseEvent.IsCanceled == false) {
@@ -1140,12 +1131,12 @@ namespace Pluton.Rust
         {
             BasePlayer messagePlayer = msg.player;
 
-            if ((bool) baseMelee.CallMethod("VerifyClientAttack", messagePlayer) == false) {
+            if ((bool)baseMelee.CallMethod("VerifyClientAttack", messagePlayer) == false) {
                 baseMelee.SendNetworkUpdate(BasePlayer.NetworkQueue.Update);
                 return;
             }
 
-            if (!baseMelee.canThrowAsProjectile){
+            if (!baseMelee.canThrowAsProjectile) {
                 Debug.LogWarning(messagePlayer + " fired invalid projectile: Not throwable");
                 return;
             }
@@ -1166,7 +1157,7 @@ namespace Pluton.Rust
 
             ProjectileShoot projectileShoot = ProjectileShoot.Deserialize(msg.read);
 
-            if (projectileShoot.projectiles.Count != 1){
+            if (projectileShoot.projectiles.Count != 1) {
                 Debug.LogWarning(messagePlayer + " fired invalid projectile: Projectile count mismatch");
                 return;
             }
@@ -1176,14 +1167,12 @@ namespace Pluton.Rust
             foreach (ProjectileShoot.Projectile current in projectileShoot.projectiles) {
                 if (messagePlayer.HasFiredProjectile(current.projectileID)) {
                     Debug.LogWarning(messagePlayer + " fired invalid projectile: Duplicate ID ->" + current.projectileID);
-                }
-                else {
+                } else {
                     Pre<WeaponThrowEvent> preWeaponThrowEvent = new Pre<WeaponThrowEvent>(baseMelee, messagePlayer, projectileShoot, current);
 
                     OnNext("Pre_PlayerThrowWeapon", preWeaponThrowEvent);
 
-                    if (preWeaponThrowEvent.IsCanceled == false)
-                    {
+                    if (preWeaponThrowEvent.IsCanceled == false) {
                         messagePlayer.NoteFiredProjectile(current.projectileID, current.startPos, current.startVel, baseMelee, item.info, item);
 
                         Effect effect = new Effect();
@@ -1209,8 +1198,7 @@ namespace Pluton.Rust
         {
             ThrowEvent evt = new ThrowEvent(thrownWeapon, msg);
 
-            switch (evt.ProjectileName)
-            {
+            switch (evt.ProjectileName) {
                 case "F1 Grenade":
                 case "Beancan Grenade":
                     OnNext("On_PlayerThrowGrenade", evt);
@@ -1254,11 +1242,7 @@ namespace Pluton.Rust
 
             if (ele.Cancel) {
                 playerLoot.Clear();
-                looter.SendConsoleCommand("chat.add",
-                                          0,
-                                          String.Format("{0}: {1}",
-                                                        Server.server_message_name.ColorText("fa5"),
-                                                        ele.cancelReason));
+                looter.SendConsoleCommand("chat.add", 0, String.Format("{0}: {1}", Server.server_message_name.ColorText("fa5"), ele.cancelReason));
             }
         }
 
@@ -1274,11 +1258,7 @@ namespace Pluton.Rust
 
             if (ile.Cancel) {
                 playerLoot.Clear();
-                looter.SendConsoleCommand("chat.add",
-                                          0,
-                                          String.Format("{0}: {1}",
-                                                        Server.server_message_name.ColorText("fa5"),
-                                                        ile.cancelReason));
+                looter.SendConsoleCommand("chat.add", 0, String.Format("{0}: {1}", Server.server_message_name.ColorText("fa5"), ile.cancelReason));
             }
         }
 
@@ -1288,16 +1268,13 @@ namespace Pluton.Rust
         public static void On_LootingPlayer(PlayerLoot playerLoot)
         {
             BasePlayer looter = playerLoot.GetComponent<BasePlayer>();
-            var ple = new PlayerLootEvent(playerLoot,
-                                          Server.GetPlayer(looter),
-                                          Server.GetPlayer(playerLoot.entitySource as BasePlayer));
+            var ple = new PlayerLootEvent(playerLoot, Server.GetPlayer(looter), Server.GetPlayer(playerLoot.entitySource as BasePlayer));
 
             OnNext("On_LootingPlayer", ple);
 
             if (ple.Cancel) {
                 playerLoot.Clear();
-                looter.SendConsoleCommand("chat.add",
-                                          0,
+                looter.SendConsoleCommand("chat.add", 0,
                                           String.Format("{0}: {1}",
                                                         Server.server_message_name.ColorText("fa5"),
                                                         ple.cancelReason));
@@ -1403,8 +1380,7 @@ namespace Pluton.Rust
 
             ConnectionAuth.m_AuthConnection.Remove(connection);
 
-            if (!ae.Event.Approved)
-            {
+            if (!ae.Event.Approved) {
                 ConnectionAuth.Reject(connection, ae.Event.Reason);
                 return;
             }
@@ -1443,7 +1419,7 @@ namespace Pluton.Rust
             try {
                 if (global::Rust.Global.SteamServer == null)
                     return;
-                
+
                 using (TimeWarning.New("UpdateServerInformation", 0.1f)) {
                     var steamServer = global::Rust.Global.SteamServer;
 
