@@ -936,10 +936,11 @@ namespace Pluton.Rust
             basePlayer.transform.rotation = re.SpawnRot;
             (basePlayer.GetFieldValue("tickInterpolator") as TickInterpolator).Reset(pos);
             basePlayer.SetFieldValue("lastTickTime", 0f);
-            basePlayer.CancelInvoke("WoundingEnd");
+            basePlayer.StopWounded();
             basePlayer.StopSpectating();
             basePlayer.UpdateNetworkGroup();
-            basePlayer.UpdatePlayerCollider(true, false);
+            basePlayer.UpdatePlayerCollider(true);
+            basePlayer.UpdatePlayerRigidbody(false);
             basePlayer.StartSleeping();
             basePlayer.Invoke("LifeStoryStart", 0f);
             basePlayer.metabolism.Reset();
@@ -1386,7 +1387,7 @@ namespace Pluton.Rust
                 return;
             }
 
-            SingletonComponent<ServerMgr>.Instance.ConnectionApproved(connection);
+            SingletonComponent<ServerMgr>.Instance.connectionQueue.CallMethod("Join", connection);
         }
 
         /// <summary>

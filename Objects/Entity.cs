@@ -65,7 +65,6 @@ namespace Pluton.Rust.Objects
                 bool oldsync = baseEntity.syncPosition;
                 baseEntity.transform.position = value;
                 baseEntity.syncPosition = true;
-                baseEntity.TransformChanged();
                 baseEntity.syncPosition = oldsync;
             }
         }

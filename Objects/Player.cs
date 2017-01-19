@@ -236,7 +236,6 @@ namespace Pluton.Rust.Objects
             basePlayer.inventory.crafting.CancelAll(true);
             basePlayer.MovePosition(newPos);
             basePlayer.ClientRPCPlayer(null, basePlayer, "ForcePositionTo", newPos);
-            basePlayer.TransformChanged();
             basePlayer.SetPlayerFlag(BasePlayer.PlayerFlags.ReceivingSnapshot, true);
             basePlayer.UpdateNetworkGroup();
             basePlayer.SendNetworkUpdateImmediate(false);
